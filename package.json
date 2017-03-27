@@ -1,0 +1,16 @@
+{
+  "name": "matroid",
+  "version": "0.0.0",
+  "description": "Matroid API Node Library",
+  "main": "lib/matroid.js",
+  "keywords": [
+    "matroid",
+    "computer vision",
+    "api"
+  ],
+  "author": "Matroid",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
