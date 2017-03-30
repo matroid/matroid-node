@@ -1,6 +1,6 @@
 {
   "name": "matroid",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "Matroid API Node Library",
   "main": "lib/matroid.js",
   "keywords": [
@@ -11,6 +11,8 @@
   "author": "Matroid",
   "license": "MIT",
   "dependencies": {
+    "mime-types": "^2.1.15",
     "request": "^2.81.0"
-  }
+  },
+  "repository": "matroid/node-matroid"
 }
