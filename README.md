@@ -204,25 +204,58 @@ api.registerStream(streamUrl, 'backyard')
   "label_dict": {"0":"cat","1":"dog"},
   "state": "running",
   "detections": {
-       "1": {"1":10},
-       "2": {"0":98,"1":10},
-       "5": {"0":75}
+       "1.5": [{ "labels": { "0": .10 } }],
+       "2": [{ "labels": { "0": .98, "1": .10 } }],
+       "5": [{ "labels": { "0": .75 } }]
    }
 }
 
 {
   "download_progress": 100,
-  "classification_progress": 100,
-  "status": "Classification success",
-  "label_dict": {"0":"cat","1":"dog"},
-  "state": "success",
+  "classification_progress": 8,
+  "status": "Video Download Complete. Classifying Video",
+  "label_dict": {"0":"man","1":"woman"},
+  "state": "running",
   "detections": {
-       "1": {"1":10},
-       "2": {"0":98,"1":10},
-       "5": {"0":75},
-       "7.5": {"0":45},
-       "10": {"1":99}
-   }
+    "89": [
+      {
+        "labels": {
+          "0": 0.95
+        },
+        "bbox": {
+         "left": 0.2377,
+         "top": 0.2021,
+         "width": 0.1628,
+         "height": 0.3896,
+       }
+      }
+    ],
+    "92": [
+      {
+        "labels": {
+          "0": 0.16,
+          "2": 0.80
+        },
+        "bbox": {
+          "left": 0.7576,
+          "top": 0.2375,
+          "width": 0.0597,
+          "height": 0.1313,
+        }
+      },
+      {
+        "labels": {
+          "0": 0.89,
+        },
+        "bbox": {
+          "left": 0.5047,
+          "top": 0.1708,
+          "width": 0.055,
+          "height": 0.1292,
+        }
+      },
+    ]
+  }
 }
 ```
 
