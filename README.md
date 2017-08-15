@@ -204,9 +204,9 @@ api.registerStream(streamUrl, 'backyard')
   "label_dict": {"0":"cat","1":"dog"},
   "state": "running",
   "detections": {
-       "1.5": [{ "labels": { "0": .10 } }],
-       "2": [{ "labels": { "0": .98, "1": .10 } }],
-       "5": [{ "labels": { "0": .75 } }]
+       "1.5": [{ "labels": { "0": 0.10 } }],
+       "2": [{ "labels": { "0": 0.98, "1": 0.10 } }],
+       "5": [{ "labels": { "0": 0.75 } }]
    }
 }
 
