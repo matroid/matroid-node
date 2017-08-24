@@ -44,7 +44,7 @@ api.retrieveToken()
 
 // Classify a picture from a file
 api.retrieveToken()
-   .then(token => api.classifyImage('test', { file: ['/home/user/picture.jpg', '/home/user/image.jpg'] }))
+   .then(token => api.classifyImage('test', { file: ['/home/user/picture.jpg', '/home/user/image.jpg'] }, { num_results: 5 }))
    .then(classification => console.log('Answer: ', util.inspect(classification, false, null)))
    .catch(error => console.error('Something happened:', error))
 
