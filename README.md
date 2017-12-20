@@ -44,20 +44,20 @@ api.retrieveToken()
 
 // Classify a picture from a file
 api.retrieveToken()
-   .then(token => api.classifyImage('test', { file: ['/home/user/picture.jpg', '/home/user/image.jpg'] }))
+   .then(token => api.classifyImage('test', { file: ['/home/user/picture.jpg', '/home/user/image.jpg'] }, { num_results: 5 }))
    .then(classification => console.log('Answer: ', util.inspect(classification, false, null)))
    .catch(error => console.error('Something happened:', error))
 
 // Classify a video from a file
 api.retrieveToken()
    .then(token => api.classifyVideo('test', { file: '/home/user/video.mp4' }))
-   .then(videoId => console.log('Video ID: ', videoId))
+   .then(({ videoId }) => console.log('Video ID: ', video_id))
    .catch(error => console.error('Something happened:', error))
 
 // Classify a YouTube video
 api.retrieveToken()
    .then(token => api.classifyVideo('test', { url: 'https://youtube.com/watch?v=abc' }))
-   .then(videoId => console.log('Video ID: ', videoId))
+   .then(({ video_id }) => console.log('Video ID: ', video_id))
    .catch(error => console.error('Something happened:', error))
 
 // Get video results
@@ -81,7 +81,7 @@ api.retrieveToken()
 */
 api.retrieveToken()
    .then(token => api.createDetector('/home/user/myPictures.zip', 'Apple Detector', 'general'))
-   .then(detectorId => api.trainDetector(detectorId))
+   .then(({ detector_id }) => api.trainDetector(detector_id))
    .catch(error => console.error('Something happened:', error))
 
 // You can check on its progress. Then when it's done training, you can classify with the detector.
@@ -95,6 +95,23 @@ api.retrieveToken()
 api.retrieveToken()
    .then(token => api.accountInfo())
    .then(account => console.log('Information: ', util.inspect(account, false, null)))
+
+// Register and monitor stream on Matroid
+let streamUrl = http://localhost:8888/stream.mjpg;
+let detectorId = 'abc123';
+let monitorOptions = {
+  'startTime': '2017-06-20T20:56:19.096Z',
+  'endTime': '2017-06-21T20:00:00.000Z',
+  'thresholds': {
+    'cat': 0.5,
+    'dog': 0.7
+  }
+  'endpoint': 'http://mydomain.fake:9000/matroid_detections'
+}
+
+api.registerStream(streamUrl, 'backyard')
+   .then(({ stream_id }) => api.monitorStream(stream_id, detectorId, monitorOptions))
+   .then(monitoringInfo => console.log(monitoringInfo));
 ```
 
 ## API Response samples
@@ -163,6 +180,21 @@ api.retrieveToken()
 }
 ```
 
+#### Sample stream creation
+```
+{
+  "stream_id": "58489472ff22bb2d3f95728c"
+}
+```
+
+#### Sample stream monitoring
+```
+{
+  "stream_id": "58489472ff22bb2d3f95728c",
+  "monitoring_id": "68489472ff22bb2d3f95728c",
+}
+```
+
 #### Sample video classification results
 ```
 {
@@ -172,25 +204,58 @@ api.retrieveToken()
   "label_dict": {"0":"cat","1":"dog"},
   "state": "running",
   "detections": {
-       "1": {"1":10},
-       "2": {"0":98,"1":10},
-       "5": {"0":75}
+       "1.5": [{ "labels": { "0": 0.10 } }],
+       "2": [{ "labels": { "0": 0.98, "1": 0.10 } }],
+       "5": [{ "labels": { "0": 0.75 } }]
    }
 }
 
 {
   "download_progress": 100,
-  "classification_progress": 100,
-  "status": "Classification success",
-  "label_dict": {"0":"cat","1":"dog"},
-  "state": "success",
+  "classification_progress": 8,
+  "status": "Video Download Complete. Classifying Video",
+  "label_dict": {"0":"man","1":"woman"},
+  "state": "running",
   "detections": {
-       "1": {"1":10},
-       "2": {"0":98,"1":10},
-       "5": {"0":75},
-       "7.5": {"0":45},
-       "10": {"1":99}
-   }
+    "89": [
+      {
+        "labels": {
+          "0": 0.95
+        },
+        "bbox": {
+         "left": 0.2377,
+         "top": 0.2021,
+         "width": 0.1628,
+         "height": 0.3896,
+       }
+      }
+    ],
+    "92": [
+      {
+        "labels": {
+          "0": 0.16,
+          "2": 0.80
+        },
+        "bbox": {
+          "left": 0.7576,
+          "top": 0.2375,
+          "width": 0.0597,
+          "height": 0.1313,
+        }
+      },
+      {
+        "labels": {
+          "0": 0.89,
+        },
+        "bbox": {
+          "left": 0.5047,
+          "top": 0.1708,
+          "width": 0.055,
+          "height": 0.1292,
+        }
+      },
+    ]
+  }
 }
 ```
 
