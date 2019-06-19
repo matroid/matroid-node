@@ -14,5 +14,12 @@
     "mime-types": "^2.1.15",
     "request": "^2.81.0"
   },
-  "repository": "matroid/node-matroid"
+  "repository": "matroid/node-matroid",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  },
+  "scripts": {
+    "test": "mocha test/test-**.js"
+  }
 }
