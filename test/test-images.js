@@ -10,7 +10,7 @@ const {
 } = require('./data');
 
 describe('Images', function() {
-  this.timeout(8000);
+  this.timeout(10000);
 
   before(async function() {
     this.api = setUpClient();
@@ -42,7 +42,7 @@ describe('Images', function() {
       expect(res.results).to.be.an('array', JSON.stringify(res));
     });
 
-    it('should classify an array online urls', async function() {
+    it('should classify an array of online urls', async function() {
       const res = await this.api.classifyImage(EVERYDAY_OBJECT_ID, {
         url: [CAT_URL, DOG_URL]
       });
@@ -61,7 +61,7 @@ describe('Images', function() {
   });
 
   describe('localizeImage', function() {
-    it('should localize an image', async function() {
+    it('should classify an image when update is not set to true', async function() {
       const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
         url: CAT_URL
       });
@@ -70,8 +70,7 @@ describe('Images', function() {
       expect(res.results).to.have.lengthOf(1);
     });
 
-    // { update: true } positive case is tested in test-labels.js
-
+    // { update: true } positive case is tested in test-labels.js, it needs a pending detector/label to test
     it('should get an error with invalid parameters', async function() {
       try {
         await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {

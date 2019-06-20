@@ -21,19 +21,19 @@ describe('Labels', function() {
     this.api = setUpClient();
     await this.api.retrieveToken();
 
+    // create a pending detector to test labels API
     await deletePendingDetector(this.api);
     const res = await this.api.createDetector(
       DETECTOR_ZIP,
       `test-label-detector-${Date.now()}`,
       'general'
     );
-
     detectorId = res.detector_id;
-
     await waitDetectorReadyForEdit(this.api, detectorId);
   });
 
   after(async function() {
+    // clean up - delete the new detector created by tests
     if (detectorId) {
       await this.api.deleteDetector(detectorId);
     }
@@ -78,7 +78,7 @@ describe('Labels', function() {
       expect(res.images).to.have.lengthOf(1, JSON.stringify(res));
     });
 
-    it('should get an error with invliad params', async function() {
+    it('should get an error with invalid params', async function() {
       try {
         await this.api.getAnnotations();
       } catch (e) {

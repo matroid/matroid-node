@@ -4,15 +4,14 @@ const { setUpClient, sleep } = require('./utils');
 const {
   INVALID_QUERY_ERR,
   EVERYDAY_OBJECT_ID,
-  RANDOM_MONGO_ID
+  RANDOM_MONGO_ID,
+  S3_BUCKET_URL
 } = require('./data');
 
 describe('Collections', function() {
   this.timeout(10000);
 
   let collectionId, collectionIndexId;
-  const collectionName = `collection-node-${Date.now()}`;
-  const s3Url = 's3://bucket/m-test-public/';
 
   before(async function() {
     this.api = setUpClient();
@@ -34,9 +33,16 @@ describe('Collections', function() {
 
   describe('createCollection', function() {
     it('should create a collection with correct params', async function() {
-      const res = await this.api.createCollection(collectionName, s3Url, 's3');
+      const collectionName = `collection-node-${Date.now()}`;
+
+      const res = await this.api.createCollection(
+        collectionName,
+        S3_BUCKET_URL,
+        's3'
+      );
 
       expect(res.collection).to.be.an('object', JSON.stringify(res));
+
       collectionId = res.collection._id;
     });
 
@@ -74,6 +80,7 @@ describe('Collections', function() {
       );
 
       expect(res.collectionTask).to.be.an('object', JSON.stringify(res));
+
       collectionIndexId = res.collectionTask._id;
     });
 
@@ -136,7 +143,7 @@ describe('Collections', function() {
     this.timeout(30000);
 
     it('should delete collection index', async function() {
-      await waitCollectionIdStop(this.api, collectionIndexId);
+      await waitCollectionTaskStop(this.api, collectionIndexId);
 
       const res = await this.api.deleteCollectionIndex(collectionIndexId);
 
@@ -167,7 +174,8 @@ describe('Collections', function() {
 
 // helpers
 
-async function waitCollectionIdStop(api, collectionIndexId) {
+async function waitCollectionTaskStop(api, collectionIndexId) {
+  // wait until collection task state is failed so it can be deleted
   let res = await api.getCollectionTask(collectionIndexId);
   let tries = 0;
   const maxTries = 10;

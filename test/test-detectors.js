@@ -29,6 +29,7 @@ describe('Detectors', function() {
   });
 
   after(async function() {
+    // clean up - make sure all new detectors created by tests are deleted
     await cleanUpDetector(this.api, detectorId);
     await cleanUpDetector(this.api, redoDetectorId);
     await cleanUpDetector(this.api, importedDetectorId);
@@ -44,12 +45,11 @@ describe('Detectors', function() {
 
       expect(res.detector_id).to.be.a('string', JSON.stringify(res));
       detectorId = res.detector_id;
-
       // wait until detector can be edited
       await waitDetectorReadyForEdit(this.api, detectorId);
     });
 
-    it('should get an error if trying creating another detector', async function() {
+    it('should get an error if creating another detector when having a pending detector already', async function() {
       const res = await this.api.createDetector(
         DETECTOR_ZIP,
         detectorName,
@@ -72,7 +72,7 @@ describe('Detectors', function() {
       await waitDetectorTraining(this.api, detectorId);
     });
 
-    it('should get an error with an invalid detector Id', async function() {
+    it('should get an error with an invalid detector ID', async function() {
       const res = await this.api.finalizeDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
@@ -86,7 +86,7 @@ describe('Detectors', function() {
       expect(res.id).to.equal(detectorId, JSON.stringify(res));
     });
 
-    it('should get an error with an invalid detector id', async function() {
+    it('should get an error with an invalid detector ID', async function() {
       const res = await this.api.getDetectorInfo(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
@@ -122,7 +122,6 @@ describe('Detectors', function() {
       expect(res).to.have.lengthOf(5, JSON.stringify(res));
 
       res = await this.api.searchDetectors({ id: detectorId });
-
       expect(res).to.be.an('array', JSON.stringify(res));
       expect(res).to.have.lengthOf(1, JSON.stringify(res));
     });
@@ -154,7 +153,7 @@ describe('Detectors', function() {
       importedDetectorId = res.detector_id;
     });
 
-    it('should throw an error when provided with invalid params', async function() {
+    it('should throw an error with invalid params', async function() {
       try {
         await this.api.importDetector(detectorName, {
           label: ['cat', 'dog']
@@ -179,7 +178,7 @@ describe('Detectors', function() {
       await cleanUpDetector(importedDetectorId);
     });
 
-    it('should get an error with an invalid detector Id', async function() {
+    it('should get an error with an invalid detector ID', async function() {
       const res = await this.api.deleteDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal('not_found', JSON.stringify(res));
@@ -190,11 +189,12 @@ describe('Detectors', function() {
 // helpers
 
 async function waitDetectorTraining(api, detectorId) {
+  // wait until detector is trained
   printInfo('waiting for detector training');
 
   let res = await api.getDetectorInfo(detectorId);
   let indicator = '\x1b[2m      .';
-  const maxTries = 50;
+  const maxTries = 40;
 
   while (res.state !== 'trained') {
     console.log(indicator);
@@ -212,6 +212,7 @@ async function waitDetectorTraining(api, detectorId) {
 }
 
 async function cleanUpDetector(api, detectorId) {
+  // delete detector if Id exists
   let res;
 
   if (detectorId) {

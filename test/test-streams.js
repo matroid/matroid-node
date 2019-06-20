@@ -114,6 +114,8 @@ describe('Streams', function() {
         'Successfully killed monitoring.',
         JSON.stringify(res)
       );
+
+      await waitMonitoringStop(this.api, monitoringId);
     });
 
     it('should throw an error is missing monitoringId', async function() {
@@ -131,7 +133,6 @@ describe('Streams', function() {
 
   describe('deleteMonitoring', function() {
     it('should delete monitoring', async function() {
-      await waitMonitoringStop(this.api, monitoringId);
       const res = await this.api.deleteMonitoring(monitoringId);
 
       expect(res.message).to.equal(
@@ -186,7 +187,7 @@ describe('Streams', function() {
 // helpers
 
 async function waitMonitoringStop(api, monitoringId) {
-  let res = await api.searchMonitorings(monitoringId);
+  let res = await api.searchMonitorings({ monitoringId });
   let tries = 0;
   const maxTries = 15;
 
@@ -196,7 +197,7 @@ async function waitMonitoringStop(api, monitoringId) {
       throw new Error('Timeout when waiting for monitoring to stop');
     }
 
-    res = await api.searchMonitorings(monitoringId);
+    res = await api.searchMonitorings({ monitoringId });
 
     await sleep(2000);
   }

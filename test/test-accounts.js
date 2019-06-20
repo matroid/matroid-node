@@ -14,14 +14,18 @@ describe('Accounts', function() {
       const res = await this.api.retrieveToken();
 
       expect(res).to.be.an('object');
+      expect(res).to.have.property('access_token');
+      expect(res).to.have.property('token_type');
     });
   });
 
   describe('getAccountInfo', function() {
-    it('get account info', async function() {
+    it('should get account info', async function() {
       const res = await this.api.getAccountInfo();
 
       expect(res.account).to.be.an('object');
+      expect(res.account).to.have.property('name');
+      expect(res.account).to.have.property('email');
     });
   });
 });

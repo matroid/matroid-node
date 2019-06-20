@@ -10,5 +10,6 @@ module.exports = {
     'https://matroid-web.s3.amazonaws.com/test/python-client/tesla-cat.jpg',
   UPLOAD_PB_FILE: `${__dirname}/test-files/upload-detector.pb`,
   UPLOAD_LABEL_FILE: `${__dirname}/test-files/upload-detector-label.txt`,
-  YOUTUBE_VID_URL: 'https://www.youtube.com/watch?v=nDvh3upNJmA'
+  YOUTUBE_VID_URL: 'https://www.youtube.com/watch?v=nDvh3upNJmA',
+  S3_BUCKET_URL: 's3://bucket/m-test-public/'
 };

@@ -1,5 +1,4 @@
 node_modules/*
-test/config.json
 
 # editor
 .vscode
