@@ -106,7 +106,9 @@ describe('Streams', function() {
     });
   });
 
-  describe('killMonitoring', function() {
+  describe('killMonitoring', function () {
+    this.timeout(30000);
+    
     it('should stop a monitoring', async function() {
       const res = await this.api.killMonitoring(monitoringId);
 
