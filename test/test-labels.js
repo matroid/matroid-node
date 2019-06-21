@@ -13,7 +13,8 @@ const {
 } = require('./data');
 
 describe('Labels', function() {
-  this.timeout(10000);
+  // increased timeout for creating detector in before all hook
+  this.timeout(20000);
 
   let detectorId, labelId, imageId;
 
