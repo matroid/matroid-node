@@ -2,7 +2,7 @@
   "name": "matroid",
   "version": "1.0.1",
   "description": "Matroid API Node Library",
-  "main": "lib/matroid.js",
+  "main": "dist/matroid.js",
   "keywords": [
     "matroid",
     "computer vision",
@@ -16,10 +16,18 @@
   },
   "repository": "matroid/node-matroid",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "mocha": "^6.1.4"
   },
   "scripts": {
-    "test": "mocha test/test-**.js"
+    "test": "mocha --compiler js:babel-core test/test-**.js",
+    "test:single": "mocha --compiler js:babel-core",
+    "init": "mkdir dist",
+    "clean": "rm -rf dist",
+    "prebuild": "yarn run clean && yarn run init",
+    "build": "babel lib -d dist"
   }
 }

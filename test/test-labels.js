@@ -14,7 +14,7 @@ const {
 
 describe('Labels', function() {
   // increased timeout for creating detector in before all hook
-  this.timeout(20000);
+  this.timeout(30000);
 
   let detectorId, labelId, imageId;
 

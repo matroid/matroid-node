@@ -36,7 +36,7 @@ describe('Detectors', function() {
   });
 
   describe('createDetector', function() {
-    this.timeout(20000);
+    this.timeout(30000);
 
     it('should create detector', async function() {
       const res = await this.api.createDetector(
