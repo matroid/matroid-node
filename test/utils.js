@@ -1,4 +1,4 @@
-const Matroid = require('../lib/matroid');
+const Matroid = require('../dist/matroid');
 
 const setUpClient = () => {
   let { BASE_URL, CLIENT_ID, CLIENT_SECRET } = process.env;
