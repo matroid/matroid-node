@@ -199,12 +199,13 @@ async function waitDetectorTraining(api, detectorId) {
   const maxTries = 40;
 
   while (res.state !== 'trained') {
+    console.log(indicator);
     indicator += '.';
 
     if (indicator.length > maxTries) {
       throw new Error('Timeout when waiting for detector training');
     } else if (res.state === 'failed') {
-      throw new Error('Detector Training failed');
+      throw new Error('Detector training failed');
     }
 
     await sleep(5000);
