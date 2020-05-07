@@ -5,7 +5,7 @@ const {
   sleep,
   printInfo,
   waitDetectorReadyForEdit,
-  deletePendingDetector
+  deletePendingDetector,
 } = require('./utils');
 const {
   DETECTOR_ZIP,
@@ -13,32 +13,32 @@ const {
   INVALID_QUERY_ERR,
   EVERYDAY_OBJECT_ID,
   UPLOAD_PB_FILE,
-  UPLOAD_LABEL_FILE
+  UPLOAD_LABEL_FILE,
 } = require('./data');
 
-describe('Detectors', function() {
+describe('Detectors', function () {
   this.timeout(10000);
 
   let detectorId, redoDetectorId, importedDetectorId;
   const detectorName = `node-detector-${Date.now()}`;
 
-  before(async function() {
+  before(async function () {
     this.api = setUpClient();
     await this.api.retrieveToken();
     await deletePendingDetector(this.api);
   });
 
-  after(async function() {
+  after(async function () {
     // clean up - make sure all new detectors created by tests are deleted
     await cleanUpDetector(this.api, detectorId);
     await cleanUpDetector(this.api, redoDetectorId);
     await cleanUpDetector(this.api, importedDetectorId);
   });
 
-  describe('createDetector', function() {
+  describe('createDetector', function () {
     this.timeout(30000);
 
-    it('should create detector', async function() {
+    it('should create detector', async function () {
       const res = await this.api.createDetector(
         DETECTOR_ZIP,
         detectorName,
@@ -51,7 +51,7 @@ describe('Detectors', function() {
       await waitDetectorReadyForEdit(this.api, detectorId);
     });
 
-    it('should get an error if creating another detector when having a pending detector already', async function() {
+    it('should get an error if creating another detector when having a pending detector already', async function () {
       const res = await this.api.createDetector(
         DETECTOR_ZIP,
         detectorName,
@@ -62,10 +62,10 @@ describe('Detectors', function() {
     });
   });
 
-  describe('finalizeDetector', function() {
+  describe('finalizeDetector', function () {
     this.timeout(300000);
 
-    it('should start detector training', async function() {
+    it('should start detector training', async function () {
       const res = await this.api.finalizeDetector(detectorId);
 
       expect(res.detector_id).to.equal(detectorId, JSON.stringify(res));
@@ -74,29 +74,29 @@ describe('Detectors', function() {
       await waitDetectorTraining(this.api, detectorId);
     });
 
-    it('should get an error with an invalid detector ID', async function() {
+    it('should get an error with an invalid detector ID', async function () {
       const res = await this.api.finalizeDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
     });
   });
 
-  describe('getDetectorInfo', function() {
-    it('should get detector info', async function() {
+  describe('getDetectorInfo', function () {
+    it('should get detector info', async function () {
       const res = await this.api.getDetectorInfo(detectorId);
 
       expect(res.id).to.equal(detectorId, JSON.stringify(res));
     });
 
-    it('should get an error with an invalid detector ID', async function() {
+    it('should get an error with an invalid detector ID', async function () {
       const res = await this.api.getDetectorInfo(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
     });
   });
 
-  describe('redoDetector', function() {
-    it('should create a copy of an existing detector', async function() {
+  describe('redoDetector', function () {
+    it('should create a copy of an existing detector', async function () {
       const res = await this.api.redoDetector(EVERYDAY_OBJECT_ID);
 
       expect(res.detector_id).to.be.a('string', JSON.stringify(res));
@@ -104,21 +104,21 @@ describe('Detectors', function() {
       redoDetectorId = res.detector_id;
     });
 
-    it('should get an error with an invalid detectorId', async function() {
+    it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR);
     });
   });
 
-  describe('searchDetectors', function() {
-    it('should get detector search result when no param provided', async function() {
+  describe('searchDetectors', function () {
+    it('should get detector search result when no param provided', async function () {
       const res = await this.api.searchDetectors();
 
       expect(res).to.be.an('array', JSON.stringify(res));
     });
 
-    it('should get detector search result based on params', async function() {
+    it('should get detector search result based on params', async function () {
       let res = await this.api.searchDetectors({ limit: 5, published: true });
       expect(res).to.be.an('array', JSON.stringify(res));
       expect(res).to.have.lengthOf(5, JSON.stringify(res));
@@ -129,10 +129,10 @@ describe('Detectors', function() {
     });
   });
 
-  describe('importDetector', function() {
+  describe('importDetector', function () {
     this.timeout(200000);
 
-    it('should import detector when provided with valid params', async function() {
+    it('should import detector when provided with valid params', async function () {
       const detectorName = `upload-node-client-${Date.now()}`;
       const inputTensor = 'input_5[128,128,3]';
       const outputTensor = 'prob3[2]';
@@ -143,7 +143,7 @@ describe('Detectors', function() {
         fileLabel: UPLOAD_LABEL_FILE,
         inputTensor,
         outputTensor,
-        detectorType
+        detectorType,
       });
 
       expect(res.detector_id).to.be.a('string', JSON.stringify(res));
@@ -155,10 +155,10 @@ describe('Detectors', function() {
       importedDetectorId = res.detector_id;
     });
 
-    it('should throw an error with invalid params', async function() {
+    it('should throw an error with invalid params', async function () {
       try {
         await this.api.importDetector(detectorName, {
-          label: ['cat', 'dog']
+          label: ['cat', 'dog'],
         });
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
@@ -170,8 +170,8 @@ describe('Detectors', function() {
     });
   });
 
-  describe('deleteDetector', function() {
-    it('should delete detector', async function() {
+  describe('deleteDetector', function () {
+    it('should delete detector', async function () {
       const res = await cleanUpDetector(this.api, detectorId);
 
       expect(res.message).to.equal('Deleted detector.', JSON.stringify(res));
@@ -180,7 +180,7 @@ describe('Detectors', function() {
       await cleanUpDetector(importedDetectorId);
     });
 
-    it('should get an error with an invalid detector ID', async function() {
+    it('should get an error with an invalid detector ID', async function () {
       const res = await this.api.deleteDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal('not_found', JSON.stringify(res));
@@ -199,11 +199,12 @@ async function waitDetectorTraining(api, detectorId) {
   const maxTries = 40;
 
   while (res.state !== 'trained') {
-    console.log(indicator);
     indicator += '.';
 
     if (indicator.length > maxTries) {
       throw new Error('Timeout when waiting for detector training');
+    } else if (res.state === 'failed') {
+      throw new Error('Detector Training failed');
     }
 
     await sleep(5000);

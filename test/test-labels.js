@@ -3,22 +3,22 @@ const expect = chai.expect;
 const {
   setUpClient,
   waitDetectorReadyForEdit,
-  deletePendingDetector
+  deletePendingDetector,
 } = require('./utils');
 const {
   CAT_FILE,
   DOG_FILE,
   DETECTOR_ZIP,
-  EVERYDAY_OBJECT_ID
+  EVERYDAY_OBJECT_ID,
 } = require('./data');
 
-describe('Labels', function() {
+describe('Labels', function () {
   // increased timeout for creating detector in before all hook
   this.timeout(30000);
 
   let detectorId, labelId, imageId;
 
-  before(async function() {
+  before(async function () {
     this.api = setUpClient();
     await this.api.retrieveToken();
 
@@ -33,15 +33,15 @@ describe('Labels', function() {
     await waitDetectorReadyForEdit(this.api, detectorId);
   });
 
-  after(async function() {
+  after(async function () {
     // clean up - delete the new detector created by tests
     if (detectorId) {
       await this.api.deleteDetector(detectorId);
     }
   });
 
-  describe('createLabelWithImages', function() {
-    it('should create a label', async function() {
+  describe('createLabelWithImages', function () {
+    it('should create a label', async function () {
       const labelName = 'new-label';
       const res = await this.api.createLabelWithImages(
         detectorId,
@@ -58,7 +58,7 @@ describe('Labels', function() {
       labelId = res.label_id;
     });
 
-    it('should get an error with invalid params', async function() {
+    it('should get an error with invalid params', async function () {
       try {
         await this.api.createLabelWithImages(detectorId);
       } catch (e) {
@@ -71,15 +71,15 @@ describe('Labels', function() {
     });
   });
 
-  describe('getAnnotations', function() {
-    it('should get annotations', async function() {
+  describe('getAnnotations', function () {
+    it('should get annotations', async function () {
       const res = await this.api.getAnnotations({ labelIds: [labelId] });
 
       expect(res.images).to.be.an('Array', JSON.stringify(res));
       expect(res.images).to.have.lengthOf(1, JSON.stringify(res));
     });
 
-    it('should get an error with invalid params', async function() {
+    it('should get an error with invalid params', async function () {
       try {
         await this.api.getAnnotations();
       } catch (e) {
@@ -92,8 +92,8 @@ describe('Labels', function() {
     });
   });
 
-  describe('getLabelImages', function() {
-    it('should get images info of a label', async function() {
+  describe('getLabelImages', function () {
+    it('should get images info of a label', async function () {
       const res = await this.api.getLabelImages(detectorId, labelId);
 
       expect(res.images).to.be.an('Array', JSON.stringify(res));
@@ -102,7 +102,7 @@ describe('Labels', function() {
       imageId = res.images[0]['image_id'];
     });
 
-    it('should throw an error with invalid params', async function() {
+    it('should throw an error with invalid params', async function () {
       try {
         await this.api.getLabelImages(detectorId);
       } catch (e) {
@@ -115,10 +115,10 @@ describe('Labels', function() {
     });
   });
 
-  describe('UpdateAnnotations', function() {
-    it('should update annotations', async function() {
+  describe('UpdateAnnotations', function () {
+    it('should update annotations', async function () {
       const res = await this.api.updateAnnotations(detectorId, labelId, [
-        { id: imageId, bbox: { left: 0.1, top: 0.1, width: 0.2, height: 0.2 } }
+        { id: imageId, bbox: { left: 0.1, top: 0.1, width: 0.2, height: 0.2 } },
       ]);
 
       expect(res.message).to.equal(
@@ -127,7 +127,7 @@ describe('Labels', function() {
       );
     });
 
-    it('should throw an error with invalid params', async function() {
+    it('should throw an error with invalid params', async function () {
       try {
         await this.api.updateAnnotations(detectorId, labelId);
       } catch (e) {
@@ -140,8 +140,8 @@ describe('Labels', function() {
     });
   });
 
-  describe('updateLabelWithImages', function() {
-    it('should upload new image to label', async function() {
+  describe('updateLabelWithImages', function () {
+    it('should upload new image to label', async function () {
       const res = await this.api.updateLabelWithImages(
         detectorId,
         labelId,
@@ -155,7 +155,7 @@ describe('Labels', function() {
       );
     });
 
-    it('should throw an error with invalid params', async function() {
+    it('should throw an error with invalid params', async function () {
       try {
         await this.api.updateLabelWithImages(detectorId);
       } catch (e) {
@@ -168,12 +168,12 @@ describe('Labels', function() {
     });
   });
 
-  describe('localizeImage', function() {
-    it('should take an imageId and a labelId', async function() {
+  describe('localizeImage', function () {
+    it('should take an imageId and a labelId', async function () {
       const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
         update: true,
         imageId,
-        labelId
+        labelId,
       });
 
       expect(res.results).to.be.an('Array', JSON.stringify(res));
@@ -181,8 +181,8 @@ describe('Labels', function() {
     });
   });
 
-  describe('deleteLabel', function() {
-    it('should delete a label', async function() {
+  describe('deleteLabel', function () {
+    it('should delete a label', async function () {
       const res = await this.api.deleteLabel(detectorId, labelId);
 
       expect(res.message).to.equal(
@@ -191,7 +191,7 @@ describe('Labels', function() {
       );
     });
 
-    it('should throw an error if missing params', async function() {
+    it('should throw an error if missing params', async function () {
       try {
         await this.api.deleteLabel(detectorId);
       } catch (e) {

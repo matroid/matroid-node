@@ -3,17 +3,17 @@ const expect = chai.expect;
 const { setUpClient, sleep } = require('./utils');
 const { YOUTUBE_VID_URL, EVERYDAY_OBJECT_ID } = require('./data');
 
-describe('Streams', function() {
+describe('Streams', function () {
   this.timeout(10000);
 
   let monitoringId, streamId;
 
-  before(async function() {
+  before(async function () {
     this.api = setUpClient();
     await this.api.retrieveToken();
   });
 
-  after(async function() {
+  after(async function () {
     if (monitoringId) {
       await this.api.killMonitoring(monitoringId);
       await waitMonitoringStop(this.api, monitoringId);
@@ -24,8 +24,8 @@ describe('Streams', function() {
     }
   });
 
-  describe('createStream', async function() {
-    it('should create a stream', async function() {
+  describe('createStream', async function () {
+    it('should create a stream', async function () {
       const streamName = `node-test-stream-${Date.now()}`;
       const res = await this.api.createStream(YOUTUBE_VID_URL, streamName);
 
@@ -34,7 +34,7 @@ describe('Streams', function() {
       streamId = res.stream_id;
     });
 
-    it('should throw an error if missing params', async function() {
+    it('should throw an error if missing params', async function () {
       try {
         await this.api.createStream(YOUTUBE_VID_URL);
       } catch (e) {
@@ -47,8 +47,8 @@ describe('Streams', function() {
     });
   });
 
-  describe('searchStreams', function() {
-    it('should get stream search result', async function() {
+  describe('searchStreams', function () {
+    it('should get stream search result', async function () {
       const res = await this.api.searchStreams({ streamId });
 
       expect(res).to.be.an('Array', JSON.stringify(res));
@@ -57,15 +57,15 @@ describe('Streams', function() {
     });
   });
 
-  describe('monitorStream', function() {
-    it('should create a monitoring', async function() {
+  describe('monitorStream', function () {
+    it('should create a monitoring', async function () {
       const res = await this.api.monitorStream(
         streamId,
         EVERYDAY_OBJECT_ID,
         { cat: 0.5 },
         {
           taskName: 'node-test-task',
-          endTime: '5 minutes'
+          endTime: '5 minutes',
         }
       );
 
@@ -76,8 +76,8 @@ describe('Streams', function() {
     });
   });
 
-  describe('searchMonitorings', function() {
-    it('should get monitoring search result', async function() {
+  describe('searchMonitorings', function () {
+    it('should get monitoring search result', async function () {
       const res = await this.api.searchMonitorings({ monitoringId });
 
       expect(res).to.be.an('Array', JSON.stringify(res));
@@ -86,14 +86,14 @@ describe('Streams', function() {
     });
   });
 
-  describe('getMonitoringResult', function() {
-    it('should get monitoring result', async function() {
+  describe('getMonitoringResult', function () {
+    it('should get monitoring result', async function () {
       const res = await this.api.getMonitoringResult(monitoringId);
 
       expect(res).to.be.an('Array', JSON.stringify(res));
     });
 
-    it('should throw an error if missing monitoringId', async function() {
+    it('should throw an error if missing monitoringId', async function () {
       try {
         await this.api.getMonitoringResult();
       } catch (e) {
@@ -107,9 +107,9 @@ describe('Streams', function() {
   });
 
   describe('killMonitoring', function () {
-    this.timeout(30000);
-    
-    it('should stop a monitoring', async function() {
+    this.timeout(50000);
+
+    it('should stop a monitoring', async function () {
       const res = await this.api.killMonitoring(monitoringId);
 
       expect(res.message).to.equal(
@@ -120,7 +120,7 @@ describe('Streams', function() {
       await waitMonitoringStop(this.api, monitoringId);
     });
 
-    it('should throw an error is missing monitoringId', async function() {
+    it('should throw an error is missing monitoringId', async function () {
       try {
         await this.api.killMonitoring();
       } catch (e) {
@@ -133,8 +133,8 @@ describe('Streams', function() {
     });
   });
 
-  describe('deleteMonitoring', function() {
-    it('should delete monitoring', async function() {
+  describe('deleteMonitoring', function () {
+    it('should delete monitoring', async function () {
       const res = await this.api.deleteMonitoring(monitoringId);
 
       expect(res.message).to.equal(
@@ -145,7 +145,7 @@ describe('Streams', function() {
       monitoringId = null;
     });
 
-    it('should throw an error is missing monitoringId', async function() {
+    it('should throw an error is missing monitoringId', async function () {
       try {
         await this.api.deleteMonitoring();
       } catch (e) {
@@ -159,8 +159,8 @@ describe('Streams', function() {
     });
   });
 
-  describe('deleteStream', function() {
-    it('should delete stream', async function() {
+  describe('deleteStream', function () {
+    it('should delete stream', async function () {
       const res = await this.api.deleteStream(streamId);
 
       expect(res.message).to.equal(
@@ -171,7 +171,7 @@ describe('Streams', function() {
       streamId = null;
     });
 
-    it('should throw an error is missing streamId', async function() {
+    it('should throw an error is missing streamId', async function () {
       try {
         await this.api.deleteStream();
       } catch (e) {
