@@ -97,7 +97,7 @@ describe('Detectors', function () {
 
   describe('redoDetector', function () {
     it('should create a copy of an existing detector', async function () {
-      const res = await this.api.redoDetector(EVERYDAY_OBJECT_ID);
+      const res = await this.api.redoDetector(detectorId);
 
       expect(res.detector_id).to.be.a('string', JSON.stringify(res));
 
@@ -123,7 +123,10 @@ describe('Detectors', function () {
       expect(res).to.be.an('array', JSON.stringify(res));
       expect(res).to.have.lengthOf(5, JSON.stringify(res));
 
-      res = await this.api.searchDetectors({ id: detectorId });
+      res = await this.api.searchDetectors({
+        id: EVERYDAY_OBJECT_ID,
+        published: true,
+      });
       expect(res).to.be.an('array', JSON.stringify(res));
       expect(res).to.have.lengthOf(1, JSON.stringify(res));
     });
