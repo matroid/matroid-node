@@ -109,9 +109,6 @@ describe('Collections', function () {
     });
   });
 
-  describe('queryCollectionByScores');
-  describe('queryCollectionByImage');
-
   describe('KillCollectionIndex', function () {
     it('should stop collection task', async function () {
       const res = await this.api.killCollectionIndex(collectionIndexId);
@@ -128,7 +125,7 @@ describe('Collections', function () {
 
   describe('updateCollectionIndex', function () {
     it('should update collection index', async function () {
-      const res = await this.api.updateCollectionIndex(collectionIndexId);
+      const res = await this.api.updateCollectionIndex(collectionIndexId, true);
 
       expect(res.collectionTask).to.be.an('object', JSON.stringify(res));
       // kill task before deleting
