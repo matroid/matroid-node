@@ -45,8 +45,8 @@ describe('Detectors', function () {
         'general'
       );
 
-      expect(res.detector_id).to.be.a('string', JSON.stringify(res));
-      detectorId = res.detector_id;
+      expect(res.detectorId).to.be.a('string', JSON.stringify(res));
+      detectorId = res.detectorId;
       // wait until detector can be edited
       await waitDetectorReadyForEdit(this.api, detectorId);
     });
@@ -68,7 +68,7 @@ describe('Detectors', function () {
     it('should start detector training', async function () {
       const res = await this.api.finalizeDetector(detectorId);
 
-      expect(res.detector_id).to.equal(detectorId, JSON.stringify(res));
+      expect(res.detectorId).to.equal(detectorId, JSON.stringify(res));
       expect(res.message).to.equal('training began successfully');
 
       await waitDetectorTraining(this.api, detectorId);

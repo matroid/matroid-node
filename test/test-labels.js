@@ -29,7 +29,7 @@ describe('Labels', function () {
       `test-label-detector-${Date.now()}`,
       'general'
     );
-    detectorId = res.detector_id;
+    detectorId = res.detectorId;
     await waitDetectorReadyForEdit(this.api, detectorId);
   });
 
@@ -49,13 +49,13 @@ describe('Labels', function () {
         CAT_FILE
       );
 
-      expect(res.label_id).to.be.a('string', JSON.stringify(res));
+      expect(res.labelId).to.be.a('string', JSON.stringify(res));
       expect(res.message).to.equal(
-        `successfully uploaded 1 images to label ${res.label_id}`,
+        `successfully uploaded 1 images to label ${res.labelId}`,
         JSON.stringify(res)
       );
 
-      labelId = res.label_id;
+      labelId = res.labelId;
     });
 
     it('should get an error with invalid params', async function () {
@@ -99,7 +99,7 @@ describe('Labels', function () {
       expect(res.images).to.be.an('Array', JSON.stringify(res));
       expect(res.images).to.have.lengthOf(1);
 
-      imageId = res.images[0]['image_id'];
+      imageId = res.images[0]['imageId'];
     });
 
     it('should throw an error with invalid params', async function () {
@@ -148,7 +148,7 @@ describe('Labels', function () {
         DOG_FILE
       );
 
-      expect(res.label_id).to.equal(labelId, JSON.stringify(res));
+      expect(res.labelId).to.equal(labelId, JSON.stringify(res));
       expect(res.message).to.equal(
         `successfully uploaded 1 images to label ${labelId}`,
         JSON.stringify(res)
