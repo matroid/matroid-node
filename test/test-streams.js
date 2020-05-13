@@ -29,9 +29,9 @@ describe('Streams', function () {
       const streamName = `node-test-stream-${Date.now()}`;
       const res = await this.api.createStream(YOUTUBE_VID_URL, streamName);
 
-      expect(res.stream_id).to.be.a('string', JSON.stringify(res));
+      expect(res.streamId).to.be.a('string', JSON.stringify(res));
 
-      streamId = res.stream_id;
+      streamId = res.streamId;
     });
 
     it('should throw an error if missing params', async function () {
@@ -53,7 +53,7 @@ describe('Streams', function () {
 
       expect(res).to.be.an('Array', JSON.stringify(res));
       expect(res).to.have.lengthOf(1, JSON.stringify(res));
-      expect(res[0].stream_id).to.equal(streamId, JSON.stringify(res));
+      expect(res[0].streamId).to.equal(streamId, JSON.stringify(res));
     });
   });
 
@@ -69,10 +69,10 @@ describe('Streams', function () {
         }
       );
 
-      expect(res.stream_id).to.equal(streamId, JSON.stringify(res));
-      expect(res.monitoring_id).to.be.a('string', JSON.stringify(res));
+      expect(res.streamId).to.equal(streamId, JSON.stringify(res));
+      expect(res.monitoringId).to.be.a('string', JSON.stringify(res));
 
-      monitoringId = res.monitoring_id;
+      monitoringId = res.monitoringId;
     });
   });
 
@@ -82,7 +82,7 @@ describe('Streams', function () {
 
       expect(res).to.be.an('Array', JSON.stringify(res));
       expect(res).to.have.lengthOf(1, JSON.stringify(res));
-      expect(res[0].monitoring_id).to.equal(monitoringId, JSON.stringify(res));
+      expect(res[0].monitoringId).to.equal(monitoringId, JSON.stringify(res));
     });
   });
 
