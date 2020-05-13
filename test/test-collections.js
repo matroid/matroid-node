@@ -129,7 +129,7 @@ describe('Collections', function () {
 
       expect(res.collectionTask).to.be.an('object', JSON.stringify(res));
       // kill task before deleting
-      await this.api.killCollectionIndex(collectionIndexId);
+      await this.api.killCollectionIndex(collectionIndexId, false);
     });
 
     it('should get an error with an invalid collection task id', async function () {
