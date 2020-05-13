@@ -169,6 +169,8 @@ describe('Labels', function () {
   });
 
   describe('localizeImage', function () {
+    this.timeout(100000);
+
     it('should take an imageId and a labelId', async function () {
       const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
         update: true,
