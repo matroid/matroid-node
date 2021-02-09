@@ -14,7 +14,7 @@ var addEndPoints = function addEndPoints(matroid) {
   matroid.endpoints = {
     // accounts
     token: matroid._makeEndpoint('POST', 'oauth/token'),
-    getAccountInfo: matroid._makeEndpoint('GET', 'account'),
+    accountInfo: matroid._makeEndpoint('GET', 'account'),
 
     // collections
     createCollectionIndex: matroid._makeEndpoint('POST', 'collections/:key/collection-tasks'),

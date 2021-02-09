@@ -21,7 +21,7 @@ var addLabelsApi = function addLabelsApi(matroid) {
       };
 
       _this._checkImageSize(imageFiles);
-      options.filePaths = { image_files: imageFiles };
+      options.filePaths = { imageFiles: imageFiles };
 
       var processedConfigs = configs;
       if (processedConfigs.bboxes) {
@@ -75,9 +75,9 @@ var addLabelsApi = function addLabelsApi(matroid) {
       var options = {
         action: 'getAnnotations',
         data: {
-          detector_id: detectorId,
-          label_ids: labelIds,
-          image_id: imageId
+          detectorId: detectorId,
+          labelIds: labelIds,
+          imageId: imageId
         }
       };
 
@@ -144,7 +144,7 @@ var addLabelsApi = function addLabelsApi(matroid) {
         data: {}
       };
 
-      options.filePaths = { image_files: imageFiles };
+      options.filePaths = { imageFiles: imageFiles };
 
       var processedConfigs = configs;
       if (processedConfigs.bboxes) {

@@ -19,9 +19,9 @@ describe('Accounts', function() {
     });
   });
 
-  describe('getAccountInfo', function() {
+  describe('accountInfo', function() {
     it('should get account info', async function() {
-      const res = await this.api.getAccountInfo();
+      const res = await this.api.accountInfo();
 
       expect(res.account).to.be.an('object');
       expect(res.account).to.have.property('name');

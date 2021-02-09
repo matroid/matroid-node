@@ -2,7 +2,7 @@
 
 var addDetectorApi = function addDetectorApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectors
-  matroid.createDetector = function (zipFile, name, detectorType) {
+  matroid.createDetector = function (zipFile, name, detectorType, configs) {
     var _this = this;
 
     /*
@@ -18,9 +18,13 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
       var options = {
         action: 'createDetector',
-        data: { name: name, detector_type: detectorType },
+        data: { name: name, detectorType: detectorType },
         filePaths: zipFile
       };
+
+      if (configs.detectorId) {
+        options.data.detectorId = configs.detectorId;
+      }
 
       _this._genericRequest(options, resolve, reject);
     });
@@ -88,8 +92,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
     /* 
     Certain combination of parameters can be supplied: 
-    file_detector, file_proto + file_label(+ file_label_ind), 
-    or file_proto + labels(+ label_inds).
+    file_detector, fileProto + fileLabel(+ fileLabel_ind), 
+    or fileProto + labels(+ label_inds).
     Parentheses part can be optionally supplied for object detection.
     */
 
@@ -126,8 +130,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
 
           Object.assign(options.filePaths, {
-            file_proto: fileProto,
-            file_label: fileLabel
+            fileProto: fileProto,
+            fileLabel: fileLabel
           });
           Object.assign(options.data, {
             input_tensor: inputTensor,
@@ -136,7 +140,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
           });
           if (fileLabelInd) {
             Object.assign(options.filePaths, {
-              file_label_ind: fileLabelInd
+              fileLabel_ind: fileLabelInd
             });
           }
         } else if (fileProto && labels) {
@@ -144,7 +148,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
 
           Object.assign(options.filePaths, {
-            file_proto: fileProto
+            fileProto: fileProto
           });
           Object.assign(options.data, {
             labels: labels,
