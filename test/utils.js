@@ -26,7 +26,7 @@ const printInfo = message => {
 
 const waitDetectorReadyForEdit = async (api, detectorId) => {
   let res = await api.getDetectorInfo(detectorId);
-
+  
   let tries = 0;
   const maxTries = 15;
   while (res.processing) {

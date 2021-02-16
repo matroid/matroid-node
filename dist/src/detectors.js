@@ -22,7 +22,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
         filePaths: zipFile
       };
 
-      if (configs.detectorId) {
+      if (configs && configs.detectorId) {
         options.data.detectorId = configs.detectorId;
       }
 
@@ -50,7 +50,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idFinalize
-  matroid.finalizeDetector = function (detectorId) {
+  matroid.trainDetector = function (detectorId) {
     var _this3 = this;
 
     /*
@@ -60,7 +60,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
       _this3._checkRequiredParams({ detectorId: detectorId });
 
       var options = {
-        action: 'finalizeDetector',
+        action: 'trainDetector',
         uriParams: { ':key': detectorId }
       };
 
@@ -160,7 +160,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
             Object.assign(options.data, { label_inds: labelInds });
           }
         } else {
-          throw new Error('Invalid paramter combination');
+          throw new Error('Invalid parameter combination');
         }
       }
 
