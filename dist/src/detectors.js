@@ -169,7 +169,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idRedo
-  matroid.redoDetector = function (detectorId) {
+  matroid.redoDetector = function (detectorId, feedbackOnly) {
     var _this6 = this;
 
     /*
@@ -180,7 +180,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
       var options = {
         action: 'redoDetector',
-        uriParams: { ':key': detectorId }
+        uriParams: { ':key': detectorId },
+        data: { feedbackOnly: feedbackOnly }
       };
 
       _this6._genericRequest(options, resolve, reject);
