@@ -49,10 +49,51 @@ const deletePendingDetector = async api => {
   }
 };
 
+// wait until the collection index is complete (i.e. has a state of 'success' or 'failed')
+const waitIndexDone = async (api, collectionTaskId) => {
+  let res = await api.getCollectionTask(collectionTaskId);
+  
+  let tries = 0;
+  const maxTries = 5;
+
+  const doneStates = ['success', 'failed'];
+  while (!doneStates.includes(res.collectionTask.state)) {
+    tries++;
+    if (tries > maxTries) {
+      throw new Error(
+        'Timeout when waiting for collection task to be ready'
+      );
+    }
+
+    await sleep(2000);
+    res = await api.getCollectionTask(collectionTaskId);
+  }
+}
+
+async function waitCollectionTaskStop(api, collectionIndexId) {
+  // wait until collection task state is failed so it can be deleted
+  let res = await api.getCollectionTask(collectionIndexId);
+  let tries = 0;
+  const maxTries = 10;
+
+  while (res.collectionTask.state !== 'failed') {
+    if (tries > maxTries) {
+      throw new Error('Timeout when waiting for collection task to stop');
+    }
+
+    await sleep(2000);
+    tries++;
+
+    res = await api.getCollectionTask(collectionIndexId);
+  }
+}
+
 module.exports = {
   setUpClient,
   sleep,
   printInfo,
   waitDetectorReadyForEdit,
-  deletePendingDetector
+  deletePendingDetector,
+  waitIndexDone,
+  waitCollectionTaskStop,
 };

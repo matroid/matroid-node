@@ -6,7 +6,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this = this;
 
     /*
-    Create an index on a collection with a detector
+    Creates an index on a collection with a detector.
     */
     return new Promise(function (resolve, reject) {
       _this._checkRequiredParams({ collectionId: collectionId, detectorId: detectorId, fileTypes: fileTypes });
@@ -25,8 +25,10 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
   matroid.createCollection = function (name, url, sourceType) {
     var _this2 = this;
 
+    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
-    Creates a new collection from a web or S3 url. Automatically kick off default indexes
+    Creates a new collection from a web or S3 url.
     */
     return new Promise(function (resolve, reject) {
       _this2._checkRequiredParams({ name: name, url: url, sourceType: sourceType });
@@ -35,6 +37,12 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
         action: 'createCollection',
         data: { name: name, url: url, sourceType: sourceType }
       };
+
+      var indexWithDefault = configs.indexWithDefault;
+
+      if (indexWithDefault) {
+        options.data.indexWithDefault = indexWithDefault;
+      }
 
       _this2._genericRequest(options, resolve, reject);
     });
@@ -45,7 +53,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this3 = this;
 
     /*
-    Deletes a completed collection manager task
+    Deletes a completed collection task.
     */
     return new Promise(function (resolve, reject) {
       _this3._checkRequiredParams({ collectionTaskId: collectionTaskId });
@@ -64,7 +72,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this4 = this;
 
     /*
-    Deletes a collection with no active indexing tasks
+    Deletes a collection with no active indexing tasks.
     */
     return new Promise(function (resolve, reject) {
       _this4._checkRequiredParams({ collectionId: collectionId });
@@ -83,7 +91,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this5 = this;
 
     /*
-    Creates a new collection from a web or S3 url
+    Retrieves information about a specific collection task.
     */
     return new Promise(function (resolve, reject) {
       _this5._checkRequiredParams({ collectionTaskId: collectionTaskId });
@@ -102,7 +110,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this6 = this;
 
     /*
-    Get information about a specific collection
+    Retrieves information about a specific collection.
     */
     return new Promise(function (resolve, reject) {
       _this6._checkRequiredParams({ collectionId: collectionId });
@@ -121,7 +129,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this7 = this;
 
     /*
-    Kills an active collection indexing task
+    Kills an active collection indexing task.
     */
     return new Promise(function (resolve, reject) {
       _this7._checkRequiredParams({ collectionTaskId: collectionTaskId });
@@ -140,7 +148,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this8 = this;
 
     /*
-    Query against a collection index using a set of labels and scores as a query
+    Queries against a collection index using a set of labels and scores.
     */
     return new Promise(function (resolve, reject) {
       _this8._checkRequiredParams({ taskId: taskId, thresholds: thresholds, numResults: numResults });
@@ -162,7 +170,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     /*
-    Query against a collection index (CollectionManagerTask) using an image as key
+    Queries against a collection index using an image.
     */
     return new Promise(function (resolve, reject) {
       _this9._checkRequiredParams({ taskId: taskId, image: image });
@@ -184,13 +192,17 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
       }
 
       var numResults = configs.numResults,
-          boundingBox = configs.boundingBox;
+          boundingBox = configs.boundingBox,
+          shouldIndicateDuplicates = configs.shouldIndicateDuplicates;
 
       if (numResults) {
         options.data.numResults = numResults;
       }
       if (boundingBox) {
         options.data.boundingBox = JSON.stringify(boundingBox);
+      }
+      if (shouldIndicateDuplicates) {
+        options.data.shouldIndicateDuplicates = shouldIndicateDuplicates;
       }
 
       _this9._genericRequest(options, resolve, reject);
