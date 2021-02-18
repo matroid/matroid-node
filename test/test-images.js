@@ -24,6 +24,7 @@ describe('Images', function () {
       });
 
       expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
     });
 
     it('should classify an array of local images', async function () {
@@ -32,6 +33,7 @@ describe('Images', function () {
       });
 
       expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(2, JSON.stringify(res));
     });
 
     it('should classify an online url', async function () {
@@ -40,6 +42,7 @@ describe('Images', function () {
       });
 
       expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
     });
 
     it('should classify an array of online urls', async function () {
@@ -48,6 +51,7 @@ describe('Images', function () {
       });
 
       expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(2, JSON.stringify(res));
     });
 
     it('should get an error if no images are provided', async function () {
@@ -61,13 +65,40 @@ describe('Images', function () {
   });
 
   describe('localizeImage', function () {
-    it('should classify an image when update is not set to true', async function () {
+    it('should classify a local image when update is not set to true', async function () {
+      const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
+        file: CAT_FILE,
+      });
+
+      expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
+    });
+
+    it('should classify an array of local images when update is not set to true', async function () {
       const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
         url: CAT_URL,
       });
 
       expect(res.results).to.be.an('array', JSON.stringify(res));
-      expect(res.results).to.have.lengthOf(1);
+      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
+    });
+
+    it('should classify an online url when update is not set to true', async function () {
+      const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
+        file: CAT_FILE,
+      });
+
+      expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
+    });
+
+    it('should classify an array of online urls when update is not set to true', async function () {
+      const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
+        url: [CAT_URL, DOG_URL],
+      });
+
+      expect(res.results).to.be.an('array', JSON.stringify(res));
+      expect(res.results).to.have.lengthOf(2, JSON.stringify(res));
     });
 
     // { update: true } positive case is tested in test-labels.js, it needs a pending detector/label to test
