@@ -69,7 +69,7 @@ var addLabelsApi = function addLabelsApi(matroid) {
 
 
       if (!detectorId && !labelIds && !imageId) {
-        throw new Error('Please pass in one of the ids: detectorId, labelIds, or imageId');
+        throw new Error('Please pass in one of the following IDs: detectorId, labelIds, or imageId');
       }
 
       var options = {
