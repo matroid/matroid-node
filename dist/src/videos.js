@@ -5,8 +5,11 @@ var addVideosApi = function addVideosApi(matroid) {
   matroid.classifyVideo = function (detectorId, video) {
     var _this = this;
 
+    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
-    Expected video format: { url: 'https://online-video-url'} OR { file: '/home/user/video.mp4'}
+    - Expected video format: { url: 'https://online-video-url'} OR { file: '/home/user/video.mp4'}
+    - videoId, fps, and annotationThresholds are the three parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
       _this._checkRequiredParams({ detectorId: detectorId, video: video });
@@ -30,6 +33,7 @@ var addVideosApi = function addVideosApi(matroid) {
 
       if (video.file) options.filePaths = video.file;
       if (video.url) options.data = { url: video.url };
+      Object.assign(options.data, configs);
 
       _this._genericRequest(options, resolve, reject);
     });
@@ -42,7 +46,8 @@ var addVideosApi = function addVideosApi(matroid) {
     var configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     /*
-    Get video classification results
+    - Get video classification results
+    - format, annotations, and threshold are the three parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
       _this2._checkRequiredParams({ videoId: videoId });
