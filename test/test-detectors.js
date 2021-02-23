@@ -80,15 +80,15 @@ describe('Detectors', function () {
     });
   });
 
-  describe('getDetectorInfo', function () {
+  describe('detectorInfo', function () {
     it('should get detector info', async function () {
-      const res = await this.api.getDetectorInfo(detectorId);
+      const res = await this.api.detectorInfo(detectorId);
 
       expect(res.id).to.equal(detectorId, JSON.stringify(res));
     });
 
     it('should get an error with an invalid detector ID', async function () {
-      const res = await this.api.getDetectorInfo(RANDOM_MONGO_ID);
+      const res = await this.api.detectorInfo(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
     });
@@ -196,7 +196,7 @@ async function waitDetectorTraining(api, detectorId) {
   // wait until detector is trained
   printInfo('waiting for detector training');
 
-  let res = await api.getDetectorInfo(detectorId);
+  let res = await api.detectorInfo(detectorId);
   let indicator = '\x1b[2m      .';
   const maxTries = 40;
 
@@ -211,7 +211,7 @@ async function waitDetectorTraining(api, detectorId) {
     }
 
     await sleep(5000);
-    res = await api.getDetectorInfo(detectorId);
+    res = await api.detectorInfo(detectorId);
   }
 
   printInfo('detector is ready.');

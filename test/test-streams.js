@@ -1,12 +1,12 @@
 const chai = require('chai');
 const expect = chai.expect;
 const { setUpClient, sleep } = require('./utils');
-const { YOUTUBE_VID_URL, EVERYDAY_OBJECT_ID } = require('./data');
+const { S3_VID_URL, EVERYDAY_OBJECT_ID } = require('./data');
 
 describe('Streams', function () {
   this.timeout(10000);
 
-  let monitoringId, streamId;
+  let streamId, monitoringId;
 
   before(async function () {
     this.api = setUpClient();
@@ -27,7 +27,7 @@ describe('Streams', function () {
   describe('createStream', async function () {
     it('should create a stream', async function () {
       const streamName = `node-test-stream-${Date.now()}`;
-      const res = await this.api.createStream(YOUTUBE_VID_URL, streamName);
+      const res = await this.api.createStream(S3_VID_URL, streamName);
 
       expect(res.streamId).to.be.a('string', JSON.stringify(res));
 
@@ -36,7 +36,7 @@ describe('Streams', function () {
 
     it('should throw an error if missing params', async function () {
       try {
-        await this.api.createStream(YOUTUBE_VID_URL);
+        await this.api.createStream(S3_VID_URL);
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(

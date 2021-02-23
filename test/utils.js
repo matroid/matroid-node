@@ -25,7 +25,7 @@ const printInfo = message => {
 };
 
 const waitDetectorReadyForEdit = async (api, detectorId) => {
-  let res = await api.getDetectorInfo(detectorId);
+  let res = await api.detectorInfo(detectorId);
   
   let tries = 0;
   const maxTries = 15;
@@ -38,7 +38,7 @@ const waitDetectorReadyForEdit = async (api, detectorId) => {
     }
 
     await sleep(2000);
-    res = await api.getDetectorInfo(detectorId);
+    res = await api.detectorInfo(detectorId);
   }
 };
 
@@ -88,6 +88,26 @@ async function waitCollectionTaskStop(api, collectionIndexId) {
   }
 }
 
+async function waitVideoDoneClassifying(api, videoId) {
+  // wait until video is done classifying so it doesn't conflict with future runs b/c of concurrent video classification limit
+  let res = await api.getVideoResults(videoId);
+  let tries = 0;
+  const maxTries = 10;
+
+  const doneStates = ['success', 'failed'];
+  while (!doneStates.includes(res.state)) {
+    if (tries > maxTries) {
+      throw new Error('Timeout when waiting for video to finish classifying');
+    }
+    console.log(res.state)
+
+    await sleep(2000);
+    tries++;
+
+    res = await api.getVideoResults(videoId);
+  }
+};
+
 module.exports = {
   setUpClient,
   sleep,
@@ -96,4 +116,5 @@ module.exports = {
   deletePendingDetector,
   waitIndexDone,
   waitCollectionTaskStop,
+  waitVideoDoneClassifying,
 };

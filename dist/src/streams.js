@@ -5,8 +5,11 @@ var addStreamsApi = function addStreamsApi(matroid) {
   matroid.createStream = function (url, name) {
     var _this = this;
 
+    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
-    Create a stream of a online video url
+    - Create a stream of a online video url
+    - detectionFps, recordingEnabled, and retentionEnabled are the three parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
       _this._checkRequiredParams({ url: url, name: name });
@@ -15,6 +18,8 @@ var addStreamsApi = function addStreamsApi(matroid) {
         action: 'createStream',
         data: { name: name, url: url }
       };
+
+      Object.assign(options.data, configs);
 
       _this._genericRequest(options, resolve, reject);
     });
@@ -65,6 +70,9 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
     var configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+    /*
+    - format and statusOnly are parameters passed in the configs object
+    */
     return new Promise(function (resolve, reject) {
       _this4._checkRequiredParams({ monitoringId: monitoringId });
 
@@ -109,6 +117,9 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
     var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
+    /*
+    - endpoint, startTime, endTime, taskName, notificationTimezone, minEmailInterval, sendEmailNotifications, regionEnabled, regionCoords, regionNegativeCoords, monitoringHours, and colors are the parameters passed in the configs object
+    */
     return new Promise(function (resolve, reject) {
       _this6._checkRequiredParams({ streamId: streamId, detectorId: detectorId, thresholds: thresholds });
 
@@ -134,6 +145,9 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
     var configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+    /*
+    - streamId, monitoringId, detectorId, name, startTime, endTime, and state are the parameters passed in the configs object
+    */
     return new Promise(function (resolve, reject) {
       var options = {
         action: 'searchMonitorings',
@@ -153,6 +167,9 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
     var configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+    /*
+    - streamId, name, and permission are the three parameters passed in the configs object
+    */
     return new Promise(function (resolve, reject) {
       var options = {
         action: 'searchStreams',
