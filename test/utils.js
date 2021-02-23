@@ -44,6 +44,7 @@ const waitDetectorReadyForEdit = async (api, detectorId) => {
 
 const deletePendingDetector = async api => {
   const res = await api.searchDetectors({ state: 'pending' });
+
   if (res.length) {
     await api.deleteDetector(res[0]['id']);
   }

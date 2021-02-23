@@ -2,8 +2,10 @@
 
 var addDetectorApi = function addDetectorApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectors
-  matroid.createDetector = function (zipFile, name, detectorType, configs) {
+  matroid.createDetector = function (zipFile, name, detectorType) {
     var _this = this;
+
+    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
     /*
     Creates detector asynchronously (turn processing to true) Note: calling this API creates a pending detector, and you can update this detector with more images by calling this API with detector_id; however, creating more than one pending detector is not allowed, so you need to finalize or delete your existing pending detector before creating a new one.
@@ -22,9 +24,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
         filePaths: zipFile
       };
 
-      if (configs && configs.detectorId) {
-        options.data.detectorId = configs.detectorId;
-      }
+      Object.assign(options.data, configs);
 
       _this._genericRequest(options, resolve, reject);
     });
@@ -69,14 +69,14 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-GetDetectorsDetector_id
-  matroid.getDetectorInfo = function (detectorId) {
+  matroid.detectorInfo = function (detectorId) {
     var _this4 = this;
 
     return new Promise(function (resolve, reject) {
       _this4._checkRequiredParams({ detectorId: detectorId });
 
       var options = {
-        action: 'getDetectorInfo',
+        action: 'detectorInfo',
         uriParams: { ':key': detectorId }
       };
 

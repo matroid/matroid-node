@@ -188,9 +188,7 @@ describe('Labels', function () {
   //   this.timeout(100000);
 
   //   it('should take an imageId and a labelId', async function () {
-  //     const infoRes = await this.api.getDetectorInfo(detectorId);
-  //     console.log(infoRes.labels)
-  //     console.log(infoRes.labelIds)
+  //     const infoRes = await this.api.detectorInfo(detectorId);
 
   //     const res = await this.api.localizeImage(detectorId, 'new-label', {
   //       update: true,
