@@ -1,7 +1,7 @@
 module.exports = {
   INVALID_QUERY_ERR: 'invalid_query_err',
   EVERYDAY_OBJECT_ID: '598e23679fd1a805a5c09275',
-  RANDOM_MONGO_ID: '5d0966ba1eff390eb5d9e2c2',
+  RANDOM_MONGO_ID: '6036ccacba368fbbd2cb20ce',
   DETECTOR_ZIP: `${__dirname}/test-files/detector.zip`,
   DOG_FILE: `${__dirname}/test-files/dog.jpg`,
   CAT_FILE: `${__dirname}/test-files/cat.jpg`,
