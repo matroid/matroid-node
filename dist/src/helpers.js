@@ -32,10 +32,11 @@ var addEndPoints = function addEndPoints(matroid) {
     createDetector: matroid._makeEndpoint('POST', 'detectors'),
     deleteDetector: matroid._makeEndpoint('DELETE', 'detectors/:key'),
     trainDetector: matroid._makeEndpoint('POST', 'detectors/:key/finalize'),
-    detectorInfo: matroid._makeEndpoint('GET', 'detectors/:key'),
+    getDetectorInfo: matroid._makeEndpoint('GET', 'detectors/:key'),
     importDetector: matroid._makeEndpoint('POST', 'detectors/upload'),
     redoDetector: matroid._makeEndpoint('POST', 'detectors/:key/redo'),
     searchDetectors: matroid._makeEndpoint('GET', 'detectors/search'),
+    listDetectors: matroid._makeEndpoint('GET', 'detectors'),
 
     // images
     classifyImage: matroid._makeEndpoint('POST', 'detectors/:key/classify_image'),
@@ -54,7 +55,7 @@ var addEndPoints = function addEndPoints(matroid) {
     getVideoResults: matroid._makeEndpoint('GET', 'videos/:key'),
 
     // streams
-    createStream: matroid._makeEndpoint('POST', 'streams'),
+    registerStream: matroid._makeEndpoint('POST', 'streams'),
     deleteMonitoring: matroid._makeEndpoint('DELETE', 'monitorings/:key'),
     deleteStream: matroid._makeEndpoint('DELETE', 'streams/:key'),
     getMonitoringResult: matroid._makeEndpoint('GET', 'monitorings/:key'),

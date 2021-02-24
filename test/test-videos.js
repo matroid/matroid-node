@@ -43,7 +43,7 @@ describe('Videos', function () {
 
   describe('getVideoResults', async function () {
     it('should get video classification results', async function () {
-      const res = await this.api.getVideoResults(videoId, {
+      const res = await this.api.getVideoResults(videoId, null, null, {
         annotations: true,
       });
 

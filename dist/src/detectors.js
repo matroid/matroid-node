@@ -69,14 +69,15 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-GetDetectorsDetector_id
-  matroid.detectorInfo = function (detectorId) {
+  // Formerly called detectorInfo (now deprecated), use getDetectorInfo
+  matroid.getDetectorInfo = matroid.detectorInfo = function (detectorId) {
     var _this4 = this;
 
     return new Promise(function (resolve, reject) {
       _this4._checkRequiredParams({ detectorId: detectorId });
 
       var options = {
-        action: 'detectorInfo',
+        action: 'getDetectorInfo',
         uriParams: { ':key': detectorId }
       };
 
@@ -206,6 +207,22 @@ var addDetectorApi = function addDetectorApi(matroid) {
       Object.assign(options.data, configs);
 
       _this7._genericRequest(options, resolve, reject);
+    });
+  };
+
+  // DEPRECATED - use searchDetectors now
+  matroid.listDetectors = function () {
+    var _this8 = this;
+
+    /*
+    Lists all detectors that are public or owned by the user.
+    */
+    return new Promise(function (resolve, reject) {
+      var options = {
+        action: 'listDetectors'
+      };
+
+      _this8._genericRequest(options, resolve, reject);
     });
   };
 };

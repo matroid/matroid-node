@@ -40,14 +40,14 @@ var addVideosApi = function addVideosApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Videos-GetVideosVideo_idQuery
-  matroid.getVideoResults = function (videoId) {
+  matroid.getVideoResults = function (videoId, threshold, format) {
     var _this2 = this;
 
-    var configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
     /*
     - Get video classification results
-    - format, annotations, and threshold are the three parameters passed in the configs object
+    - annotations is the parameter passed in the configs object
     */
     return new Promise(function (resolve, reject) {
       _this2._checkRequiredParams({ videoId: videoId });
@@ -55,11 +55,11 @@ var addVideosApi = function addVideosApi(matroid) {
       var options = {
         action: 'getVideoResults',
         uriParams: { ':key': videoId },
-        data: {}
+        data: { threshold: threshold, format: format }
       };
 
       Object.assign(options.data, configs);
-      if (configs.format === 'csv') options.shouldNotParse = true;
+      if (format === 'csv') options.shouldNotParse = true;
 
       _this2._genericRequest(options, resolve, reject);
     });

@@ -24,10 +24,10 @@ describe('Streams', function () {
     }
   });
 
-  describe('createStream', async function () {
+  describe('registerStream', async function () {
     it('should create a stream', async function () {
       const streamName = `node-test-stream-${Date.now()}`;
-      const res = await this.api.createStream(S3_VID_URL, streamName);
+      const res = await this.api.registerStream(S3_VID_URL, streamName);
 
       expect(res.streamId).to.be.a('string', JSON.stringify(res));
 
@@ -36,7 +36,7 @@ describe('Streams', function () {
 
     it('should throw an error if missing params', async function () {
       try {
-        await this.api.createStream(S3_VID_URL);
+        await this.api.registerStream(S3_VID_URL);
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(
@@ -62,8 +62,8 @@ describe('Streams', function () {
       const res = await this.api.monitorStream(
         streamId,
         EVERYDAY_OBJECT_ID,
-        { cat: 0.5 },
         {
+          thresholds: { cat: 0.5 },
           taskName: 'node-test-task',
           endTime: '5 minutes',
         }
