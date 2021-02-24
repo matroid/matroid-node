@@ -39,12 +39,13 @@ var addAccountsApi = function addAccountsApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Accounts-GetAccount
-  matroid.accountInfo = function () {
+  // Formerly called accountInfo (now deprecated), use getAccountInfo
+  matroid.getAccountInfo = matroid.accountInfo = function () {
     var _this2 = this;
 
     return new Promise(function (resolve, reject) {
       var options = {
-        action: 'accountInfo'
+        action: 'getAccountInfo'
       };
 
       _this2._genericRequest(options, resolve, reject);

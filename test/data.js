@@ -11,5 +11,6 @@ module.exports = {
   UPLOAD_PB_FILE: `${__dirname}/test-files/upload-detector.pb`,
   UPLOAD_LABEL_FILE: `${__dirname}/test-files/upload-detector-label.txt`,
   S3_VID_URL: 'https://m-test-public.s3-us-west-2.amazonaws.com/videos/Multiple+cars+-+5s.mp4',
+  S3_VID_URL_2: 'https://m-test-public.s3.us-west-2.amazonaws.com/videos/TomCruiseInterview.mp4',
   S3_BUCKET_URL: 's3://bucket/m-test-public/'
 };

@@ -1,12 +1,12 @@
 const chai = require('chai');
 const expect = chai.expect;
 const { setUpClient, sleep } = require('./utils');
-const { S3_VID_URL, EVERYDAY_OBJECT_ID } = require('./data');
+const { S3_VID_URL, S3_VID_URL_2 , EVERYDAY_OBJECT_ID } = require('./data');
 
 describe('Streams', function () {
   this.timeout(10000);
 
-  let streamId, monitoringId;
+  let streamId, streamId2, monitoringId;
 
   before(async function () {
     this.api = setUpClient();
@@ -22,21 +22,34 @@ describe('Streams', function () {
     if (streamId) {
       await this.api.deleteStream(streamId);
     }
+
+    if (streamId2) {
+      await this.api.deleteStream(streamId2);
+    }
   });
 
-  describe('registerStream', async function () {
+  describe('createStream', async function () {
     it('should create a stream', async function () {
       const streamName = `node-test-stream-${Date.now()}`;
-      const res = await this.api.registerStream(S3_VID_URL, streamName);
+      const res = await this.api.createStream(S3_VID_URL, streamName);
 
       expect(res.streamId).to.be.a('string', JSON.stringify(res));
 
       streamId = res.streamId;
     });
 
+    it('should create a stream using registerStream (deprecated for createStream)', async function () {
+      const streamName = `node-test-stream-${Date.now()}`;
+      const res = await this.api.registerStream(S3_VID_URL_2, streamName);
+
+      expect(res.streamId).to.be.a('string', JSON.stringify(res));
+
+      streamId2 = res.streamId;
+    });
+
     it('should throw an error if missing params', async function () {
       try {
-        await this.api.registerStream(S3_VID_URL);
+        await this.api.createStream(S3_VID_URL);
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(

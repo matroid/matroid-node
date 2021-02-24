@@ -2,7 +2,7 @@
 
 var addStreamsApi = function addStreamsApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreams
-  matroid.registerStream = function (url, name) {
+  matroid.createStream = matroid.registerStream = function (url, name) {
     var _this = this;
 
     var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -15,7 +15,7 @@ var addStreamsApi = function addStreamsApi(matroid) {
       _this._checkRequiredParams({ url: url, name: name });
 
       var options = {
-        action: 'registerStream',
+        action: 'createStream',
         data: { name: name, url: url }
       };
 

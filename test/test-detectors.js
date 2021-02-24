@@ -178,7 +178,7 @@ describe('Detectors', function () {
     });
   });
 
-  describe('listDetectors', function () {
+  describe('listDetectors (deprecated for searchDetectors)', function () {
     it('should list all detectors', async function () {
       const res = await this.api.listDetectors();
 

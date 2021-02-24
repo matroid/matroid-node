@@ -14,7 +14,7 @@ var addEndPoints = function addEndPoints(matroid) {
   matroid.endpoints = {
     // accounts
     token: matroid._makeEndpoint('POST', 'oauth/token'),
-    accountInfo: matroid._makeEndpoint('GET', 'account'),
+    getAccountInfo: matroid._makeEndpoint('GET', 'account'),
 
     // collections
     createCollectionIndex: matroid._makeEndpoint('POST', 'collections/:key/collection-tasks'),
@@ -55,7 +55,7 @@ var addEndPoints = function addEndPoints(matroid) {
     getVideoResults: matroid._makeEndpoint('GET', 'videos/:key'),
 
     // streams
-    registerStream: matroid._makeEndpoint('POST', 'streams'),
+    createStream: matroid._makeEndpoint('POST', 'streams'),
     deleteMonitoring: matroid._makeEndpoint('DELETE', 'monitorings/:key'),
     deleteStream: matroid._makeEndpoint('DELETE', 'streams/:key'),
     getMonitoringResult: matroid._makeEndpoint('GET', 'monitorings/:key'),
