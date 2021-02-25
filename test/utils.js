@@ -1,18 +1,18 @@
 const Matroid = require('../dist/matroid');
 
 const setUpClient = () => {
-  let { BASE_URL, CLIENT_ID, CLIENT_SECRET } = process.env;
+  let { BASE_URL, MATROID_CLIENT_ID, MATROID_CLIENT_SECRET } = process.env;
 
   const baseUrl = BASE_URL || 'https://staging.dev.matroid.com/api/v1';
 
-  if (!CLIENT_ID || !CLIENT_SECRET) {
-    throw new Error('Please pass in CLIENT_ID and CLIENT_SECRET');
+  if (!MATROID_CLIENT_ID || !MATROID_CLIENT_SECRET) {
+    throw new Error('Please pass in MATROID_CLIENT_ID and MATROID_CLIENT_SECRET');
   }
 
   return new Matroid({
     baseUrl,
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET
+    clientId: MATROID_CLIENT_ID,
+    clientSecret: MATROID_CLIENT_SECRET
   });
 };
 
@@ -34,11 +34,12 @@ const waitDetectorReadyForEdit = async (api, detectorId) => {
     if (tries > maxTries) {
       throw new Error(
         'Timeout when waiting for detector to be ready for editing'
-      );
-    }
-
-    await sleep(2000);
-    res = await api.detectorInfo(detectorId);
+        );
+      }
+      
+      await sleep(2000);
+      res = await api.detectorInfo(detectorId);
+      console.log(res.state)
   }
 };
 
