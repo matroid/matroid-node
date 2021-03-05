@@ -156,7 +156,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
       var options = {
         action: 'queryCollectionByScores',
         uriParams: { ':key': taskId },
-        data: { numResults: numResults }
+        data: { thresholds: thresholds }
       };
       Object.assign(options.data, configs);
 
