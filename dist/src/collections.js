@@ -144,20 +144,21 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     });
   };
   // https://www.matroid.com/docs/api/index.html#api-Collections-PostApiVersionCollectionTasksTaskidScoresQuery
-  matroid.queryCollectionByScores = function (taskId, thresholds, numResults) {
+  matroid.queryCollectionByScores = function (taskId, thresholds, configs) {
     var _this8 = this;
 
     /*
     Queries against a collection index using a set of labels and scores.
     */
     return new Promise(function (resolve, reject) {
-      _this8._checkRequiredParams({ taskId: taskId, thresholds: thresholds, numResults: numResults });
+      _this8._checkRequiredParams({ taskId: taskId, thresholds: thresholds });
 
       var options = {
         action: 'queryCollectionByScores',
         uriParams: { ':key': taskId },
-        data: { thresholds: thresholds, numResults: numResults }
+        data: { numResults: numResults }
       };
+      Object.assign(options.data, configs);
 
       _this8._genericRequest(options, resolve, reject);
     });

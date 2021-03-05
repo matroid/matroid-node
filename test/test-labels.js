@@ -184,32 +184,6 @@ describe('Labels', function () {
     });
   });
 
-  // describe('localizeImage', function () {
-  //   this.timeout(100000);
-
-  //   it('should take an imageId and a labelId', async function () {
-  //     const res = await this.api.localizeImage(detectorId, 'cat', {
-  //       update: true,
-  //       imageId,
-  //       labelId,
-  //     });
-
-  //     expect(res.results).to.be.an('Array', JSON.stringify(res));
-  //     expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
-  //   });
-
-  //   it('should take an array of imageIds and a labelId', async function () {
-  //     const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
-  //       update: true,
-  //       imageIds: [imageId, 'invalid-id'],
-  //       labelId,
-  //     });
-
-  //     expect(res.results).to.be.an('Array', JSON.stringify(res));
-  //     expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
-  //   });
-  // });
-
   describe('deleteLabel', function () {
     it('should delete a label', async function () {
       const res = await this.api.deleteLabel(detectorId, labelId);
