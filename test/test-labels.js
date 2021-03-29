@@ -27,7 +27,7 @@ describe('Labels', function () {
     const res = await this.api.createDetector(
       DETECTOR_ZIP,
       `test-label-detector-${Date.now()}`,
-      'general'
+      'single_shot_detector'
     );
     detectorId = res.detectorId;
     await waitDetectorReadyForEdit(this.api, detectorId);
@@ -72,11 +72,29 @@ describe('Labels', function () {
   });
 
   describe('getAnnotations', function () {
-    it('should get annotations', async function () {
+    it('should get annotations using a labelId', async function () {
       const res = await this.api.getAnnotations({ labelIds: [labelId] });
 
       expect(res.images).to.be.an('Array', JSON.stringify(res));
       expect(res.images).to.have.lengthOf(1, JSON.stringify(res));
+
+      imageId = res.images[0].id;
+    });
+
+    it('should get annotations using a detectorId', async function () {
+      const res = await this.api.getAnnotations({ detectorId });
+
+      expect(res.images).to.be.an('Array', JSON.stringify(res));
+      // two images from detector zip file and one image from the createLabelWithImages test
+      expect(res.images).to.have.lengthOf(3, JSON.stringify(res));
+    });
+
+    it('should get annotations using an imageId', async function () {
+      const res = await this.api.getAnnotations({ imageId });
+
+      expect(res.images).to.be.an('Array', JSON.stringify(res));
+      expect(res.images).to.have.lengthOf(1, JSON.stringify(res));
+      expect(res.images[0].id).to.equal(imageId);
     });
 
     it('should get an error with invalid params', async function () {
@@ -85,7 +103,7 @@ describe('Labels', function () {
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(
-          'Please pass in one of the ids: detectorId, labelIds, or imageId',
+          'Please pass in one of the following IDs: detectorId, labelIds, or imageId',
           JSON.stringify(e)
         );
       }
@@ -98,8 +116,6 @@ describe('Labels', function () {
 
       expect(res.images).to.be.an('Array', JSON.stringify(res));
       expect(res.images).to.have.lengthOf(1);
-
-      imageId = res.images[0]['imageId'];
     });
 
     it('should throw an error with invalid params', async function () {
@@ -115,7 +131,7 @@ describe('Labels', function () {
     });
   });
 
-  describe('UpdateAnnotations', function () {
+  describe('updateAnnotations', function () {
     it('should update annotations', async function () {
       const res = await this.api.updateAnnotations(detectorId, labelId, [
         { id: imageId, bbox: { left: 0.1, top: 0.1, width: 0.2, height: 0.2 } },
@@ -165,32 +181,6 @@ describe('Labels', function () {
           JSON.stringify(e)
         );
       }
-    });
-  });
-
-  describe('localizeImage', function () {
-    this.timeout(100000);
-
-    it('should take an imageId and a labelId', async function () {
-      const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
-        update: true,
-        imageId,
-        labelId,
-      });
-
-      expect(res.results).to.be.an('Array', JSON.stringify(res));
-      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
-    });
-
-    it('should take an array of imageIds and a labelId', async function () {
-      const res = await this.api.localizeImage(EVERYDAY_OBJECT_ID, 'cat', {
-        update: true,
-        imageIds: [imageId, 'invalid-id'],
-        labelId,
-      });
-
-      expect(res.results).to.be.an('Array', JSON.stringify(res));
-      expect(res.results).to.have.lengthOf(1, JSON.stringify(res));
     });
   });
 

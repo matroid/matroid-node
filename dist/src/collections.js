@@ -6,7 +6,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this = this;
 
     /*
-    Create an index on a collection with a detector
+    Creates an index on a collection with a detector.
     */
     return new Promise(function (resolve, reject) {
       _this._checkRequiredParams({ collectionId: collectionId, detectorId: detectorId, fileTypes: fileTypes });
@@ -25,8 +25,10 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
   matroid.createCollection = function (name, url, sourceType) {
     var _this2 = this;
 
+    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
-    Creates a new collection from a web or S3 url. Automatically kick off default indexes
+    Creates a new collection from a web or S3 url.
     */
     return new Promise(function (resolve, reject) {
       _this2._checkRequiredParams({ name: name, url: url, sourceType: sourceType });
@@ -35,6 +37,12 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
         action: 'createCollection',
         data: { name: name, url: url, sourceType: sourceType }
       };
+
+      var indexWithDefault = configs.indexWithDefault;
+
+      if (indexWithDefault) {
+        options.data.indexWithDefault = indexWithDefault;
+      }
 
       _this2._genericRequest(options, resolve, reject);
     });
@@ -45,7 +53,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this3 = this;
 
     /*
-    Deletes a completed collection manager task
+    Deletes a completed collection task.
     */
     return new Promise(function (resolve, reject) {
       _this3._checkRequiredParams({ collectionTaskId: collectionTaskId });
@@ -64,7 +72,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this4 = this;
 
     /*
-    Deletes a collection with no active indexing tasks
+    Deletes a collection with no active indexing tasks.
     */
     return new Promise(function (resolve, reject) {
       _this4._checkRequiredParams({ collectionId: collectionId });
@@ -83,7 +91,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this5 = this;
 
     /*
-    Creates a new collection from a web or S3 url
+    Retrieves information about a specific collection task.
     */
     return new Promise(function (resolve, reject) {
       _this5._checkRequiredParams({ collectionTaskId: collectionTaskId });
@@ -102,7 +110,7 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
     var _this6 = this;
 
     /*
-    Get information about a specific collection
+    Retrieves information about a specific collection.
     */
     return new Promise(function (resolve, reject) {
       _this6._checkRequiredParams({ collectionId: collectionId });
@@ -117,55 +125,56 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Collections-PostCollectionTasksTaskidKill
-  matroid.killCollectionIndex = function (collectionTaskId) {
+  matroid.killCollectionIndex = function (collectionTaskId, includeCollectionInfo) {
     var _this7 = this;
 
     /*
-    Kills an active collection indexing task
+    Kills an active collection indexing task.
     */
     return new Promise(function (resolve, reject) {
       _this7._checkRequiredParams({ collectionTaskId: collectionTaskId });
 
       var options = {
         action: 'killCollectionIndex',
-        uriParams: { ':key': collectionTaskId }
+        uriParams: { ':key': collectionTaskId },
+        data: { includeCollectionInfo: includeCollectionInfo }
       };
 
       _this7._genericRequest(options, resolve, reject);
     });
   };
-
   // https://www.matroid.com/docs/api/index.html#api-Collections-PostApiVersionCollectionTasksTaskidScoresQuery
-  matroid.queryCollectionByScores = function (taskId, thresholds, numResults) {
+  matroid.queryCollectionByScores = function (taskId, thresholds, configs) {
     var _this8 = this;
 
     /*
-    Query against a collection index using a set of labels and scores as a query
+    Queries against a collection index using a set of labels and scores.
     */
     return new Promise(function (resolve, reject) {
-      _this8._checkRequiredParams({ taskId: taskId, thresholds: thresholds, numResults: numResults });
+      _this8._checkRequiredParams({ taskId: taskId, thresholds: thresholds });
 
       var options = {
         action: 'queryCollectionByScores',
         uriParams: { ':key': taskId },
-        data: { thresholds: thresholds, numResults: numResults }
+        data: { thresholds: thresholds }
       };
+      Object.assign(options.data, configs);
 
       _this8._genericRequest(options, resolve, reject);
     });
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Collections-PostApiCollectionTasksTaskidImageQuery
-  matroid.queryCollectionByImage = function (taskId, taskType, numResults, image) {
+  matroid.queryCollectionByImage = function (taskId, image) {
     var _this9 = this;
 
-    var configs = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     /*
-    Query against a collection index (CollectionManagerTask) using an image as key
+    Queries against a collection index using an image.
     */
     return new Promise(function (resolve, reject) {
-      _this9._checkRequiredParams({ taskId: taskId, taskType: taskType, numResults: numResults, image: image });
+      _this9._checkRequiredParams({ taskId: taskId, image: image });
 
       _this9._validateImageObj(image);
       _this9._checkImageSize(image.file);
@@ -173,24 +182,36 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
       var options = {
         action: 'queryCollectionByImage',
         uriParams: { ':key': taskId },
-        data: { taskType: taskType, numResults: numResults }
+        data: {}
       };
 
-      if (image.file) options.filePaths = image.file;
-      if (image.url) Object.assign(options.data, { url: image.url });
+      if (image.file) {
+        options.filePaths = image.file;
+      }
+      if (image.url) {
+        Object.assign(options.data, { url: image.url });
+      }
 
-      var processedConfigs = configs;
-      var bbox = processedConfigs.boundingBox;
-      if (bbox) processedConfigs.boundingBox = JSON.stringify(bbox);
+      var numResults = configs.numResults,
+          boundingBox = configs.boundingBox,
+          shouldIndicateDuplicates = configs.shouldIndicateDuplicates;
 
-      Object.assign(options.data, processedConfigs);
+      if (numResults) {
+        options.data.numResults = numResults;
+      }
+      if (boundingBox) {
+        options.data.boundingBox = JSON.stringify(boundingBox);
+      }
+      if (shouldIndicateDuplicates) {
+        options.data.shouldIndicateDuplicates = shouldIndicateDuplicates;
+      }
 
       _this9._genericRequest(options, resolve, reject);
     });
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Collections-PutApiVersionCollectionTasksTaskid
-  matroid.updateCollectionIndex = function (collectionTaskId) {
+  matroid.updateCollectionIndex = function (collectionTaskId, updateIndex) {
     var _this10 = this;
 
     return new Promise(function (resolve, reject) {
@@ -198,7 +219,8 @@ var addCollectionsApi = function addCollectionsApi(matroid) {
 
       var options = {
         action: 'updateCollectionIndex',
-        uriParams: { ':key': collectionTaskId }
+        uriParams: { ':key': collectionTaskId },
+        data: { updateIndex: updateIndex }
       };
 
       _this10._genericRequest(options, resolve, reject);

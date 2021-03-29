@@ -27,5 +27,13 @@ describe('Accounts', function() {
       expect(res.account).to.have.property('name');
       expect(res.account).to.have.property('email');
     });
+
+    it('should get account info using accountInfo (deprecated for getAccountInfo)', async function () {
+      const res = await this.api.accountInfo();
+
+      expect(res.account).to.be.an('object');
+      expect(res.account).to.have.property('name');
+      expect(res.account).to.have.property('email');
+    });
   });
 });

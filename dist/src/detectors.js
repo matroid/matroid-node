@@ -5,6 +5,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
   matroid.createDetector = function (zipFile, name, detectorType) {
     var _this = this;
 
+    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Creates detector asynchronously (turn processing to true) Note: calling this API creates a pending detector, and you can update this detector with more images by calling this API with detector_id; however, creating more than one pending detector is not allowed, so you need to finalize or delete your existing pending detector before creating a new one.
      It might take some time for the detector to become editable(add labels etc)
@@ -18,9 +20,11 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
       var options = {
         action: 'createDetector',
-        data: { name: name, detector_type: detectorType },
+        data: { name: name, detectorType: detectorType },
         filePaths: zipFile
       };
+
+      Object.assign(options.data, configs);
 
       _this._genericRequest(options, resolve, reject);
     });
@@ -46,7 +50,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idFinalize
-  matroid.finalizeDetector = function (detectorId) {
+  matroid.trainDetector = function (detectorId) {
     var _this3 = this;
 
     /*
@@ -56,7 +60,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
       _this3._checkRequiredParams({ detectorId: detectorId });
 
       var options = {
-        action: 'finalizeDetector',
+        action: 'trainDetector',
         uriParams: { ':key': detectorId }
       };
 
@@ -65,7 +69,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-GetDetectorsDetector_id
-  matroid.getDetectorInfo = function (detectorId) {
+  // Formerly called detectorInfo (now deprecated), use getDetectorInfo
+  matroid.getDetectorInfo = matroid.detectorInfo = function (detectorId) {
     var _this4 = this;
 
     return new Promise(function (resolve, reject) {
@@ -88,8 +93,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
     /* 
     Certain combination of parameters can be supplied: 
-    file_detector, file_proto + file_label(+ file_label_ind), 
-    or file_proto + labels(+ label_inds).
+    file_detector, fileProto + fileLabel(+ fileLabel_ind), 
+    or fileProto + labels(+ label_inds).
     Parentheses part can be optionally supplied for object detection.
     */
 
@@ -126,8 +131,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
 
           Object.assign(options.filePaths, {
-            file_proto: fileProto,
-            file_label: fileLabel
+            fileProto: fileProto,
+            fileLabel: fileLabel
           });
           Object.assign(options.data, {
             input_tensor: inputTensor,
@@ -136,7 +141,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
           });
           if (fileLabelInd) {
             Object.assign(options.filePaths, {
-              file_label_ind: fileLabelInd
+              fileLabel_ind: fileLabelInd
             });
           }
         } else if (fileProto && labels) {
@@ -144,7 +149,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
 
           Object.assign(options.filePaths, {
-            file_proto: fileProto
+            fileProto: fileProto
           });
           Object.assign(options.data, {
             labels: labels,
@@ -156,7 +161,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
             Object.assign(options.data, { label_inds: labelInds });
           }
         } else {
-          throw new Error('Invalid paramter combination');
+          throw new Error('Invalid parameter combination');
         }
       }
 
@@ -165,7 +170,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
   };
 
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idRedo
-  matroid.redoDetector = function (detectorId) {
+  matroid.redoDetector = function (detectorId, feedbackOnly) {
     var _this6 = this;
 
     /*
@@ -176,7 +181,8 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
       var options = {
         action: 'redoDetector',
-        uriParams: { ':key': detectorId }
+        uriParams: { ':key': detectorId },
+        data: { feedbackOnly: feedbackOnly }
       };
 
       _this6._genericRequest(options, resolve, reject);
@@ -201,6 +207,22 @@ var addDetectorApi = function addDetectorApi(matroid) {
       Object.assign(options.data, configs);
 
       _this7._genericRequest(options, resolve, reject);
+    });
+  };
+
+  // DEPRECATED - use searchDetectors now
+  matroid.listDetectors = function () {
+    var _this8 = this;
+
+    /*
+    Lists all detectors that are public or owned by the user.
+    */
+    return new Promise(function (resolve, reject) {
+      var options = {
+        action: 'listDetectors'
+      };
+
+      _this8._genericRequest(options, resolve, reject);
     });
   };
 };

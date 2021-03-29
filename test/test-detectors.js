@@ -44,7 +44,6 @@ describe('Detectors', function () {
         detectorName,
         'general'
       );
-
       expect(res.detectorId).to.be.a('string', JSON.stringify(res));
       detectorId = res.detectorId;
       // wait until detector can be edited
@@ -62,11 +61,11 @@ describe('Detectors', function () {
     });
   });
 
-  describe('finalizeDetector', function () {
+  describe('trainDetector', function () {
     this.timeout(300000);
 
     it('should start detector training', async function () {
-      const res = await this.api.finalizeDetector(detectorId);
+      const res = await this.api.trainDetector(detectorId);
 
       expect(res.detectorId).to.equal(detectorId, JSON.stringify(res));
       expect(res.message).to.equal('training began successfully');
@@ -75,7 +74,7 @@ describe('Detectors', function () {
     });
 
     it('should get an error with an invalid detector ID', async function () {
-      const res = await this.api.finalizeDetector(RANDOM_MONGO_ID);
+      const res = await this.api.trainDetector(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
     });
@@ -84,6 +83,12 @@ describe('Detectors', function () {
   describe('getDetectorInfo', function () {
     it('should get detector info', async function () {
       const res = await this.api.getDetectorInfo(detectorId);
+
+      expect(res.id).to.equal(detectorId, JSON.stringify(res));
+    });
+
+    it('should get detector info using detectorInfo (deprecated for getDetectorInfo)', async function () {
+      const res = await this.api.detectorInfo(detectorId);
 
       expect(res.id).to.equal(detectorId, JSON.stringify(res));
     });
@@ -99,15 +104,15 @@ describe('Detectors', function () {
     it('should create a copy of an existing detector', async function () {
       const res = await this.api.redoDetector(detectorId);
 
-      expect(res.detector_id).to.be.a('string', JSON.stringify(res));
+      expect(res.detectorId).to.be.a('string', JSON.stringify(res));
 
-      redoDetectorId = res.detector_id;
+      redoDetectorId = res.detectorId;
     });
 
     it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
-      expect(res.code).to.equal(INVALID_QUERY_ERR);
+      expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
     });
   });
 
@@ -149,13 +154,13 @@ describe('Detectors', function () {
         detectorType,
       });
 
-      expect(res.detector_id).to.be.a('string', JSON.stringify(res));
+      expect(res.detectorId).to.be.a('string', JSON.stringify(res));
       expect(res.message).to.include(
         'Your model is being uploaded',
         JSON.stringify(res)
       );
 
-      importedDetectorId = res.detector_id;
+      importedDetectorId = res.detectorId;
     });
 
     it('should throw an error with invalid params', async function () {
@@ -170,6 +175,15 @@ describe('Detectors', function () {
           JSON.stringify(e)
         );
       }
+    });
+  });
+
+  describe('listDetectors (deprecated for searchDetectors)', function () {
+    it('should list all detectors', async function () {
+      const res = await this.api.listDetectors();
+
+      expect(res).to.be.an('array', JSON.stringify(res));
+      expect(res).to.have.lengthOf.above(0, JSON.stringify(res));
     });
   });
 

@@ -1,10 +1,10 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { setUpClient } = require('./utils');
-const { EVERYDAY_OBJECT_ID, YOUTUBE_VID_URL } = require('./data');
+const { setUpClient, waitVideoDoneClassifying } = require('./utils');
+const { EVERYDAY_OBJECT_ID, S3_VID_URL } = require('./data');
 
 describe('Videos', function () {
-  this.timeout(10000);
+  this.timeout(100000);
 
   let videoId;
 
@@ -13,10 +13,14 @@ describe('Videos', function () {
     await this.api.retrieveToken();
   });
 
+  after(async function () {
+    await waitVideoDoneClassifying(this.api, videoId);
+  });
+
   describe('classifyVideo', async function () {
     it('should start classifying a video', async function () {
       const res = await this.api.classifyVideo(EVERYDAY_OBJECT_ID, {
-        url: YOUTUBE_VID_URL,
+        url: S3_VID_URL,
       });
 
       expect(res.videoId).to.be.a('string', JSON.stringify(res));
@@ -24,7 +28,7 @@ describe('Videos', function () {
       videoId = res.videoId;
     });
 
-    it('should throw and error if missing video', async function () {
+    it('should throw an error if missing video', async function () {
       try {
         await this.api.classifyVideo(EVERYDAY_OBJECT_ID);
       } catch (e) {
@@ -39,7 +43,7 @@ describe('Videos', function () {
 
   describe('getVideoResults', async function () {
     it('should get video classification results', async function () {
-      const res = await this.api.getVideoResults(videoId, {
+      const res = await this.api.getVideoResults(videoId, null, null, {
         annotations: true,
       });
 

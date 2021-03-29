@@ -93,7 +93,7 @@ api.retrieveToken()
 
 // Check how many Matroid Credits you have
 api.retrieveToken()
-   .then(token => api.accountInfo())
+   .then(token => api.getAccountInfo())
    .then(account => console.log('Information: ', util.inspect(account, false, null)))
 
 // Register and monitor stream on Matroid
@@ -109,7 +109,7 @@ let monitorOptions = {
   'endpoint': 'http://mydomain.fake:9000/matroid_detections'
 }
 
-api.registerStream(streamUrl, 'backyard')
+api.createStream(streamUrl, 'backyard')
    .then(({ stream_id }) => api.monitorStream(stream_id, detectorId, monitorOptions))
    .then(monitoringInfo => console.log(monitoringInfo));
 ```

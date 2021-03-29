@@ -31,11 +31,12 @@ var addEndPoints = function addEndPoints(matroid) {
     // detectors
     createDetector: matroid._makeEndpoint('POST', 'detectors'),
     deleteDetector: matroid._makeEndpoint('DELETE', 'detectors/:key'),
-    finalizeDetector: matroid._makeEndpoint('POST', 'detectors/:key/finalize'),
+    trainDetector: matroid._makeEndpoint('POST', 'detectors/:key/finalize'),
     getDetectorInfo: matroid._makeEndpoint('GET', 'detectors/:key'),
     importDetector: matroid._makeEndpoint('POST', 'detectors/upload'),
     redoDetector: matroid._makeEndpoint('POST', 'detectors/:key/redo'),
     searchDetectors: matroid._makeEndpoint('GET', 'detectors/search'),
+    listDetectors: matroid._makeEndpoint('GET', 'detectors'),
 
     // images
     classifyImage: matroid._makeEndpoint('POST', 'detectors/:key/classify_image'),
