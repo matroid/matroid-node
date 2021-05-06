@@ -14,6 +14,8 @@ const {
   EVERYDAY_OBJECT_ID,
   UPLOAD_PB_FILE,
   UPLOAD_LABEL_FILE,
+  DOG_FILE,
+  CAT_URL,
 } = require('./data');
 
 describe('Detectors', function () {
@@ -97,6 +99,88 @@ describe('Detectors', function () {
       const res = await this.api.getDetectorInfo(RANDOM_MONGO_ID);
 
       expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
+    });
+  });
+
+  const feedbackIds = [];
+
+  describe('addFeedbackFromFile', function() {
+    it('should add feedback from a local file', async function() {
+      const boundingBox = {
+        top: .08,
+        left: .17,
+        height: .89,
+        width: .64
+      };
+
+      const feedback = [
+        {
+          label: 'cat',
+          feedbackType: 'negative',
+          boundingBox,
+        },
+      ];
+
+      const res = await this.api.addFeedbackFromFile(detectorId, DOG_FILE, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      expect(feedbackItem.id).to.be.an('string', JSON.stringify(res));
+
+      expect(feedbackItem.feedbackType).to.equal('negative', JSON.stringify(res));
+      expect(feedbackItem.labelName).to.equal('cat', JSON.stringify(res));
+
+      expect(feedbackItem.boundingBox.top).to.equal(boundingBox.top, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.left).to.equal(boundingBox.left, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.width).to.equal(boundingBox.width, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.height).to.equal(boundingBox.height, JSON.stringify(res));
+
+      feedbackIds.push(feedbackItem.id);
+    });
+  });
+
+  describe('addFeedbackFromURL', function() {
+    it('should add feedback from a local file', async function() {
+      const boundingBox = {
+        top: .1,
+        left: .36,
+        height: .84,
+        width: .62
+      };
+
+      const feedback = [
+        {
+          label: 'cat',
+          feedbackType: 'positive',
+          boundingBox,
+        },
+      ];
+
+      const res = await this.api.addFeedbackFromURL(detectorId, CAT_URL, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      expect(feedbackItem.id).to.be.an('string', JSON.stringify(res));
+
+      expect(feedbackItem.feedbackType).to.equal('positive', JSON.stringify(res));
+      expect(feedbackItem.labelName).to.equal('cat', JSON.stringify(res));
+
+      expect(feedbackItem.boundingBox.top).to.equal(boundingBox.top, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.left).to.equal(boundingBox.left, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.width).to.equal(boundingBox.width, JSON.stringify(res));
+      expect(feedbackItem.boundingBox.height).to.equal(boundingBox.height, JSON.stringify(res));
+
+      feedbackIds.push(feedbackItem.id);
+    });
+  });
+
+  describe('deleteFeedback', function() {
+    it('should delete feedback', async function () {
+      for (let feedbackId of feedbackIds) {
+        const res = await this.api.deleteFeedback(feedbackId);
+        expect(res.feedbackId).to.be.a('string', JSON.stringify(res));
+        expect(res.feedbackId).to.equal(feedbackId, JSON.stringify(res));
+      }
     });
   });
 
