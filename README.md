@@ -34,7 +34,7 @@ The public functions all return Promise objects.
 const Matroid = require('matroid');
 const util = require('util');
 
-let api = new Matroid({clientId: 'abc', clientSecret: '123'});
+const api = new Matroid({clientId: 'abc', clientSecret: '123'});
 
 // Classify a picture from a URL
 api.retrieveToken()
@@ -85,7 +85,7 @@ api.retrieveToken()
    .catch(error => console.error('Something happened:', error))
 
 // You can check on its progress. Then when it's done training, you can classify with the detector.
-var detectorId = 'test';
+const detectorId = 'test';
 api.retrieveToken()
    .then(token => api.detectorInfo(detectorId))
    .then(detectorInfo => console.log('Information: ', util.inspect(detectorInfo, false, null)))
@@ -97,9 +97,9 @@ api.retrieveToken()
    .then(account => console.log('Information: ', util.inspect(account, false, null)))
 
 // Register and monitor stream on Matroid
-let streamUrl = http://localhost:8888/stream.mjpg;
-let detectorId = 'abc123';
-let monitorOptions = {
+const streamUrl = http://localhost:8888/stream.mjpg;
+const detectorId = 'abc123';
+const monitorOptions = {
   'startTime': '2017-06-20T20:56:19.096Z',
   'endTime': '2017-06-21T20:00:00.000Z',
   'thresholds': {
@@ -112,6 +112,73 @@ let monitorOptions = {
 api.createStream(streamUrl, 'backyard')
    .then(({ stream_id }) => api.monitorStream(stream_id, detectorId, monitorOptions))
    .then(monitoringInfo => console.log(monitoringInfo));
+
+// Add feedback to a detector using a local file
+const detectorId = 'your-detector-id';
+const filePath = /Users/matroid-user/Desktop/image.png
+const feedback = [
+  {
+    label: 'cat',
+    feedbackType: 'positive',
+    boundingBox: {
+      top: .08,
+      left: .17,
+      height: .89,
+      width: .64
+    },
+  },
+  {
+    label: 'dog',
+    feedbackType: 'negative',
+    {
+      top: .1,
+      left: .36,
+      height: .84,
+      width: .62
+    }
+  },
+];
+
+api.retrieveToken()
+   .then(token => api.addFeedbackFromFile(detectorId, filePath, feedback))
+   .catch(error => console.error('Something happened:', error))
+
+// Add feedback to a detector using a URL
+const detectorId = 'your-detector-id';
+const imageURL = 'https://matroid-web.s3.amazonaws.com/test/python-client/tesla-cat.jpg';
+const feedback = [
+  {
+    label: 'cat',
+    feedbackType: 'positive',
+    boundingBox: {
+      top: .08,
+      left: .17,
+      height: .89,
+      width: .64
+    },
+  },
+  {
+    label: 'dog',
+    feedbackType: 'negative',
+    {
+      top: .1,
+      left: .36,
+      height: .84,
+      width: .62
+    }
+  },
+];
+
+api.retrieveToken()
+   .then(token => api.addFeedbackFromURL(detectorId, imageURL, feedback))
+   .catch(error => console.error('Something happened:', error))
+
+// Delete feedback
+const feedbackId = 'your-feedback-id';
+
+api.retrieveToken()
+   .then(token => api.deleteFeedback(feedbackId))
+   .catch(error => console.error('Something happened:', error))
 ```
 
 ## API Response samples
@@ -287,5 +354,31 @@ api.createStream(streamUrl, 'backyard')
       "estimated_completion_time": "2016-01-01T20:24:30.193Z"
     }
   }
+}
+```
+
+#### Sample add feedback response
+```
+{
+  "feedback": [
+    {
+      "id": "unique-feedback-id",
+      "feedbackType": "positive",
+      "label": "cat",
+      "boundingBox": {
+        "top": ".08",
+        "left": ".17",
+        "height": ".89",
+        "width": ".64"
+      },
+    }
+  ]
+}
+```
+
+#### Sample delete feedback response
+```
+{
+  "feedbackId": "unique-feedback-id"
 }
 ```
