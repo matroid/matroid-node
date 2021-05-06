@@ -38,6 +38,11 @@ var addEndPoints = function addEndPoints(matroid) {
     searchDetectors: matroid._makeEndpoint('GET', 'detectors/search'),
     listDetectors: matroid._makeEndpoint('GET', 'detectors'),
 
+    // detector feedback
+    addFeedbackFromFile: matroid._makeEndpoint('POST', 'detectors/:key/feedback'),
+    addFeedbackFromURL: matroid._makeEndpoint('POST', 'detectors/:key/feedback'),
+    deleteFeedback: matroid._makeEndpoint('DELETE', 'feedback/:key'),
+
     // images
     classifyImage: matroid._makeEndpoint('POST', 'detectors/:key/classify_image'),
     localizeImage: matroid._makeEndpoint('POST', 'localize'),

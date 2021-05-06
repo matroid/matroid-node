@@ -225,6 +225,64 @@ var addDetectorApi = function addDetectorApi(matroid) {
       _this8._genericRequest(options, resolve, reject);
     });
   };
+
+  matroid.addFeedbackFromFile = function (detectorId, imageFile, feedback) {
+    var _this9 = this;
+
+    /*
+     * Add feedback to a Matroid detector from a local file.
+     */
+    return new Promise(function (resolve, reject) {
+      var options = {
+        action: 'addFeedbackFromFile',
+        uriParams: { ':detectorId': detectorId },
+        filePaths: imageFile,
+        data: {
+          feedback: feedback
+        }
+      };
+
+      _this9._genericRequest(options, resolve, reject);
+    });
+  };
+
+  matroid.addFeedbackFromURL = function (detectorId, url, feedback) {
+    var _this10 = this;
+
+    /*
+     * Add feedback to a Matroid detector a url
+     */
+    return new Promise(function (resolve, reject) {
+      var options = {
+        action: 'addFeedbackFromURL',
+        uriParams: { ':detectorId': detectorId },
+        data: {
+          feedback: feedback,
+          url: url
+        }
+      };
+
+      _this10._genericRequest(options, resolve, reject);
+    });
+  };
+
+  matroid.deleteFeedback = function (feedbackId) {
+    var _this11 = this;
+
+    /*
+     * Delete Matroid detector feedback
+     */
+    return new Promise(function (resolve, reject) {
+      _this11._checkRequiredParams({ feedbackId: feedbackId });
+
+      var options = {
+        action: 'deleteFeedback',
+        uriParams: { ':feedbackId': feedbackId }
+      };
+
+      _this11._genericRequest(options, resolve, reject);
+    });
+  };
 };
 
 exports = module.exports = addDetectorApi;
