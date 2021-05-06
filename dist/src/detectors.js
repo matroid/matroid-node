@@ -233,12 +233,16 @@ var addDetectorApi = function addDetectorApi(matroid) {
      * Add feedback to a Matroid detector from a local file.
      */
     return new Promise(function (resolve, reject) {
+      var feedbackToAdd = Array.isArray(feedback) ? feedback : [feedback];
+
       var options = {
         action: 'addFeedbackFromFile',
-        uriParams: { ':detectorId': detectorId },
+        uriParams: { ':key': detectorId },
         filePaths: imageFile,
         data: {
-          feedback: feedback
+          feedback: feedbackToAdd.map(function (item) {
+            return JSON.stringify(item);
+          })
         }
       };
 
@@ -255,9 +259,9 @@ var addDetectorApi = function addDetectorApi(matroid) {
     return new Promise(function (resolve, reject) {
       var options = {
         action: 'addFeedbackFromURL',
-        uriParams: { ':detectorId': detectorId },
+        uriParams: { ':key': detectorId },
         data: {
-          feedback: feedback,
+          feedback: Array.isArray(feedback) ? feedback : [feedback],
           url: url
         }
       };
@@ -277,7 +281,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
 
       var options = {
         action: 'deleteFeedback',
-        uriParams: { ':feedbackId': feedbackId }
+        uriParams: { ':key': feedbackId }
       };
 
       _this11._genericRequest(options, resolve, reject);

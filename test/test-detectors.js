@@ -102,75 +102,131 @@ describe('Detectors', function () {
     });
   });
 
+  function checkFeedback(expectedFeedback, feedbackItem) {
+    expect(feedbackItem.id).to.be.a('string', JSON.stringify(feedbackItem));
+
+    expect(feedbackItem.feedbackType).to.equal(expectedFeedback.feedbackType, JSON.stringify(feedbackItem));
+    expect(feedbackItem.label).to.equal(expectedFeedback.label, JSON.stringify(feedbackItem));
+
+    expect(feedbackItem.boundingBox.top).to.equal(expectedFeedback.boundingBox.top, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.left).to.equal(expectedFeedback.boundingBox.left, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.width).to.equal(expectedFeedback.boundingBox.width, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.height).to.equal(expectedFeedback.boundingBox.height, JSON.stringify(feedbackItem));
+  }
+
+  const boundingBox1 = {
+    top: .08,
+    left: .17,
+    height: .89,
+    width: .64
+  };
+
+  const boundingBox2 = {
+    top: .1,
+    left: .36,
+    height: .84,
+    width: .62
+  };
+
   const feedbackIds = [];
 
   describe('addFeedbackFromFile', function() {
     it('should add feedback from a local file', async function() {
-      const boundingBox = {
-        top: .08,
-        left: .17,
-        height: .89,
-        width: .64
+      const feedback = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox1,
+      };
+
+      const res = await this.api.addFeedbackFromFile(detectorId, DOG_FILE, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback, feedbackItem);
+
+      feedbackIds.push(feedbackItem.id);
+    });
+
+    it('should add multiple feedbacks from a local file', async function() {
+      const feedback1 = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox1,
+      };
+
+      const feedback2 = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
       };
 
       const feedback = [
-        {
-          label: 'cat',
-          feedbackType: 'negative',
-          boundingBox,
-        },
+        feedback1,
+        feedback2,
       ];
 
       const res = await this.api.addFeedbackFromFile(detectorId, DOG_FILE, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
 
       const feedbackItem = res.feedback[0];
-      expect(feedbackItem.id).to.be.an('string', JSON.stringify(res));
-
-      expect(feedbackItem.feedbackType).to.equal('negative', JSON.stringify(res));
-      expect(feedbackItem.labelName).to.equal('cat', JSON.stringify(res));
-
-      expect(feedbackItem.boundingBox.top).to.equal(boundingBox.top, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.left).to.equal(boundingBox.left, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.width).to.equal(boundingBox.width, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.height).to.equal(boundingBox.height, JSON.stringify(res));
-
+      checkFeedback(feedback1, feedbackItem);
       feedbackIds.push(feedbackItem.id);
+
+      const feedbackItem2 = res.feedback[1];
+      checkFeedback(feedback2, feedbackItem2);
+      feedbackIds.push(feedbackItem2.id);
     });
   });
 
   describe('addFeedbackFromURL', function() {
-    it('should add feedback from a local file', async function() {
-      const boundingBox = {
-        top: .1,
-        left: .36,
-        height: .84,
-        width: .62
+    it('should add feedback from a URL', async function() {
+      const feedback = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
+      };
+
+      const res = await this.api.addFeedbackFromURL(detectorId, CAT_URL, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback, feedbackItem);
+
+      feedbackIds.push(feedbackItem.id);
+    });
+
+    it('should add multiple feedback from a URL', async function() {
+      const feedback1 = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
+      };
+
+      const feedback2 = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox2,
       };
 
       const feedback = [
-        {
-          label: 'cat',
-          feedbackType: 'positive',
-          boundingBox,
-        },
+        feedback1,
+        feedback2,
       ];
 
       const res = await this.api.addFeedbackFromURL(detectorId, CAT_URL, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
 
       const feedbackItem = res.feedback[0];
-      expect(feedbackItem.id).to.be.an('string', JSON.stringify(res));
-
-      expect(feedbackItem.feedbackType).to.equal('positive', JSON.stringify(res));
-      expect(feedbackItem.labelName).to.equal('cat', JSON.stringify(res));
-
-      expect(feedbackItem.boundingBox.top).to.equal(boundingBox.top, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.left).to.equal(boundingBox.left, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.width).to.equal(boundingBox.width, JSON.stringify(res));
-      expect(feedbackItem.boundingBox.height).to.equal(boundingBox.height, JSON.stringify(res));
-
+      checkFeedback(feedback1, feedbackItem);
       feedbackIds.push(feedbackItem.id);
+
+      const feedbackItem2 = res.feedback[1];
+      checkFeedback(feedback2, feedbackItem2);
+      feedbackIds.push(feedbackItem2.id);
     });
   });
 
