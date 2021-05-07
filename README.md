@@ -30,7 +30,7 @@ Then run `source ~/.bash_profile` on the command line to ensure the environment 
 
 The public functions all return Promise objects.
 
-```
+```javascript
 const Matroid = require('matroid');
 const util = require('util');
 
