@@ -233,7 +233,7 @@ describe('Detectors', function () {
   describe('deleteFeedback', function() {
     it('should delete feedback', async function () {
       for (let feedbackId of feedbackIds) {
-        const res = await this.api.deleteFeedback(feedbackId);
+        const res = await this.api.deleteFeedback(feedbackId, detectorId);
         expect(res.feedbackId).to.be.a('string', JSON.stringify(res));
         expect(res.feedbackId).to.equal(feedbackId, JSON.stringify(res));
       }
