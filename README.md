@@ -175,9 +175,10 @@ api.retrieveToken()
 
 // Delete feedback
 const feedbackId = 'your-feedback-id';
+const detectorId = 'your-detector-id';
 
 api.retrieveToken()
-   .then(token => api.deleteFeedback(feedbackId))
+   .then(token => api.deleteFeedback(feedbackId, detectorId))
    .catch(error => console.error('Something happened:', error))
 ```
 
