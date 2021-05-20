@@ -115,7 +115,7 @@ api.createStream(streamUrl, 'backyard')
 
 // Add feedback to a detector using a local file
 const detectorId = 'your-detector-id';
-const filePath = /Users/matroid-user/Desktop/image.png
+const filePath = '/Users/matroid-user/Desktop/image.png';
 const feedback = [
   {
     label: 'cat',
