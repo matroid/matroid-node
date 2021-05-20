@@ -116,6 +116,7 @@ api.createStream(streamUrl, 'backyard')
 // Add feedback to a detector using a local file
 const detectorId = 'your-detector-id';
 const filePath = '/Users/matroid-user/Desktop/image.png';
+const image = { file: filePath };
 const feedback = [
   {
     label: 'cat',
@@ -140,12 +141,15 @@ const feedback = [
 ];
 
 api.retrieveToken()
-   .then(token => api.addFeedbackFromFile(detectorId, filePath, feedback))
+   .then(token => api.addFeedback(detectorId, image, feedback))
    .catch(error => console.error('Something happened:', error))
 
 // Add feedback to a detector using a URL
 const detectorId = 'your-detector-id';
+
 const imageURL = 'https://matroid-web.s3.amazonaws.com/test/python-client/tesla-cat.jpg';
+const image = { url: imageURL };
+
 const feedback = [
   {
     label: 'cat',
@@ -170,7 +174,7 @@ const feedback = [
 ];
 
 api.retrieveToken()
-   .then(token => api.addFeedbackFromURL(detectorId, imageURL, feedback))
+   .then(token => api.addFeedback(detectorId, image, feedback))
    .catch(error => console.error('Something happened:', error))
 
 // Delete feedback

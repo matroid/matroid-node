@@ -130,7 +130,7 @@ describe('Detectors', function () {
 
   const feedbackIds = [];
 
-  describe('addFeedbackFromFile', function() {
+  describe('addFeedback', function() {
     it('should add feedback from a local file', async function() {
       const feedback = {
         label: 'cat',
@@ -138,7 +138,9 @@ describe('Detectors', function () {
         boundingBox: boundingBox1,
       };
 
-      const res = await this.api.addFeedbackFromFile(detectorId, DOG_FILE, feedback);
+      const image = { file: DOG_FILE };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
       expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
 
@@ -166,7 +168,9 @@ describe('Detectors', function () {
         feedback2,
       ];
 
-      const res = await this.api.addFeedbackFromFile(detectorId, DOG_FILE, feedback);
+      const image = { file: DOG_FILE };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
       expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
 
@@ -178,9 +182,7 @@ describe('Detectors', function () {
       checkFeedback(feedback2, feedbackItem2);
       feedbackIds.push(feedbackItem2.id);
     });
-  });
 
-  describe('addFeedbackFromURL', function() {
     it('should add feedback from a URL', async function() {
       const feedback = {
         label: 'cat',
@@ -188,7 +190,9 @@ describe('Detectors', function () {
         boundingBox: boundingBox2,
       };
 
-      const res = await this.api.addFeedbackFromURL(detectorId, CAT_URL, feedback);
+      const image = { url: CAT_URL };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
       expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
 
@@ -216,7 +220,9 @@ describe('Detectors', function () {
         feedback2,
       ];
 
-      const res = await this.api.addFeedbackFromURL(detectorId, CAT_URL, feedback);
+      const image = { url: CAT_URL };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
       expect(res.feedback).to.be.an('array', JSON.stringify(res));
       expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
 

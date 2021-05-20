@@ -226,19 +226,23 @@ var addDetectorApi = function addDetectorApi(matroid) {
     });
   };
 
-  matroid.addFeedbackFromFile = function (detectorId, imageFile, feedback) {
+  matroid.addFeedback = function (detectorId, image, feedback) {
     var _this9 = this;
 
     /*
-     * Add feedback to a Matroid detector from a local file.
+     * Add feedback to a Matroid detector from an image
      */
     return new Promise(function (resolve, reject) {
       var feedbackToAdd = Array.isArray(feedback) ? feedback : [feedback];
 
+      _this9._checkRequiredParams({ detectorId: detectorId });
+
+      _this9._validateImageObj(image);
+      _this9._checkImageSize(image.file);
+
       var options = {
-        action: 'addFeedbackFromFile',
+        action: 'addFeedback',
         uriParams: { ':detectorId': detectorId },
-        filePaths: imageFile,
         data: {
           feedback: feedbackToAdd.map(function (item) {
             return JSON.stringify(item);
@@ -246,38 +250,24 @@ var addDetectorApi = function addDetectorApi(matroid) {
         }
       };
 
+      if (image.file) {
+        options.filePaths = image.file;
+      } else {
+        Object.assign(options.data, { url: image.url });
+      }
+
       _this9._genericRequest(options, resolve, reject);
     });
   };
 
-  matroid.addFeedbackFromURL = function (detectorId, url, feedback) {
-    var _this10 = this;
-
-    /*
-     * Add feedback to a Matroid detector a url
-     */
-    return new Promise(function (resolve, reject) {
-      var options = {
-        action: 'addFeedbackFromURL',
-        uriParams: { ':detectorId': detectorId },
-        data: {
-          feedback: Array.isArray(feedback) ? feedback : [feedback],
-          url: url
-        }
-      };
-
-      _this10._genericRequest(options, resolve, reject);
-    });
-  };
-
   matroid.deleteFeedback = function (feedbackId, detectorId) {
-    var _this11 = this;
+    var _this10 = this;
 
     /*
      * Delete Matroid detector feedback
      */
     return new Promise(function (resolve, reject) {
-      _this11._checkRequiredParams({ feedbackId: feedbackId, detectorId: detectorId });
+      _this10._checkRequiredParams({ feedbackId: feedbackId, detectorId: detectorId });
 
       var options = {
         action: 'deleteFeedback',
@@ -287,7 +277,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
         }
       };
 
-      _this11._genericRequest(options, resolve, reject);
+      _this10._genericRequest(options, resolve, reject);
     });
   };
 };
