@@ -62,7 +62,16 @@ var addEndPoints = function addEndPoints(matroid) {
     killMonitoring: matroid._makeEndpoint('POST', 'monitorings/:key/kill'),
     searchMonitorings: matroid._makeEndpoint('GET', 'monitorings'),
     monitorStream: matroid._makeEndpoint('POST', 'streams/:streamId/monitor/:detectorId'),
-    searchStreams: matroid._makeEndpoint('GET', 'streams')
+    searchStreams: matroid._makeEndpoint('GET', 'streams'),
+
+    // video summary
+    getVideoSummary: matroid._makeEndpoint('GET', 'summaries/:summaryId'),
+    getVideoSummaryTracks: matroid._makeEndpoint('GET', 'summaries/:summaryId/tracks.csv'),
+    getVideoSummaryFile: matroid._makeEndpoint('GET', 'summaries/:summaryId/video.mp4'),
+    createVideoSummary: matroid._makeEndpoint('POST', 'summarize'),
+    deleteVideoSummary: matroid._makeEndpoint('DELETE', 'summaries/:summaryId'),
+    getStreamSummaries: matroid._makeEndpoint('GET', 'streams/:streamId/summaries'),
+    createStreamSummary: matroid._makeEndpoint('POST', 'streams/:streamId/summarize')
   };
 };
 
@@ -195,13 +204,11 @@ var addHelpers = function addHelpers(matroid) {
   };
 
   matroid._validateImageObj = function (image) {
-    if (!image || typeof image.url === 'undefined' && typeof image.file === 'undefined') {
-      throw new Error('No image provided');
-    }
+    validateMediaObj(image, 'image');
+  };
 
-    if (image.url && image.file) {
-      throw new Error('Can only handle either url or local file classification in a single request');
-    }
+  matroid._validateVideoObj = function (video) {
+    validateMediaObj(video, 'video');
   };
 
   matroid._setAuthToken = function (resolve, reject, token) {
@@ -246,6 +253,16 @@ var addHelpers = function addHelpers(matroid) {
     return string.split(/(?=[A-Z])/).join('_').toLowerCase();
   };
 };
+
+function validateMediaObj(media, mediaType) {
+  if (!media || typeof media.url === 'undefined' && typeof media.file === 'undefined') {
+    throw new Error('No ' + mediaType + ' provided');
+  }
+
+  if (media.url && media.file) {
+    throw new Error('Can only handle either url or local file classification in a single request');
+  }
+}
 
 function safeParse(response) {
   var result = void 0;
