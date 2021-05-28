@@ -101,9 +101,8 @@ describe('Video Summary', function () {
       const res = await this.api.getVideoSummary(urlVideoSummaryId);
 
       expect(res).to.be.an('object', JSON.stringify(res));
-      expect(res.progress).to.be.a('number', JSON.stringify(res))
-      expect(res.trackUrl.includes(`summaries/${urlVideoSummaryId}/tracks.csv`)).to.be.true;
-      expect(res.videoUrl.includes(`summaries/${urlVideoSummaryId}/video.mp4`)).to.be.true;
+      expect(res.progress).to.equal(0, JSON.stringify(res))
+      expect(res.state).to.equal('requested', JSON.stringify(res));
     });
   });
 
