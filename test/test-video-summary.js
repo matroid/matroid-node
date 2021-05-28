@@ -149,7 +149,6 @@ describe('Video Summary', function () {
     });
 
     it('should delete a VideoSummaryTask for the provided summary ID', async function () {
-      console.log('delete: ', urlVideoSummaryId);
       const res = await this.api.deleteVideoSummary(urlVideoSummaryId);
       expect(res.summaryId).to.equal(urlVideoSummaryId, JSON.stringify(res));
     });
