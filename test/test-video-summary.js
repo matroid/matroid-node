@@ -134,7 +134,7 @@ describe('Video Summary', function () {
     });
   });
 
-  describe('deleteStreamSummary', function () {
+  describe('deleteVideoSummary', function () {
     it('should throw an error if missing a summary ID', async function () {
       try {
         await this.api.deleteVideoSummary();
