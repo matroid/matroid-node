@@ -103,7 +103,7 @@ describe('Detectors', function () {
   });
 
   function checkFeedback(expectedFeedback, feedbackItem) {
-    expect(feedbackItem.id).to.be.a('string', JSON.stringify(feedbackItem));
+    expect(feedbackItem.id || feedbackItem._id).to.be.a('string', JSON.stringify(feedbackItem));
 
     expect(feedbackItem.feedbackType).to.equal(expectedFeedback.feedbackType, JSON.stringify(feedbackItem));
     expect(feedbackItem.label).to.equal(expectedFeedback.label, JSON.stringify(feedbackItem));
@@ -147,7 +147,7 @@ describe('Detectors', function () {
       const feedbackItem = res.feedback[0];
       checkFeedback(feedback, feedbackItem);
 
-      feedbackIds.push(feedbackItem.id);
+      feedbackIds.push(feedbackItem.id || feedbackItem._id);
     });
 
     it('should add multiple feedbacks from a local file', async function() {
@@ -176,11 +176,11 @@ describe('Detectors', function () {
 
       const feedbackItem = res.feedback[0];
       checkFeedback(feedback1, feedbackItem);
-      feedbackIds.push(feedbackItem.id);
+      feedbackIds.push(feedbackItem.id || feedbackItem._id);
 
       const feedbackItem2 = res.feedback[1];
       checkFeedback(feedback2, feedbackItem2);
-      feedbackIds.push(feedbackItem2.id);
+      feedbackIds.push(feedbackItem2.id || feedbackItem2._id);
     });
 
     it('should add feedback from a URL', async function() {
@@ -199,7 +199,7 @@ describe('Detectors', function () {
       const feedbackItem = res.feedback[0];
       checkFeedback(feedback, feedbackItem);
 
-      feedbackIds.push(feedbackItem.id);
+      feedbackIds.push(feedbackItem.id || feedbackItem._id);
     });
 
     it('should add multiple feedback from a URL', async function() {
@@ -228,11 +228,11 @@ describe('Detectors', function () {
 
       const feedbackItem = res.feedback[0];
       checkFeedback(feedback1, feedbackItem);
-      feedbackIds.push(feedbackItem.id);
+      feedbackIds.push(feedbackItem.id || feedbackItem._id);
 
       const feedbackItem2 = res.feedback[1];
       checkFeedback(feedback2, feedbackItem2);
-      feedbackIds.push(feedbackItem2.id);
+      feedbackIds.push(feedbackItem2.id || feedbackItem2._id);
     });
   });
 
@@ -258,7 +258,7 @@ describe('Detectors', function () {
     it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
-      expect(res.message).to.equal('The proto network does not exist.');
+      expect(res.code).to.equal('server_err');
     });
   });
 
