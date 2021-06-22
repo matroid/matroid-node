@@ -225,6 +225,61 @@ var addDetectorApi = function addDetectorApi(matroid) {
       _this8._genericRequest(options, resolve, reject);
     });
   };
+
+  matroid.addFeedback = function (detectorId, image, feedback) {
+    var _this9 = this;
+
+    /*
+     * Add feedback to a Matroid detector from an image
+     */
+    return new Promise(function (resolve, reject) {
+      var feedbackToAdd = Array.isArray(feedback) ? feedback : [feedback];
+
+      _this9._checkRequiredParams({ detectorId: detectorId });
+
+      _this9._validateImageObj(image);
+      _this9._checkImageSize(image.file);
+
+      var options = {
+        action: 'addFeedback',
+        uriParams: { ':detectorId': detectorId },
+        data: {
+          feedback: feedbackToAdd.map(function (item) {
+            return JSON.stringify(item);
+          })
+        }
+      };
+
+      if (image.file) {
+        options.filePaths = image.file;
+      } else {
+        Object.assign(options.data, { url: image.url });
+      }
+
+      _this9._genericRequest(options, resolve, reject);
+    });
+  };
+
+  matroid.deleteFeedback = function (feedbackId, detectorId) {
+    var _this10 = this;
+
+    /*
+     * Delete Matroid detector feedback
+     */
+    return new Promise(function (resolve, reject) {
+      _this10._checkRequiredParams({ feedbackId: feedbackId, detectorId: detectorId });
+
+      var options = {
+        action: 'deleteFeedback',
+        uriParams: {
+          ':detectorId': detectorId,
+          ':feedbackId': feedbackId
+        }
+      };
+
+      _this10._genericRequest(options, resolve, reject);
+    });
+  };
 };
 
 exports = module.exports = addDetectorApi;
