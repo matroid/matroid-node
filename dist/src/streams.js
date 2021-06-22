@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var addStreamsApi = function addStreamsApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreams
@@ -12,20 +12,25 @@ var addStreamsApi = function addStreamsApi(matroid) {
     - detectionFps, recordingEnabled, and retentionEnabled are the three parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
-      _this._checkRequiredParams({ url: url, name: name });
+      _this._checkRequiredParams({
+        url: url,
+        name: name
+      });
 
       var options = {
         action: 'createStream',
-        data: { name: name, url: url }
+        data: {
+          name: name,
+          url: url
+        }
       };
-
       Object.assign(options.data, configs);
 
       _this._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteMonitoringsMonitoring_id
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteMonitoringsMonitoring_id
+
   matroid.deleteMonitoring = function (monitoringId) {
     var _this2 = this;
 
@@ -34,18 +39,22 @@ var addStreamsApi = function addStreamsApi(matroid) {
     activeStates = ['requested', 'toprepare', 'preparing', 'ready']
     */
     return new Promise(function (resolve, reject) {
-      _this2._checkRequiredParams({ monitoringId: monitoringId });
+      _this2._checkRequiredParams({
+        monitoringId: monitoringId
+      });
 
       var options = {
         action: 'deleteMonitoring',
-        uriParams: { ':key': monitoringId }
+        uriParams: {
+          ':key': monitoringId
+        }
       };
 
       _this2._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteStreamsStream_id
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteStreamsStream_id
+
   matroid.deleteStream = function (streamId) {
     var _this3 = this;
 
@@ -53,18 +62,22 @@ var addStreamsApi = function addStreamsApi(matroid) {
     requires no active monitorings
     */
     return new Promise(function (resolve, reject) {
-      _this3._checkRequiredParams({ streamId: streamId });
+      _this3._checkRequiredParams({
+        streamId: streamId
+      });
 
       var options = {
         action: 'deleteStream',
-        uriParams: { ':key': streamId }
+        uriParams: {
+          ':key': streamId
+        }
       };
 
       _this3._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsMonitoring_idQuery
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsMonitoring_idQuery
+
   matroid.getMonitoringResult = function (monitoringId) {
     var _this4 = this;
 
@@ -74,25 +87,31 @@ var addStreamsApi = function addStreamsApi(matroid) {
     - format and statusOnly are parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
-      _this4._checkRequiredParams({ monitoringId: monitoringId });
+      _this4._checkRequiredParams({
+        monitoringId: monitoringId
+      });
 
       var options = {
         action: 'getMonitoringResult',
-        uriParams: { ':key': monitoringId },
+        uriParams: {
+          ':key': monitoringId
+        },
         data: {}
       };
 
       var processedConfigs = _this4.convertConfigsSnakeCase(configs);
+
       Object.assign(options.data, processedConfigs);
+
       if (configs.format && configs.format.toUpperCase() !== 'JSON') {
         options.shouldNotParse = true;
       }
 
       _this4._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-PostMonitoringsMonitoring_idKill
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-PostMonitoringsMonitoring_idKill
+
   matroid.killMonitoring = function (monitoringId) {
     var _this5 = this;
 
@@ -100,18 +119,22 @@ var addStreamsApi = function addStreamsApi(matroid) {
     It might take some time for the monitoring to actually go to 'failed' state
     */
     return new Promise(function (resolve, reject) {
-      _this5._checkRequiredParams({ monitoringId: monitoringId });
+      _this5._checkRequiredParams({
+        monitoringId: monitoringId
+      });
 
       var options = {
         action: 'killMonitoring',
-        uriParams: { ':key': monitoringId }
+        uriParams: {
+          ':key': monitoringId
+        }
       };
 
       _this5._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsQuery
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsQuery
+
   matroid.monitorStream = function (streamId, detectorId) {
     var _this6 = this;
 
@@ -121,7 +144,10 @@ var addStreamsApi = function addStreamsApi(matroid) {
     - thresholds, endpoint, startTime, endTime, taskName, notificationTimezone, minEmailInterval, sendEmailNotifications, regionEnabled, regionCoords, regionNegativeCoords, monitoringHours, and colors are the parameters passed in the configs object
     */
     return new Promise(function (resolve, reject) {
-      _this6._checkRequiredParams({ streamId: streamId, detectorId: detectorId });
+      _this6._checkRequiredParams({
+        streamId: streamId,
+        detectorId: detectorId
+      });
 
       var options = {
         action: 'monitorStream',
@@ -131,8 +157,8 @@ var addStreamsApi = function addStreamsApi(matroid) {
         },
         data: {}
       };
-
       var processedConfigs = configs;
+
       if (processedConfigs.thresholds) {
         processedConfigs.thresholds = JSON.stringify(processedConfigs.thresholds);
       }
@@ -141,9 +167,9 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
       _this6._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreamsStream_idMonitorDetector_id
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreamsStream_idMonitorDetector_id
+
   matroid.searchMonitorings = function () {
     var _this7 = this;
 
@@ -159,13 +185,14 @@ var addStreamsApi = function addStreamsApi(matroid) {
       };
 
       var processedConfigs = _this7.convertConfigsSnakeCase(configs);
+
       Object.assign(options.data, processedConfigs);
 
       _this7._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetStreamsQuery
 
-  // https://www.matroid.com/docs/api/index.html#api-Streams-GetStreamsQuery
+
   matroid.searchStreams = function () {
     var _this8 = this;
 
@@ -181,6 +208,7 @@ var addStreamsApi = function addStreamsApi(matroid) {
       };
 
       var processedConfigs = _this8.convertConfigsSnakeCase(configs);
+
       Object.assign(options.data, processedConfigs);
 
       _this8._genericRequest(options, resolve, reject);

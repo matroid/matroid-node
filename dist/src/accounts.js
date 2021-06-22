@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var addAccountsApi = function addAccountsApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Accounts-RefreshToken
@@ -14,7 +14,6 @@ var addAccountsApi = function addAccountsApi(matroid) {
     */
     return new Promise(function (resolve, reject) {
       var refresh = options.refresh;
-
 
       if (_this.authorizationHeader && !refresh) {
         return resolve(_this.authorizationHeader);
@@ -36,10 +35,10 @@ var addAccountsApi = function addAccountsApi(matroid) {
 
       _this._genericRequest(requestOptions, _this._setAuthToken.bind(_this, resolve, reject), reject);
     });
-  };
-
-  // https://www.matroid.com/docs/api/index.html#api-Accounts-GetAccount
+  }; // https://www.matroid.com/docs/api/index.html#api-Accounts-GetAccount
   // Formerly called accountInfo (now deprecated), use getAccountInfo
+
+
   matroid.getAccountInfo = matroid.accountInfo = function () {
     var _this2 = this;
 

@@ -1,14 +1,21 @@
-'use strict';
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var addAccountsApi = require('./src/accounts');
+
 var addCollectionsApi = require('./src/collections');
+
 var addDetectorsApi = require('./src/detectors');
+
 var addImagesApi = require('./src/images');
+
 var addLabelsApi = require('./src/labels');
+
 var addVideosApi = require('./src/videos');
+
 var addStreamsApi = require('./src/streams');
+
 var addVideoSummaryApi = require('./src/video_summary');
 
 var _require = require('./src/helpers'),
@@ -20,16 +27,14 @@ var Matroid = function Matroid(opts) {
 
   var options = opts;
   if (!options) options = {};
-
   this.baseUrl = options.baseUrl || 'https://www.matroid.com/api/v1';
   this.clientId = options.clientId || process.env.MATROID_CLIENT_ID;
   this.clientSecret = options.clientSecret || process.env.MATROID_CLIENT_SECRET;
-
   this.baseHeaders = {
     'User-Agent': 'request'
   };
-
   /* eslint-disable no-magic-numbers */
+
   this._fileSizeLimits = {
     image: 50 * 1024 * 1024,
     video: 300 * 1024 * 1024,

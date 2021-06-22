@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var addLabelsApi = function addLabelsApi(matroid) {
   // https://www.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabels
@@ -12,18 +12,29 @@ var addLabelsApi = function addLabelsApi(matroid) {
     Requires processing=false. Creates label asynchronously (turn processing to true)
     */
     return new Promise(function (resolve, reject) {
-      _this._checkRequiredParams({ detectorId: detectorId, name: name, imageFiles: imageFiles });
+      _this._checkRequiredParams({
+        detectorId: detectorId,
+        name: name,
+        imageFiles: imageFiles
+      });
 
       var options = {
         action: 'createLabelWithImages',
-        uriParams: { ':key': detectorId },
-        data: { name: name }
+        uriParams: {
+          ':key': detectorId
+        },
+        data: {
+          name: name
+        }
       };
 
       _this._checkImageSize(imageFiles);
-      options.filePaths = { imageFiles: imageFiles };
 
+      options.filePaths = {
+        imageFiles: imageFiles
+      };
       var processedConfigs = configs;
+
       if (processedConfigs.bboxes) {
         processedConfigs.bboxes = JSON.stringify(processedConfigs.bboxes);
       }
@@ -32,9 +43,9 @@ var addLabelsApi = function addLabelsApi(matroid) {
 
       _this._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Labels-DeleteDetectorsDetector_idLabelsLabel_id
 
-  // https://www.matroid.com/docs/api/index.html#api-Labels-DeleteDetectorsDetector_idLabelsLabel_id
+
   matroid.deleteLabel = function (detectorId, labelId) {
     var _this2 = this;
 
@@ -42,18 +53,24 @@ var addLabelsApi = function addLabelsApi(matroid) {
     Requires processing=false
     */
     return new Promise(function (resolve, reject) {
-      _this2._checkRequiredParams({ detectorId: detectorId, labelId: labelId });
+      _this2._checkRequiredParams({
+        detectorId: detectorId,
+        labelId: labelId
+      });
 
       var options = {
         action: 'deleteLabel',
-        uriParams: { ':detectorId': detectorId, ':labelId': labelId }
+        uriParams: {
+          ':detectorId': detectorId,
+          ':labelId': labelId
+        }
       };
 
       _this2._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Labels-GetImagesAnnotationsQuery
 
-  // https://www.matroid.com/docs/api/index.html#api-Labels-GetImagesAnnotationsQuery
+
   matroid.getAnnotations = function () {
     var _this3 = this;
 
@@ -66,7 +83,6 @@ var addLabelsApi = function addLabelsApi(matroid) {
       var detectorId = configs.detectorId,
           labelIds = configs.labelIds,
           imageId = configs.imageId;
-
 
       if (!detectorId && !labelIds && !imageId) {
         throw new Error('Please pass in one of the following IDs: detectorId, labelIds, or imageId');
@@ -83,25 +99,31 @@ var addLabelsApi = function addLabelsApi(matroid) {
 
       _this3._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Labels-GetDetectorsDetector_idLabelsLabel_id
 
-  // https://www.matroid.com/docs/api/index.html#api-Labels-GetDetectorsDetector_idLabelsLabel_id
+
   matroid.getLabelImages = function (detectorId, labelId) {
     var _this4 = this;
 
     return new Promise(function (resolve, reject) {
-      _this4._checkRequiredParams({ detectorId: detectorId, labelId: labelId });
+      _this4._checkRequiredParams({
+        detectorId: detectorId,
+        labelId: labelId
+      });
 
       var options = {
         action: 'getLabelImages',
-        uriParams: { ':detectorId': detectorId, ':labelId': labelId }
+        uriParams: {
+          ':detectorId': detectorId,
+          ':labelId': labelId
+        }
       };
 
       _this4._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Labels-UpdateAnnotations
 
-  // https://www.matroid.com/docs/api/index.html#api-Labels-UpdateAnnotations
+
   matroid.updateAnnotations = function (detectorId, labelId, images) {
     var _this5 = this;
 
@@ -111,22 +133,30 @@ var addLabelsApi = function addLabelsApi(matroid) {
     Update bounding boxes of label images
     */
     return new Promise(function (resolve, reject) {
-      _this5._checkRequiredParams({ detectorId: detectorId, labelId: labelId, images: images });
+      _this5._checkRequiredParams({
+        detectorId: detectorId,
+        labelId: labelId,
+        images: images
+      });
 
       var options = {
         action: 'updateAnnotations',
-        uriParams: { ':detectorId': detectorId, ':labelId': labelId },
+        uriParams: {
+          ':detectorId': detectorId,
+          ':labelId': labelId
+        },
         data: {}
       };
-
-      Object.assign(options.data, { images: JSON.stringify(images) });
+      Object.assign(options.data, {
+        images: JSON.stringify(images)
+      });
       Object.assign(options.data, configs);
 
       _this5._genericRequest(options, resolve, reject);
     });
-  };
+  }; // https://www.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabelsLabel_idImages
 
-  // https://www.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabelsLabel_idImages
+
   matroid.updateLabelWithImages = function (detectorId, labelId, imageFiles) {
     var _this6 = this;
 
@@ -136,17 +166,25 @@ var addLabelsApi = function addLabelsApi(matroid) {
     Requires processing=false. Updates label asynchronously (turn processing to true)
     */
     return new Promise(function (resolve, reject) {
-      _this6._checkRequiredParams({ detectorId: detectorId, labelId: labelId, imageFiles: imageFiles });
+      _this6._checkRequiredParams({
+        detectorId: detectorId,
+        labelId: labelId,
+        imageFiles: imageFiles
+      });
 
       var options = {
         action: 'updateLabelWithImages',
-        uriParams: { ':detectorId': detectorId, ':labelId': labelId },
+        uriParams: {
+          ':detectorId': detectorId,
+          ':labelId': labelId
+        },
         data: {}
       };
-
-      options.filePaths = { imageFiles: imageFiles };
-
+      options.filePaths = {
+        imageFiles: imageFiles
+      };
       var processedConfigs = configs;
+
       if (processedConfigs.bboxes) {
         processedConfigs.bboxes = JSON.stringify(processedConfigs.bboxes);
       }
