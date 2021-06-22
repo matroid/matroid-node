@@ -14,6 +14,8 @@ const {
   EVERYDAY_OBJECT_ID,
   UPLOAD_PB_FILE,
   UPLOAD_LABEL_FILE,
+  DOG_FILE,
+  CAT_URL,
 } = require('./data');
 
 describe('Detectors', function () {
@@ -100,6 +102,150 @@ describe('Detectors', function () {
     });
   });
 
+  function checkFeedback(expectedFeedback, feedbackItem) {
+    expect(feedbackItem.id).to.be.a('string', JSON.stringify(feedbackItem));
+
+    expect(feedbackItem.feedbackType).to.equal(expectedFeedback.feedbackType, JSON.stringify(feedbackItem));
+    expect(feedbackItem.label).to.equal(expectedFeedback.label, JSON.stringify(feedbackItem));
+
+    expect(feedbackItem.boundingBox.top).to.equal(expectedFeedback.boundingBox.top, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.left).to.equal(expectedFeedback.boundingBox.left, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.width).to.equal(expectedFeedback.boundingBox.width, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.height).to.equal(expectedFeedback.boundingBox.height, JSON.stringify(feedbackItem));
+  }
+
+  const boundingBox1 = {
+    top: .08,
+    left: .17,
+    height: .89,
+    width: .64
+  };
+
+  const boundingBox2 = {
+    top: .1,
+    left: .36,
+    height: .84,
+    width: .62
+  };
+
+  const feedbackIds = [];
+
+  describe('addFeedback', function() {
+    it('should add feedback from a local file', async function() {
+      const feedback = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox1,
+      };
+
+      const image = { file: DOG_FILE };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback, feedbackItem);
+
+      feedbackIds.push(feedbackItem.id);
+    });
+
+    it('should add multiple feedbacks from a local file', async function() {
+      const feedback1 = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox1,
+      };
+
+      const feedback2 = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
+      };
+
+      const feedback = [
+        feedback1,
+        feedback2,
+      ];
+
+      const image = { file: DOG_FILE };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback1, feedbackItem);
+      feedbackIds.push(feedbackItem.id);
+
+      const feedbackItem2 = res.feedback[1];
+      checkFeedback(feedback2, feedbackItem2);
+      feedbackIds.push(feedbackItem2.id);
+    });
+
+    it('should add feedback from a URL', async function() {
+      const feedback = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
+      };
+
+      const image = { url: CAT_URL };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(1, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback, feedbackItem);
+
+      feedbackIds.push(feedbackItem.id);
+    });
+
+    it('should add multiple feedback from a URL', async function() {
+      const feedback1 = {
+        label: 'cat',
+        feedbackType: 'positive',
+        boundingBox: boundingBox2,
+      };
+
+      const feedback2 = {
+        label: 'cat',
+        feedbackType: 'negative',
+        boundingBox: boundingBox2,
+      };
+
+      const feedback = [
+        feedback1,
+        feedback2,
+      ];
+
+      const image = { url: CAT_URL };
+
+      const res = await this.api.addFeedback(detectorId, image, feedback);
+      expect(res.feedback).to.be.an('array', JSON.stringify(res));
+      expect(res.feedback).to.have.lengthOf(2, JSON.stringify(res));
+
+      const feedbackItem = res.feedback[0];
+      checkFeedback(feedback1, feedbackItem);
+      feedbackIds.push(feedbackItem.id);
+
+      const feedbackItem2 = res.feedback[1];
+      checkFeedback(feedback2, feedbackItem2);
+      feedbackIds.push(feedbackItem2.id);
+    });
+  });
+
+  describe('deleteFeedback', function() {
+    it('should delete feedback', async function () {
+      for (let feedbackId of feedbackIds) {
+        const res = await this.api.deleteFeedback(feedbackId, detectorId);
+        expect(res.feedbackId).to.be.a('string', JSON.stringify(res));
+        expect(res.feedbackId).to.equal(feedbackId, JSON.stringify(res));
+      }
+    });
+  });
+
   describe('redoDetector', function () {
     it('should create a copy of an existing detector', async function () {
       const res = await this.api.redoDetector(detectorId);
@@ -112,7 +258,7 @@ describe('Detectors', function () {
     it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
-      expect(res.code).to.equal(INVALID_QUERY_ERR, JSON.stringify(res));
+      expect(res.message).to.equal('The proto network does not exist.');
     });
   });
 
