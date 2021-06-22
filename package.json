@@ -1,6 +1,7 @@
 {
   "name": "matroid",
   "version": "1.1.0",
+  "homepage": "https://github.com/matroid/matroid-node",
   "description": "Matroid API Node Library",
   "main": "dist/matroid.js",
   "keywords": [
@@ -14,7 +15,7 @@
     "mime-types": "^2.1.15",
     "request": "^2.81.0"
   },
-  "repository": "matroid/node-matroid",
+  "repository": "matroid/matroid-node",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
