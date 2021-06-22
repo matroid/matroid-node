@@ -1,6 +1,6 @@
 ## Matroid API Node Client
 
-Use our Node client to access the Matroid API for image and video classification. It has been tested as far back as Node 6.2.2.
+Use our Node client to access the Matroid API for image and video classification. It has been tested as far back as Node 10.
 
 ## Full documentation
 Navigate to any detector's page, such as the [Famous Places Detector](https://www.matroid.com/detector/58d010c75bcac50d00ad85ed?tab=api), and click on the "Overview" tab.
@@ -188,7 +188,7 @@ api.retrieveToken()
 
 ## API Response samples
 #### Sample detectors listing
-```
+```json
 [
   {
     "detector_name": "cat-dog-47",
@@ -201,7 +201,7 @@ api.retrieveToken()
 ```
 
 #### Sample Image Classification
-```
+```json
 {
   "results": [
     {
@@ -246,21 +246,21 @@ api.retrieveToken()
 ```
 
 #### Sample video classification tracking ID
-```
+```json
 {
   "video_id": "58489472ff22bb2d3f95728c"
 }
 ```
 
 #### Sample stream creation
-```
+```json
 {
   "stream_id": "58489472ff22bb2d3f95728c"
 }
 ```
 
 #### Sample stream monitoring
-```
+```json
 {
   "stream_id": "58489472ff22bb2d3f95728c",
   "monitoring_id": "68489472ff22bb2d3f95728c",
@@ -268,7 +268,7 @@ api.retrieveToken()
 ```
 
 #### Sample video classification results
-```
+```json
 {
   "download_progress": 100,
   "classification_progress": 8,
@@ -332,14 +332,14 @@ api.retrieveToken()
 ```
 
 #### Sample detector creation ID
-```
+```json
 {
   "detector_id": "58489472ff22bb2d3f95728c"
 }
 ```
 
 #### Sample detector information and training progress response
-```
+```json
 {
   "detector": {
     "labels": [{
@@ -363,7 +363,7 @@ api.retrieveToken()
 ```
 
 #### Sample add feedback response
-```
+```json
 {
   "feedback": [
     {
