@@ -9,6 +9,7 @@ var addImagesApi = require('./src/images');
 var addLabelsApi = require('./src/labels');
 var addVideosApi = require('./src/videos');
 var addStreamsApi = require('./src/streams');
+var addVideoSummaryApi = require('./src/video_summary');
 
 var _require = require('./src/helpers'),
     addHelpers = _require.addHelpers,
@@ -46,6 +47,7 @@ var Matroid = function Matroid(opts) {
   addLabelsApi(this);
   addVideosApi(this);
   addStreamsApi(this);
+  addVideoSummaryApi(this);
 };
 
 exports = module.exports = Matroid;
