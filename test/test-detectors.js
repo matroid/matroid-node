@@ -258,7 +258,7 @@ describe('Detectors', function () {
     it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
-      expect(res.code).to.equal('server_err');
+      expect(res.message).to.equal('The proto network does not exist.');
     });
   });
 
