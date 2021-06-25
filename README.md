@@ -3,8 +3,7 @@
 Use our Node client to access the Matroid API for image and video classification. It has been tested as far back as Node 10.
 
 ## Full documentation
-Navigate to any detector's page, such as the [Famous Places Detector](https://www.matroid.com/detector/58d010c75bcac50d00ad85ed?tab=api), and click on the "Overview" tab.
-The "Overview" section contains the full specifications for each REST endpoint.
+You can view our full client documentation [here](https://www.matroid.com/docs/api/documentation).
 
 ## Installation
 ```
