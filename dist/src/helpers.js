@@ -1,30 +1,16 @@
 "use strict";
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+const request = require('request');
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+const fs = require('fs');
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+const path = require('path');
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+const mime = require('mime-types');
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+const util = require('util');
 
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var request = require('request');
-
-var fs = require('fs');
-
-var path = require('path');
-
-var mime = require('mime-types');
-
-var util = require('util');
-
-var addEndPoints = function addEndPoints(matroid) {
+const addEndPoints = matroid => {
   matroid.endpoints = {
     // accounts
     token: matroid._makeEndpoint('POST', 'oauth/token'),
@@ -85,31 +71,34 @@ var addEndPoints = function addEndPoints(matroid) {
   };
 };
 
-var addHelpers = function addHelpers(matroid) {
+const addHelpers = matroid => {
   matroid._genericRequest = function (options, resolve, reject) {
-    var action = options.action,
-        data = options.data,
-        filePaths = options.filePaths,
-        uriParams = options.uriParams,
-        shouldNotParse = options.shouldNotParse,
-        noAuth = options.noAuth;
-    var _matroid$endpoints$ac = matroid.endpoints[action],
-        method = _matroid$endpoints$ac.method,
-        uri = _matroid$endpoints$ac.uri;
-    var headers = {
+    let {
+      action,
+      data,
+      filePaths,
+      uriParams,
+      shouldNotParse,
+      noAuth
+    } = options;
+    let {
+      method,
+      uri
+    } = matroid.endpoints[action];
+    let headers = {
       Authorization: this.authorizationHeader
     };
     if (noAuth) delete headers['Authorization'];
     uri = this._replaceParamsInUri(uri, uriParams);
-    var config = {
+    let config = {
       uri: uri,
       method: method,
       headers: Object.assign({}, this.baseHeaders, headers)
     };
     config = this._setData(config, data, method, filePaths);
-    request(config, function (err, res, body) {
+    request(config, (err, res, body) => {
       if (err) return reject(err);
-      var result;
+      let result;
       shouldNotParse ? result = body : result = safeParse(body);
       return resolve(result);
     });
@@ -118,15 +107,15 @@ var addHelpers = function addHelpers(matroid) {
   matroid._makeEndpoint = function (method, resource) {
     return {
       method: method,
-      uri: "".concat(matroid.baseUrl, "/").concat(resource)
+      uri: `${matroid.baseUrl}/${resource}`
     };
   };
 
   matroid._replaceParamsInUri = function (uri, uriParams) {
-    if (!uriParams || _typeof(uriParams) !== 'object') return uri;
-    var modifiedUri = uri;
+    if (!uriParams || typeof uriParams !== 'object') return uri;
+    let modifiedUri = uri;
 
-    for (var param in uriParams) {
+    for (let param in uriParams) {
       modifiedUri = modifiedUri.replace(new RegExp(param, 'g'), uriParams[param]);
     }
 
@@ -139,9 +128,9 @@ var addHelpers = function addHelpers(matroid) {
     if (method === 'GET') {
       config.qs = data;
     } else if (filePaths) {
-      var fileData = this._setFileData(filePaths);
+      let fileData = this._setFileData(filePaths);
 
-      var combinedData = Object.assign({}, data, fileData);
+      let combinedData = Object.assign({}, data, fileData);
       config.formData = combinedData;
     } else {
       config.form = data;
@@ -151,8 +140,6 @@ var addHelpers = function addHelpers(matroid) {
   };
 
   matroid._setFileData = function (filePaths) {
-    var _this = this;
-
     if (Array.isArray(filePaths)) {
       return {
         file: this._createFilesData(filePaths)
@@ -163,12 +150,12 @@ var addHelpers = function addHelpers(matroid) {
       };
     } else {
       // filePaths is an object, where keys are keywords for file names
-      var filesObjs = {};
-      Object.keys(filePaths).forEach(function (keyword) {
+      let filesObjs = {};
+      Object.keys(filePaths).forEach(keyword => {
         if (Array.isArray(filePaths[keyword])) {
-          filesObjs[keyword] = _this._createFilesData(filePaths[keyword]);
+          filesObjs[keyword] = this._createFilesData(filePaths[keyword]);
         } else {
-          filesObjs[keyword] = _this._createFileData(filePaths[keyword]);
+          filesObjs[keyword] = this._createFileData(filePaths[keyword]);
         }
       });
       return filesObjs;
@@ -176,12 +163,12 @@ var addHelpers = function addHelpers(matroid) {
   };
 
   matroid._createFileData = function (filePath) {
-    var contentType = mime.lookup(filePath);
-    var filename = path.basename(filePath);
-    var result = {
+    let contentType = mime.lookup(filePath);
+    let filename = path.basename(filePath);
+    let result = {
       value: fs.createReadStream(filePath),
       options: {
-        filename: filename
+        filename
       }
     };
     if (contentType) result.options.contentType = contentType;
@@ -195,9 +182,7 @@ var addHelpers = function addHelpers(matroid) {
 
   matroid._checkFilePayloadSize = function (filePaths, batchLimit, singleLimit) {
     if (Array.isArray(filePaths)) {
-      return filePaths.reduce(function (sum, filePath) {
-        return sum + fs.statSync(filePath).size;
-      }, 0) <= batchLimit;
+      return filePaths.reduce((sum, filePath) => sum + fs.statSync(filePath).size, 0) <= batchLimit;
     } else {
       return fs.statSync(filePaths).size <= singleLimit;
     }
@@ -205,7 +190,7 @@ var addHelpers = function addHelpers(matroid) {
 
   matroid._checkImageSize = function (image) {
     if (image && !this._checkFilePayloadSize(image, this._fileSizeLimits.imageBatch, this._fileSizeLimits.image)) {
-      throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.image / 1024 / 1024, "MB; Batch size under ").concat(this._fileSizeLimits.imageBatch / 1024 / 1024, "MB"));
+      throw new Error(`Individual file size must be under ${this._fileSizeLimits.image / 1024 / 1024}MB; Batch size under ${this._fileSizeLimits.imageBatch / 1024 / 1024}MB`);
     }
   };
 
@@ -219,19 +204,17 @@ var addHelpers = function addHelpers(matroid) {
 
   matroid._setAuthToken = function (resolve, reject, token) {
     if (!token || !token.token_type || !token.access_token) {
-      reject(Error("Unable to extract token from ".concat(util.inspect(token, false, null))));
+      reject(Error(`Unable to extract token from ${util.inspect(token, false, null)}`));
     }
 
-    this.authorizationHeader = "".concat(token.token_type, " ").concat(token.access_token);
+    this.authorizationHeader = `${token.token_type} ${token.access_token}`;
     return resolve(token);
   };
 
   matroid._checkRequiredParams = function (params) {
-    var missingParams = [];
-    Object.entries(params).forEach(function (paramInfo) {
-      var _paramInfo = _slicedToArray(paramInfo, 2),
-          paramName = _paramInfo[0],
-          paramValue = _paramInfo[1];
+    let missingParams = [];
+    Object.entries(params).forEach(paramInfo => {
+      const [paramName, paramValue] = paramInfo;
 
       if (!paramValue) {
         missingParams.push(paramName);
@@ -239,15 +222,15 @@ var addHelpers = function addHelpers(matroid) {
     });
 
     if (missingParams.length) {
-      var errorMsg = "Please provide data: ".concat(missingParams.join(', '));
+      const errorMsg = `Please provide data: ${missingParams.join(', ')}`;
       throw new Error(errorMsg);
     }
   };
 
   matroid.convertConfigsSnakeCase = function (configs) {
-    var snakeCaseConfigs = {};
+    let snakeCaseConfigs = {};
 
-    for (var key in configs) {
+    for (let key in configs) {
       snakeCaseConfigs[this.toSnakeCase(key)] = configs[key];
     }
 
@@ -261,7 +244,7 @@ var addHelpers = function addHelpers(matroid) {
 
 function validateMediaObj(media, mediaType) {
   if (!media || typeof media.url === 'undefined' && typeof media.file === 'undefined') {
-    throw new Error("No ".concat(mediaType, " provided"));
+    throw new Error(`No ${mediaType} provided`);
   }
 
   if (media.url && media.file) {
@@ -270,7 +253,7 @@ function validateMediaObj(media, mediaType) {
 }
 
 function safeParse(response) {
-  var result;
+  let result;
 
   try {
     if (typeof response === 'string') {
@@ -283,13 +266,13 @@ function safeParse(response) {
       code: 'server_err',
       message: 'Unable to parse server response'
     };
-    console.error("Server response ".concat(response));
+    console.error(`Server response ${response}`);
   }
 
   return result;
 }
 
 module.exports = {
-  addHelpers: addHelpers,
-  addEndPoints: addEndPoints
+  addHelpers,
+  addEndPoints
 };

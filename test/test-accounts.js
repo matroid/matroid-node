@@ -2,15 +2,15 @@ const chai = require('chai');
 const expect = chai.expect;
 const { setUpClient } = require('./utils');
 
-describe('Accounts', function() {
+describe('Accounts', function () {
   this.timeout(10000);
 
-  before(function() {
+  before(function () {
     this.api = setUpClient();
   });
 
-  describe('retrieveToken', function() {
-    it('should retrieve token', async function() {
+  describe('retrieveToken', function () {
+    it('should retrieve token', async function () {
       const res = await this.api.retrieveToken();
 
       expect(res).to.be.an('object');
@@ -19,8 +19,8 @@ describe('Accounts', function() {
     });
   });
 
-  describe('getAccountInfo', function() {
-    it('should get account info', async function() {
+  describe('getAccountInfo', function () {
+    it('should get account info', async function () {
       const res = await this.api.getAccountInfo();
 
       expect(res.account).to.be.an('object');

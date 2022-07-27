@@ -1,155 +1,135 @@
 "use strict";
 
-var addStreamsApi = function addStreamsApi(matroid) {
+const addStreamsApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreams
-  matroid.createStream = matroid.registerStream = function (url, name) {
-    var _this = this;
-
-    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
+  matroid.createStream = matroid.registerStream = function (url, name, configs = {}) {
     /*
     - Create a stream of a online video url
     - detectionFps, recordingEnabled, and retentionEnabled are the three parameters passed in the configs object
     */
-    return new Promise(function (resolve, reject) {
-      _this._checkRequiredParams({
-        url: url,
-        name: name
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        url,
+        name
       });
 
-      var options = {
+      let options = {
         action: 'createStream',
         data: {
-          name: name,
-          url: url
+          name,
+          url
         }
       };
       Object.assign(options.data, configs);
 
-      _this._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteMonitoringsMonitoring_id
 
 
   matroid.deleteMonitoring = function (monitoringId) {
-    var _this2 = this;
-
     /*
     Requires monitoring to not be in active states
     activeStates = ['requested', 'toprepare', 'preparing', 'ready']
     */
-    return new Promise(function (resolve, reject) {
-      _this2._checkRequiredParams({
-        monitoringId: monitoringId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        monitoringId
       });
 
-      var options = {
+      let options = {
         action: 'deleteMonitoring',
         uriParams: {
           ':key': monitoringId
         }
       };
 
-      _this2._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-DeleteStreamsStream_id
 
 
   matroid.deleteStream = function (streamId) {
-    var _this3 = this;
-
     /*
     requires no active monitorings
     */
-    return new Promise(function (resolve, reject) {
-      _this3._checkRequiredParams({
-        streamId: streamId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        streamId
       });
 
-      var options = {
+      let options = {
         action: 'deleteStream',
         uriParams: {
           ':key': streamId
         }
       };
 
-      _this3._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsMonitoring_idQuery
 
 
-  matroid.getMonitoringResult = function (monitoringId) {
-    var _this4 = this;
-
-    var configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+  matroid.getMonitoringResult = function (monitoringId, configs = {}) {
     /*
     - format and statusOnly are parameters passed in the configs object
     */
-    return new Promise(function (resolve, reject) {
-      _this4._checkRequiredParams({
-        monitoringId: monitoringId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        monitoringId
       });
 
-      var options = {
+      let options = {
         action: 'getMonitoringResult',
         uriParams: {
           ':key': monitoringId
         },
         data: {}
       };
-
-      var processedConfigs = _this4.convertConfigsSnakeCase(configs);
-
+      const processedConfigs = this.convertConfigsSnakeCase(configs);
       Object.assign(options.data, processedConfigs);
 
       if (configs.format && configs.format.toUpperCase() !== 'JSON') {
         options.shouldNotParse = true;
       }
 
-      _this4._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-PostMonitoringsMonitoring_idKill
 
 
   matroid.killMonitoring = function (monitoringId) {
-    var _this5 = this;
-
     /*
     It might take some time for the monitoring to actually go to 'failed' state
     */
-    return new Promise(function (resolve, reject) {
-      _this5._checkRequiredParams({
-        monitoringId: monitoringId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        monitoringId
       });
 
-      var options = {
+      let options = {
         action: 'killMonitoring',
         uriParams: {
           ':key': monitoringId
         }
       };
 
-      _this5._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsQuery
 
 
-  matroid.monitorStream = function (streamId, detectorId) {
-    var _this6 = this;
-
-    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
+  matroid.monitorStream = function (streamId, detectorId, configs = {}) {
     /*
     - thresholds, endpoint, startTime, endTime, taskName, notificationTimezone, minEmailInterval, sendEmailNotifications, regionEnabled, regionCoords, regionNegativeCoords, monitoringHours, and colors are the parameters passed in the configs object
     */
-    return new Promise(function (resolve, reject) {
-      _this6._checkRequiredParams({
-        streamId: streamId,
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        streamId,
+        detectorId
       });
 
-      var options = {
+      let options = {
         action: 'monitorStream',
         uriParams: {
           ':streamId': streamId,
@@ -157,7 +137,7 @@ var addStreamsApi = function addStreamsApi(matroid) {
         },
         data: {}
       };
-      var processedConfigs = configs;
+      const processedConfigs = configs;
 
       if (processedConfigs.thresholds) {
         processedConfigs.thresholds = JSON.stringify(processedConfigs.thresholds);
@@ -165,53 +145,41 @@ var addStreamsApi = function addStreamsApi(matroid) {
 
       Object.assign(options.data, processedConfigs);
 
-      _this6._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreamsStream_idMonitorDetector_id
 
 
-  matroid.searchMonitorings = function () {
-    var _this7 = this;
-
-    var configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  matroid.searchMonitorings = function (configs = {}) {
     /*
     - streamId, monitoringId, detectorId, name, startTime, endTime, and state are the parameters passed in the configs object
     */
-    return new Promise(function (resolve, reject) {
-      var options = {
+    return new Promise((resolve, reject) => {
+      let options = {
         action: 'searchMonitorings',
         data: {}
       };
-
-      var processedConfigs = _this7.convertConfigsSnakeCase(configs);
-
+      const processedConfigs = this.convertConfigsSnakeCase(configs);
       Object.assign(options.data, processedConfigs);
 
-      _this7._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetStreamsQuery
 
 
-  matroid.searchStreams = function () {
-    var _this8 = this;
-
-    var configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  matroid.searchStreams = function (configs = {}) {
     /*
     - streamId, name, and permission are the three parameters passed in the configs object
     */
-    return new Promise(function (resolve, reject) {
-      var options = {
+    return new Promise((resolve, reject) => {
+      let options = {
         action: 'searchStreams',
         data: {}
       };
-
-      var processedConfigs = _this8.convertConfigsSnakeCase(configs);
-
+      const processedConfigs = this.convertConfigsSnakeCase(configs);
       Object.assign(options.data, processedConfigs);
 
-      _this8._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 };

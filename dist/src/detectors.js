@@ -1,129 +1,115 @@
 "use strict";
 
-var addDetectorApi = function addDetectorApi(matroid) {
+const addDetectorApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectors
-  matroid.createDetector = function (zipFile, name, detectorType) {
-    var _this = this;
-
-    var configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
+  matroid.createDetector = function (zipFile, name, detectorType, configs = {}) {
     /*
     Creates detector asynchronously (turn processing to true) Note: calling this API creates a pending detector, and you can update this detector with more images by calling this API with detector_id; however, creating more than one pending detector is not allowed, so you need to finalize or delete your existing pending detector before creating a new one.
      It might take some time for the detector to become editable(add labels etc)
     */
-    return new Promise(function (resolve, reject) {
-      _this._checkRequiredParams({
-        zipFile: zipFile,
-        name: name,
-        detectorType: detectorType
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        zipFile,
+        name,
+        detectorType
       });
 
-      if (!_this._checkFilePayloadSize(zipFile, 0, _this._fileSizeLimits.zip)) {
-        throw new Error("Individual file size must be under ".concat(_this._fileSizeLimits.zip / 1024 / 1024, "MB"));
+      if (!this._checkFilePayloadSize(zipFile, 0, this._fileSizeLimits.zip)) {
+        throw new Error(`Individual file size must be under ${this._fileSizeLimits.zip / 1024 / 1024}MB`);
       }
 
-      var options = {
+      let options = {
         action: 'createDetector',
         data: {
-          name: name,
-          detectorType: detectorType
+          name,
+          detectorType
         },
         filePaths: zipFile
       };
       Object.assign(options.data, configs);
 
-      _this._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-DeleteDetectorsDetector_id
 
 
   matroid.deleteDetector = function (detectorId) {
-    var _this2 = this;
-
     /*
     Requires processing=false. 
     */
-    return new Promise(function (resolve, reject) {
-      _this2._checkRequiredParams({
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        detectorId
       });
 
-      var options = {
+      let options = {
         action: 'deleteDetector',
         uriParams: {
           ':key': detectorId
         }
       };
 
-      _this2._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idFinalize
 
 
   matroid.trainDetector = function (detectorId) {
-    var _this3 = this;
-
     /*
     Requires processing=false. Starts training asynchronously (turn processing to true)
     */
-    return new Promise(function (resolve, reject) {
-      _this3._checkRequiredParams({
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        detectorId
       });
 
-      var options = {
+      let options = {
         action: 'trainDetector',
         uriParams: {
           ':key': detectorId
         }
       };
 
-      _this3._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-GetDetectorsDetector_id
   // Formerly called detectorInfo (now deprecated), use getDetectorInfo
 
 
   matroid.getDetectorInfo = matroid.detectorInfo = function (detectorId) {
-    var _this4 = this;
-
-    return new Promise(function (resolve, reject) {
-      _this4._checkRequiredParams({
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        detectorId
       });
 
-      var options = {
+      let options = {
         action: 'getDetectorInfo',
         uriParams: {
           ':key': detectorId
         }
       };
 
-      _this4._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsUpload
 
 
-  matroid.importDetector = function (name) {
-    var _this5 = this;
-
-    var configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+  matroid.importDetector = function (name, configs = {}) {
     /* 
     Certain combination of parameters can be supplied: 
     file_detector, fileProto + fileLabel(+ fileLabel_ind), 
     or fileProto + labels(+ label_inds).
     Parentheses part can be optionally supplied for object detection.
     */
-    return new Promise(function (resolve, reject) {
-      _this5._checkRequiredParams({
-        name: name
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        name
       });
 
-      var options = {
+      let options = {
         action: 'importDetector',
         data: {
-          name: name
+          name
         },
         filePaths: {}
       };
@@ -134,20 +120,26 @@ var addDetectorApi = function addDetectorApi(matroid) {
           file_detector: configs.fileDetector
         });
       } else {
-        var inputTensor = configs.inputTensor,
-            outputTensor = configs.outputTensor,
-            detectorType = configs.detectorType;
+        const {
+          inputTensor,
+          outputTensor,
+          detectorType
+        } = configs;
 
         if (!inputTensor || !outputTensor || !detectorType) {
           throw new Error('Please provide info: inputTensor, outputTensor, detectorType');
         }
 
-        var fileProto = configs.fileProto,
-            fileLabel = configs.fileLabel,
-            labels = configs.labels;
+        const {
+          fileProto,
+          fileLabel,
+          labels
+        } = configs;
 
         if (fileProto && fileLabel) {
-          var fileLabelInd = configs.fileLabelInd;
+          const {
+            fileLabelInd
+          } = configs;
           Object.assign(options.filePaths, {
             fileProto: fileProto,
             fileLabel: fileLabel
@@ -164,12 +156,14 @@ var addDetectorApi = function addDetectorApi(matroid) {
             });
           }
         } else if (fileProto && labels) {
-          var labelInds = configs.labelInds;
+          const {
+            labelInds
+          } = configs;
           Object.assign(options.filePaths, {
             fileProto: fileProto
           });
           Object.assign(options.data, {
-            labels: labels,
+            labels,
             input_tensor: inputTensor,
             output_tensor: outputTensor,
             detector_type: detectorType
@@ -185,98 +179,86 @@ var addDetectorApi = function addDetectorApi(matroid) {
         }
       }
 
-      _this5._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idRedo
 
 
   matroid.redoDetector = function (detectorId, feedbackOnly) {
-    var _this6 = this;
-
     /*
     A deep copy of the trained detector with different detector_id will be made
     */
-    return new Promise(function (resolve, reject) {
-      _this6._checkRequiredParams({
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        detectorId
       });
 
-      var options = {
+      let options = {
         action: 'redoDetector',
         uriParams: {
           ':key': detectorId
         },
         data: {
-          feedbackOnly: feedbackOnly
+          feedbackOnly
         }
       };
 
-      _this6._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-Search
 
 
-  matroid.searchDetectors = function () {
-    var _this7 = this;
-
-    var configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  matroid.searchDetectors = function (configs = {}) {
     /*
     Search for detectors based on the provided params.
     */
-    return new Promise(function (resolve, reject) {
-      var options = {
+    return new Promise((resolve, reject) => {
+      let options = {
         action: 'searchDetectors',
         data: {}
       };
       Object.assign(options.data, configs);
 
-      _this7._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // DEPRECATED - use searchDetectors now
 
 
   matroid.listDetectors = function () {
-    var _this8 = this;
-
     /*
     Lists all detectors that are public or owned by the user.
     */
-    return new Promise(function (resolve, reject) {
-      var options = {
+    return new Promise((resolve, reject) => {
+      let options = {
         action: 'listDetectors'
       };
 
-      _this8._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 
   matroid.addFeedback = function (detectorId, image, feedback) {
-    var _this9 = this;
-
     /*
      * Add feedback to a Matroid detector from an image
      */
-    return new Promise(function (resolve, reject) {
-      var feedbackToAdd = Array.isArray(feedback) ? feedback : [feedback];
+    return new Promise((resolve, reject) => {
+      const feedbackToAdd = Array.isArray(feedback) ? feedback : [feedback];
 
-      _this9._checkRequiredParams({
-        detectorId: detectorId
+      this._checkRequiredParams({
+        detectorId
       });
 
-      _this9._validateImageObj(image);
+      this._validateImageObj(image);
 
-      _this9._checkImageSize(image.file);
+      this._checkImageSize(image.file);
 
-      var options = {
+      const options = {
         action: 'addFeedback',
         uriParams: {
           ':detectorId': detectorId
         },
         data: {
-          feedback: feedbackToAdd.map(function (item) {
-            return JSON.stringify(item);
-          })
+          feedback: feedbackToAdd.map(item => JSON.stringify(item))
         }
       };
 
@@ -288,23 +270,21 @@ var addDetectorApi = function addDetectorApi(matroid) {
         });
       }
 
-      _this9._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 
   matroid.deleteFeedback = function (feedbackId, detectorId) {
-    var _this10 = this;
-
     /*
      * Delete Matroid detector feedback
      */
-    return new Promise(function (resolve, reject) {
-      _this10._checkRequiredParams({
-        feedbackId: feedbackId,
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        feedbackId,
+        detectorId
       });
 
-      var options = {
+      const options = {
         action: 'deleteFeedback',
         uriParams: {
           ':detectorId': detectorId,
@@ -312,7 +292,7 @@ var addDetectorApi = function addDetectorApi(matroid) {
         }
       };
 
-      _this10._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 };

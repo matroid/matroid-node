@@ -1,6 +1,11 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { setUpClient, sleep, waitIndexDone, waitCollectionTaskStop } = require('./utils');
+const {
+  setUpClient,
+  sleep,
+  waitIndexDone,
+  waitCollectionTaskStop,
+} = require('./utils');
 const {
   INVALID_QUERY_ERR,
   EVERYDAY_OBJECT_ID,
@@ -22,15 +27,19 @@ describe('Collections', function () {
 
   after(async function () {
     // clean up all collection indexes
-    await Promise.all(indexesToDelete.map(async (indexId) => {
-      await this.api.killCollectionIndex(indexId);
-      await this.api.deleteCollectionIndex(indexId);
-    }));
+    await Promise.all(
+      indexesToDelete.map(async (indexId) => {
+        await this.api.killCollectionIndex(indexId);
+        await this.api.deleteCollectionIndex(indexId);
+      })
+    );
 
     // clean up all collections
-    await Promise.all(collectionsToDelete.map(async (collectionId) => {
-      await this.api.deleteCollection(collectionId);
-    }));
+    await Promise.all(
+      collectionsToDelete.map(async (collectionId) => {
+        await this.api.deleteCollection(collectionId);
+      })
+    );
   });
 
   describe('createCollection', function () {
@@ -42,7 +51,7 @@ describe('Collections', function () {
         collectionName,
         S3_BUCKET_URL,
         sourceType,
-        { indexWithDefault: false },
+        { indexWithDefault: false }
       );
 
       expect(res.collection).to.be.an('object', JSON.stringify(res));
@@ -63,7 +72,7 @@ describe('Collections', function () {
         collectionName,
         S3_BUCKET_URL,
         sourceType,
-        { indexWithDefault: true },
+        { indexWithDefault: true }
       );
 
       expect(res.collection).to.be.an('object', JSON.stringify(res));
@@ -73,7 +82,9 @@ describe('Collections', function () {
       // Should have created default indexes as detecting tasks
       expect(res.collection.detectingTasks).to.have.lengthOf.above(0);
 
-      res.collection.detectingTasks.forEach(({ _id }) => indexesToDelete.push(_id));
+      res.collection.detectingTasks.forEach(({ _id }) =>
+        indexesToDelete.push(_id)
+      );
 
       collectionsToDelete.push(res.collection._id);
     });
@@ -172,7 +183,7 @@ describe('Collections', function () {
 
       expect(res.collectionTask).to.be.an('object', JSON.stringify(res));
       expect(res.collectionTask.retryTime).to.be.a('string');
-      
+
       // kill task before deleting
       await this.api.killCollectionIndex(collectionIndexId);
     });

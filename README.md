@@ -2,8 +2,10 @@
 
 Use our Node client to access the Matroid API for image and video classification. It has been tested as far back as Node 10.
 
+Due to API changes, please use Matroid Node Client versions 1.2.1 or later
+
 ## Full documentation
-You can view our full client documentation [here](https://www.matroid.com/docs/api/documentation).
+You can view our full client documentation [here](https://app.matroid.com/docs/api/documentation).
 
 ## Installation
 ```
@@ -17,7 +19,7 @@ Here is a bash example:
 nano .bash_profile
 ```
 
-Inside your `.bash_profile`, add the following lines, replacing the placeholder with the real values from the [API documentation's](https://www.matroid.com/detector/58d010c75bcac50d00ad85ed?tab=api) "Account Info" section
+Inside your `.bash_profile`, add the following lines, replacing the placeholder with the real values from the [API documentation's](https://app.matroid.com/detector/58d010c75bcac50d00ad85ed?tab=api) "Account Info" section
 ```
 export MATROID_CLIENT_ID=PLACEHOLDER
 export MATROID_CLIENT_SECRET=PLACEHOLDER
@@ -37,7 +39,7 @@ const api = new Matroid({clientId: 'abc', clientSecret: '123'});
 
 // Classify a picture from a URL
 api.retrieveToken()
-   .then(token => api.classifyImage('test', { url: 'https://www.matroid.com/images/logo2.png' }))
+   .then(token => api.classifyImage('test', { url: 'https://app.matroid.com/images/logo2.png' }))
    .then(classification => console.log('Answer: ', util.inspect(classification, false, null)))
    .catch(error => console.error('Something happened:', error))
 

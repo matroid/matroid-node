@@ -51,16 +51,6 @@ describe('Detectors', function () {
       // wait until detector can be edited
       await waitDetectorReadyForEdit(this.api, detectorId);
     });
-
-    it('should get an error if creating another detector when having a pending detector already', async function () {
-      const res = await this.api.createDetector(
-        DETECTOR_ZIP,
-        detectorName,
-        'general'
-      );
-
-      expect(res.message).to.include('You have a pending detector already');
-    });
   });
 
   describe('trainDetector', function () {
@@ -103,35 +93,56 @@ describe('Detectors', function () {
   });
 
   function checkFeedback(expectedFeedback, feedbackItem) {
-    expect(feedbackItem.id || feedbackItem._id).to.be.a('string', JSON.stringify(feedbackItem));
+    expect(feedbackItem.id || feedbackItem._id).to.be.a(
+      'string',
+      JSON.stringify(feedbackItem)
+    );
 
-    expect(feedbackItem.feedbackType).to.equal(expectedFeedback.feedbackType, JSON.stringify(feedbackItem));
-    expect(feedbackItem.label).to.equal(expectedFeedback.label, JSON.stringify(feedbackItem));
+    expect(feedbackItem.feedbackType).to.equal(
+      expectedFeedback.feedbackType,
+      JSON.stringify(feedbackItem)
+    );
+    expect(feedbackItem.label).to.equal(
+      expectedFeedback.label,
+      JSON.stringify(feedbackItem)
+    );
 
-    expect(feedbackItem.boundingBox.top).to.equal(expectedFeedback.boundingBox.top, JSON.stringify(feedbackItem));
-    expect(feedbackItem.boundingBox.left).to.equal(expectedFeedback.boundingBox.left, JSON.stringify(feedbackItem));
-    expect(feedbackItem.boundingBox.width).to.equal(expectedFeedback.boundingBox.width, JSON.stringify(feedbackItem));
-    expect(feedbackItem.boundingBox.height).to.equal(expectedFeedback.boundingBox.height, JSON.stringify(feedbackItem));
+    expect(feedbackItem.boundingBox.top).to.equal(
+      expectedFeedback.boundingBox.top,
+      JSON.stringify(feedbackItem)
+    );
+    expect(feedbackItem.boundingBox.left).to.equal(
+      expectedFeedback.boundingBox.left,
+      JSON.stringify(feedbackItem)
+    );
+    expect(feedbackItem.boundingBox.width).to.equal(
+      expectedFeedback.boundingBox.width,
+      JSON.stringify(feedbackItem)
+    );
+    expect(feedbackItem.boundingBox.height).to.equal(
+      expectedFeedback.boundingBox.height,
+      JSON.stringify(feedbackItem)
+    );
   }
 
   const boundingBox1 = {
-    top: .08,
-    left: .17,
-    height: .89,
-    width: .64
+    top: 0.08,
+    left: 0.17,
+    height: 0.89,
+    width: 0.64,
   };
 
   const boundingBox2 = {
-    top: .1,
-    left: .36,
-    height: .84,
-    width: .62
+    top: 0.1,
+    left: 0.36,
+    height: 0.84,
+    width: 0.62,
   };
 
   const feedbackIds = [];
 
-  describe('addFeedback', function() {
-    it('should add feedback from a local file', async function() {
+  describe('addFeedback', function () {
+    it('should add feedback from a local file', async function () {
       const feedback = {
         label: 'cat',
         feedbackType: 'negative',
@@ -150,7 +161,7 @@ describe('Detectors', function () {
       feedbackIds.push(feedbackItem.id || feedbackItem._id);
     });
 
-    it('should add multiple feedbacks from a local file', async function() {
+    it('should add multiple feedbacks from a local file', async function () {
       const feedback1 = {
         label: 'cat',
         feedbackType: 'negative',
@@ -163,10 +174,7 @@ describe('Detectors', function () {
         boundingBox: boundingBox2,
       };
 
-      const feedback = [
-        feedback1,
-        feedback2,
-      ];
+      const feedback = [feedback1, feedback2];
 
       const image = { file: DOG_FILE };
 
@@ -183,7 +191,7 @@ describe('Detectors', function () {
       feedbackIds.push(feedbackItem2.id || feedbackItem2._id);
     });
 
-    it('should add feedback from a URL', async function() {
+    it('should add feedback from a URL', async function () {
       const feedback = {
         label: 'cat',
         feedbackType: 'positive',
@@ -202,7 +210,7 @@ describe('Detectors', function () {
       feedbackIds.push(feedbackItem.id || feedbackItem._id);
     });
 
-    it('should add multiple feedback from a URL', async function() {
+    it('should add multiple feedback from a URL', async function () {
       const feedback1 = {
         label: 'cat',
         feedbackType: 'positive',
@@ -215,10 +223,7 @@ describe('Detectors', function () {
         boundingBox: boundingBox2,
       };
 
-      const feedback = [
-        feedback1,
-        feedback2,
-      ];
+      const feedback = [feedback1, feedback2];
 
       const image = { url: CAT_URL };
 
@@ -236,7 +241,7 @@ describe('Detectors', function () {
     });
   });
 
-  describe('deleteFeedback', function() {
+  describe('deleteFeedback', function () {
     it('should delete feedback', async function () {
       for (let feedbackId of feedbackIds) {
         const res = await this.api.deleteFeedback(feedbackId, detectorId);

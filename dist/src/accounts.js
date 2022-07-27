@@ -1,29 +1,27 @@
 "use strict";
 
-var addAccountsApi = function addAccountsApi(matroid) {
+const addAccountsApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Accounts-RefreshToken
-  matroid.retrieveToken = function () {
-    var _this = this;
-
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  matroid.retrieveToken = function (options = {}) {
     /*
     Generates an OAuth token. The API client will intelligently refresh the Access Token for you
     However, if you would like to manually create a new token,
     call this method manually and pass in 'refresh': true in the options argument.
     */
-    return new Promise(function (resolve, reject) {
-      var refresh = options.refresh;
+    return new Promise((resolve, reject) => {
+      let {
+        refresh
+      } = options;
 
-      if (_this.authorizationHeader && !refresh) {
-        return resolve(_this.authorizationHeader);
+      if (this.authorizationHeader && !refresh) {
+        return resolve(this.authorizationHeader);
       }
 
-      var requestOptions = {
+      let requestOptions = {
         action: 'token',
         data: {
-          client_id: _this.clientId,
-          client_secret: _this.clientSecret,
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
           grant_type: 'client_credentials'
         },
         noAuth: true
@@ -33,21 +31,19 @@ var addAccountsApi = function addAccountsApi(matroid) {
         requestOptions.data.refresh = 'true';
       }
 
-      _this._genericRequest(requestOptions, _this._setAuthToken.bind(_this, resolve, reject), reject);
+      this._genericRequest(requestOptions, this._setAuthToken.bind(this, resolve, reject), reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Accounts-GetAccount
   // Formerly called accountInfo (now deprecated), use getAccountInfo
 
 
   matroid.getAccountInfo = matroid.accountInfo = function () {
-    var _this2 = this;
-
-    return new Promise(function (resolve, reject) {
-      var options = {
+    return new Promise((resolve, reject) => {
+      let options = {
         action: 'getAccountInfo'
       };
 
-      _this2._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 };

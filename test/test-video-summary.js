@@ -1,11 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const { setUpClient, sleep } = require('./utils');
-const {
-  LOCAL_VID,
-  ONE_DAY,
-  S3_VID_URL,
-} = require('./data');
+const { LOCAL_VID, ONE_DAY, S3_VID_URL } = require('./data');
 
 describe('Video Summary', function () {
   this.timeout(10000);
@@ -41,10 +37,7 @@ describe('Video Summary', function () {
         await this.api.createVideoSummary();
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
-        expect(e.message).to.equal(
-          'No video provided',
-          JSON.stringify(e)
-        );
+        expect(e.message).to.equal('No video provided', JSON.stringify(e));
       }
     });
 
@@ -52,7 +45,7 @@ describe('Video Summary', function () {
       try {
         await this.api.createVideoSummary({
           url: S3_VID_URL,
-          file: LOCAL_VID, 
+          file: LOCAL_VID,
         });
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
@@ -65,21 +58,21 @@ describe('Video Summary', function () {
 
     it('should create a video summary with provided URL', async function () {
       const res = await this.api.createVideoSummary({
-        url: S3_VID_URL
+        url: S3_VID_URL,
       });
 
       urlVideoSummaryId = res.summary._id;
-      
+
       expect(res.summary).to.be.an('object', JSON.stringify(res));
     });
 
     it('should create a video summary with provided local file', async function () {
       const res = await this.api.createVideoSummary({
-        file: LOCAL_VID
+        file: LOCAL_VID,
       });
 
       localVideoSummaryId = res.summary._id;
-      
+
       expect(res.summary).to.be.an('object', JSON.stringify(res));
     });
   });
@@ -101,8 +94,11 @@ describe('Video Summary', function () {
       const res = await this.api.getVideoSummary(urlVideoSummaryId);
 
       expect(res).to.be.an('object', JSON.stringify(res));
-      expect(res.progress).to.equal(0, JSON.stringify(res))
-      expect(res.state).to.equal('requested', JSON.stringify(res));
+      expect(res.progress).to.equal(0, JSON.stringify(res));
+      expect(res.state).to.be.oneOf(
+        ['requested', 'preparing', 'ready'],
+        JSON.stringify(res)
+      );
     });
   });
 
@@ -173,14 +169,17 @@ describe('Video Summary', function () {
       streamId = streamRes.streamId;
 
       const res = await this.api.createStreamSummary(streamId, {
-        startTime: new Date(Date.now() - ONE_DAY * 2),
-        endTime: new Date(Date.now() - ONE_DAY)
+        startTime: new Date(Date.now() - 60 * 2),
+        endTime: new Date(Date.now() - 30),
       });
 
       streamSummaryId = res.summary._id;
 
       expect(res.summary).to.be.an('object', JSON.stringify(res));
-      expect(res.summary.feed.toString()).to.equal(streamId.toString(), JSON.stringify(res));
+      expect(res.summary.feed.toString()).to.equal(
+        streamId.toString(),
+        JSON.stringify(res)
+      );
     });
   });
 
@@ -202,7 +201,10 @@ describe('Video Summary', function () {
 
       expect(res.summaries).to.be.an('array', JSON.stringify(res));
       expect(res.summaries.length).to.equal(1, JSON.stringify(res));
-      expect(res.summaries[0]._id.toString()).to.equal(streamSummaryId.toString(), JSON.stringify(res));
+      expect(res.summaries[0]._id.toString()).to.equal(
+        streamSummaryId.toString(),
+        JSON.stringify(res)
+      );
     });
   });
 });

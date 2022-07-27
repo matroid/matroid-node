@@ -1,25 +1,21 @@
 "use strict";
 
-var addImagesApi = function addImagesApi(matroid) {
+const addImagesApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Images-Classify
-  matroid.classifyImage = function (detectorId, image) {
-    var _this = this;
-
-    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
+  matroid.classifyImage = function (detectorId, image, configs = {}) {
     /*
     Classify one or more images using a detector. Expected image format: { url: 'https://www.matroid.com/logo.png'} OR { file: ['/home/user/image.jpg', '/home/user/other_image.png'] }.
     */
-    return new Promise(function (resolve, reject) {
-      _this._checkRequiredParams({
-        detectorId: detectorId
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        detectorId
       });
 
-      _this._validateImageObj(image);
+      this._validateImageObj(image);
 
-      _this._checkImageSize(image.file);
+      this._checkImageSize(image.file);
 
-      var options = {
+      let options = {
         action: 'classifyImage',
         uriParams: {
           ':key': detectorId
@@ -36,44 +32,44 @@ var addImagesApi = function addImagesApi(matroid) {
 
       Object.assign(options.data, configs);
 
-      _this._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   }; // https://www.matroid.com/docs/api/index.html#api-Images-PostLocalize
 
 
-  matroid.localizeImage = function (localizer, localizerLabel) {
-    var _this2 = this;
-
-    var configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
+  matroid.localizeImage = function (localizer, localizerLabel, configs = {}) {
     /*
     This API is very similar to [Images/Classify](#api-Images-Classify). However, it can be used to update bounding boxes of existing training images by supplying `update=true`, `labelId`, and one of `imageId` or `imageIds`. It also has access to the internal face localizer (`localizer="DEFAULT_FACE"` and `localizerLabel="face"`). After receiving the results, perform the actual update using [Labels/Update Annotations](#api-Labels-UpdateAnnotations).
     */
-    return new Promise(function (resolve, reject) {
-      _this2._checkRequiredParams({
-        localizer: localizer,
-        localizerLabel: localizerLabel
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        localizer,
+        localizerLabel
       });
 
-      var update = configs.update;
-      var options = {
+      const {
+        update
+      } = configs;
+      let options = {
         action: 'localizeImage',
         data: {
-          localizer: localizer,
-          localizerLabel: localizerLabel
+          localizer,
+          localizerLabel
         }
       };
 
       if (!update) {
-        var file = configs.file,
-            url = configs.url;
+        const {
+          file,
+          url
+        } = configs;
 
-        _this2._validateImageObj({
-          file: file,
-          url: url
+        this._validateImageObj({
+          file,
+          url
         });
 
-        _this2._checkImageSize(file);
+        this._checkImageSize(file);
 
         if (file) options.filePaths = file;
 
@@ -84,14 +80,16 @@ var addImagesApi = function addImagesApi(matroid) {
             });
           } else {
             Object.assign(options.data, {
-              url: url
+              url
             });
           }
         }
       } else {
-        var labelId = configs.labelId,
-            imageId = configs.imageId,
-            imageIds = configs.imageIds;
+        const {
+          labelId,
+          imageId,
+          imageIds
+        } = configs;
 
         if (!labelId || !imageId && !imageIds) {
           throw new Error('Please provide labelId and one of imageId/imageIds when setting update to true');
@@ -100,7 +98,7 @@ var addImagesApi = function addImagesApi(matroid) {
 
       Object.assign(options.data, configs);
 
-      _this2._genericRequest(options, resolve, reject);
+      this._genericRequest(options, resolve, reject);
     });
   };
 };
