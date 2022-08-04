@@ -2,7 +2,9 @@
 
 const addAccountsApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Accounts-RefreshToken
-  matroid.retrieveToken = function (options = {}) {
+  matroid.retrieveToken = function () {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     /*
     Generates an OAuth token. The API client will intelligently refresh the Access Token for you
     However, if you would like to manually create a new token,

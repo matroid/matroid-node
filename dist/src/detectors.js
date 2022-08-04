@@ -2,7 +2,9 @@
 
 const addDetectorApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectors
-  matroid.createDetector = function (zipFile, name, detectorType, configs = {}) {
+  matroid.createDetector = function (zipFile, name, detectorType) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Creates detector asynchronously (turn processing to true) Note: calling this API creates a pending detector, and you can update this detector with more images by calling this API with detector_id; however, creating more than one pending detector is not allowed, so you need to finalize or delete your existing pending detector before creating a new one.
      It might take some time for the detector to become editable(add labels etc)
@@ -15,7 +17,7 @@ const addDetectorApi = matroid => {
       });
 
       if (!this._checkFilePayloadSize(zipFile, 0, this._fileSizeLimits.zip)) {
-        throw new Error(`Individual file size must be under ${this._fileSizeLimits.zip / 1024 / 1024}MB`);
+        throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.zip / 1024 / 1024, "MB"));
       }
 
       let options = {
@@ -94,7 +96,9 @@ const addDetectorApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsUpload
 
 
-  matroid.importDetector = function (name, configs = {}) {
+  matroid.importDetector = function (name) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     /* 
     Certain combination of parameters can be supplied: 
     file_detector, fileProto + fileLabel(+ fileLabel_ind), 
@@ -208,7 +212,9 @@ const addDetectorApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Detectors-Search
 
 
-  matroid.searchDetectors = function (configs = {}) {
+  matroid.searchDetectors = function () {
+    let configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     /*
     Search for detectors based on the provided params.
     */

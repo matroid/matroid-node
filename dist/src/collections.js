@@ -29,7 +29,9 @@ const addCollectionsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Collections-PostCollections
 
 
-  matroid.createCollection = function (name, url, sourceType, configs = {}) {
+  matroid.createCollection = function (name, url, sourceType) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Creates a new collection from a web or S3 url.
     */
@@ -195,7 +197,9 @@ const addCollectionsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Collections-PostApiCollectionTasksTaskidImageQuery
 
 
-  matroid.queryCollectionByImage = function (taskId, image, configs = {}) {
+  matroid.queryCollectionByImage = function (taskId, image) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     Queries against a collection index using an image.
     */

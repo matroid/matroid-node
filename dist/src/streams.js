@@ -2,7 +2,9 @@
 
 const addStreamsApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreams
-  matroid.createStream = matroid.registerStream = function (url, name, configs = {}) {
+  matroid.createStream = matroid.registerStream = function (url, name) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     - Create a stream of a online video url
     - detectionFps, recordingEnabled, and retentionEnabled are the three parameters passed in the configs object
@@ -70,7 +72,9 @@ const addStreamsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsMonitoring_idQuery
 
 
-  matroid.getMonitoringResult = function (monitoringId, configs = {}) {
+  matroid.getMonitoringResult = function (monitoringId) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     /*
     - format and statusOnly are parameters passed in the configs object
     */
@@ -119,7 +123,9 @@ const addStreamsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsQuery
 
 
-  matroid.monitorStream = function (streamId, detectorId, configs = {}) {
+  matroid.monitorStream = function (streamId, detectorId) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     - thresholds, endpoint, startTime, endTime, taskName, notificationTimezone, minEmailInterval, sendEmailNotifications, regionEnabled, regionCoords, regionNegativeCoords, monitoringHours, and colors are the parameters passed in the configs object
     */
@@ -150,7 +156,9 @@ const addStreamsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-PostStreamsStream_idMonitorDetector_id
 
 
-  matroid.searchMonitorings = function (configs = {}) {
+  matroid.searchMonitorings = function () {
+    let configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     /*
     - streamId, monitoringId, detectorId, name, startTime, endTime, and state are the parameters passed in the configs object
     */
@@ -167,7 +175,9 @@ const addStreamsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Streams-GetStreamsQuery
 
 
-  matroid.searchStreams = function (configs = {}) {
+  matroid.searchStreams = function () {
+    let configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     /*
     - streamId, name, and permission are the three parameters passed in the configs object
     */

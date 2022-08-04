@@ -22,8 +22,7 @@ const addVideoSummaryApi = matroid => {
 
   matroid.getVideoSummaryTracks = function (summaryId) {
     /*
-    Downloads video summary tracks CSV file as stream
-    */
+    Downloads video summary tracks CSV file as stream */
     return new Promise((resolve, reject) => {
       this._checkRequiredParams({
         summaryId
@@ -62,12 +61,25 @@ const addVideoSummaryApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-PostSummarize
 
 
-  matroid.createVideoSummary = function (video) {
+  matroid.createVideoSummary = function (video, configs) {
     /*
-    Can accept a url and optional videoId, or a local file
+    Can accept a url and optional videoId, or a local file.
+     Configs:
+      - fps
+      - featureWeight
+      - motionWeight
+      - matchingDistance
     */
     return new Promise((resolve, reject) => {
       this._validateVideoObj(video);
+
+      const {
+        detectorId
+      } = configs;
+
+      if (!detectorId) {
+        throw new Error("Missing required parameter: detectorId");
+      }
 
       const options = {
         action: 'createVideoSummary',
@@ -81,6 +93,8 @@ const addVideoSummaryApi = matroid => {
           videoId: video.videoId
         });
       }
+
+      Object.assign(options.data, configs);
 
       this._genericRequest(options, resolve, reject);
     });
@@ -124,8 +138,16 @@ const addVideoSummaryApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-PostStreamsStreamidSummarize
 
 
-  matroid.createStreamSummary = function (streamId, configs = {}) {
+  matroid.createStreamSummary = function (streamId) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     return new Promise((resolve, reject) => {
+      /*
+      Configs:
+        - fps
+        - featureWeight
+        - motionWeight
+        - matchingDistance
+      */
       this._checkRequiredParams({
         streamId
       });

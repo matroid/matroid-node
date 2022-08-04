@@ -3,7 +3,7 @@ const Matroid = require('../dist/matroid');
 const setUpClient = () => {
   let { BASE_URL, MATROID_CLIENT_ID, MATROID_CLIENT_SECRET } = process.env;
 
-  const baseUrl = BASE_URL || 'https://staging.dev.matroid.com/api/v1';
+  const baseUrl = BASE_URL || 'https://staging.app.matroid.com/api/v1';
 
   if (!MATROID_CLIENT_ID || !MATROID_CLIENT_SECRET) {
     throw new Error(

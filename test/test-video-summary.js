@@ -1,7 +1,12 @@
 const chai = require('chai');
 const expect = chai.expect;
 const { setUpClient, sleep } = require('./utils');
-const { LOCAL_VID, ONE_DAY, S3_VID_URL } = require('./data');
+const {
+  LOCAL_VID,
+  ONE_DAY,
+  S3_VID_URL,
+  EVERYDAY_OBJECT_ID,
+} = require('./data');
 
 describe('Video Summary', function () {
   this.timeout(10000);
@@ -11,13 +16,14 @@ describe('Video Summary', function () {
   before(async function () {
     this.api = setUpClient();
     await this.api.retrieveToken();
+
+    const streamName = `node-test-stream-no-det-${Date.now()}`;
+    const streamRes = await this.api.createStream(S3_VID_URL, streamName);
+
+    streamId = streamRes.streamId;
   });
 
   after(async function () {
-    if (streamId) {
-      await this.api.deleteStream(streamId);
-    }
-
     if (urlVideoSummaryId) {
       await this.api.deleteVideoSummary(urlVideoSummaryId);
     }
@@ -29,12 +35,48 @@ describe('Video Summary', function () {
     if (streamSummaryId) {
       await this.api.deleteVideoSummary(streamSummaryId);
     }
+
+    if (streamId) {
+      await this.api.deleteStream(streamId);
+    }
   });
 
   describe('createVideoSummary', async function () {
+    const labels = ['person', 'car'];
+
+    const defaultConfigs = {
+      labels,
+      detectorId: EVERYDAY_OBJECT_ID,
+    };
+
+    const urlVideo = {
+      url: S3_VID_URL,
+    };
+
+    const fileVideo = {
+      file: LOCAL_VID,
+    };
+
+    const bothVideo = {
+      url: S3_VID_URL,
+      file: LOCAL_VID,
+    };
+
+    it('should throw an error if missing a detectorId', async function () {
+      try {
+        await this.api.createVideoSummary(urlVideo, { labels });
+      } catch (e) {
+        expect(e).to.be.an('Error', JSON.stringify(e));
+        expect(e.message).to.equal(
+          'Missing required parameter: detectorId',
+          JSON.stringify(e)
+        );
+      }
+    });
+
     it('should throw an error if missing a video file', async function () {
       try {
-        await this.api.createVideoSummary();
+        await this.api.createVideoSummary(null, defaultConfigs);
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal('No video provided', JSON.stringify(e));
@@ -43,10 +85,7 @@ describe('Video Summary', function () {
 
     it('should throw an error if providing both URL and local file', async function () {
       try {
-        await this.api.createVideoSummary({
-          url: S3_VID_URL,
-          file: LOCAL_VID,
-        });
+        await this.api.createVideoSummary(bothVideo, defaultConfigs);
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(
@@ -57,9 +96,7 @@ describe('Video Summary', function () {
     });
 
     it('should create a video summary with provided URL', async function () {
-      const res = await this.api.createVideoSummary({
-        url: S3_VID_URL,
-      });
+      const res = await this.api.createVideoSummary(urlVideo, defaultConfigs);
 
       urlVideoSummaryId = res.summary._id;
 
@@ -67,9 +104,7 @@ describe('Video Summary', function () {
     });
 
     it('should create a video summary with provided local file', async function () {
-      const res = await this.api.createVideoSummary({
-        file: LOCAL_VID,
-      });
+      const res = await this.api.createVideoSummary(fileVideo, defaultConfigs);
 
       localVideoSummaryId = res.summary._id;
 
@@ -150,9 +185,15 @@ describe('Video Summary', function () {
   });
 
   describe('createStreamSummary', function () {
+    const getConfigs = (overrides = {}) => ({
+      ...overrides,
+      startTime: new Date(Date.now() - 60 * 2),
+      endTime: new Date(Date.now() - 30),
+    });
+
     it('should throw an error if missing a stream ID', async function () {
       try {
-        await this.api.createStreamSummary();
+        await this.api.createStreamSummary(null, getConfigs());
       } catch (e) {
         expect(e).to.be.an('Error', JSON.stringify(e));
         expect(e.message).to.equal(
@@ -162,16 +203,14 @@ describe('Video Summary', function () {
       }
     });
 
-    it('should create a stream summary with valid inputs', async function () {
-      const streamName = `node-test-stream-${Date.now()}`;
-      const streamRes = await this.api.createStream(S3_VID_URL, streamName);
-
-      streamId = streamRes.streamId;
-
-      const res = await this.api.createStreamSummary(streamId, {
-        startTime: new Date(Date.now() - 60 * 2),
-        endTime: new Date(Date.now() - 30),
-      });
+    it('should create a stream summary with a detector specified', async function () {
+      const res = await this.api.createStreamSummary(
+        streamId,
+        getConfigs({
+          detectorId: EVERYDAY_OBJECT_ID,
+          labels: ['person', 'car'],
+        })
+      );
 
       streamSummaryId = res.summary._id;
 

@@ -185,6 +185,111 @@ const detectorId = 'your-detector-id';
 api.retrieveToken()
    .then(token => api.deleteFeedback(feedbackId, detectorId))
    .catch(error => console.error('Something happened:', error))
+
+// Get video summary information
+const summaryId = 'your-summary-id';
+
+api.retrieveToken()
+   .then(token => api.getVideoSummary(summaryId))
+   .catch(error => console.error('Something happened:', error))
+
+// Download video summary tracks as a CSV file
+api.retrieveToken()
+   .then(token => api.getVideoSummaryTracks(summaryId))
+   .catch(error => console.error('Something happened:', error))
+
+// Download video summary as a video file
+api.retrieveToken()
+   .then(token => api.getVideoSummaryFile(summaryId))
+   .catch(error => console.error('Something happened:', error))
+
+// Create a video summary from a local file
+const video = { 
+  file: '/home/user/video.mp4'
+};
+
+const detectorId = 'my-detector-id';
+
+/*
+ * Required configuration:
+ * - detectorId: the detector to create the summary with
+ */
+/*
+ * Optional configuration:
+ * - fps: the number of frames per second to process when generating the summary [default = 4]
+ * - labels: array of labels to summarize
+ * - featureWeight: weight to be given to features when tracking
+ * - motionWieght: weight to be given to motion when tracking
+ * - matchingDistance [range 0 - 1]: distance threshold when matching
+ */
+
+const labelsToSummarize = ['people', 'car'];
+const summaryFPS = 4;
+
+const configs = { 
+  detectorId,
+  fps: summaryFPS,
+  labels: labelsToSummarize,
+};
+
+api.retrieveToken()
+   .then(token => api.createVideoSummary(video, configs))
+   .catch(error => console.error('Something happened:', error))
+
+// Delete video summary
+const summaryId = 'your-summary-id';
+
+api.retrieveToken()
+   .then(token => api.deleteVideoSummary(summaryId))
+   .catch(error => console.error('Something happened:', error))
+
+// Get stream summaries
+const streamId = 'your-stream-id';
+
+api.retrieveToken()
+   .then(token => api.getStreamSummaries(streamId))
+   .catch(error => console.error('Something happened:', error))
+
+// Create a stream summary from a local file
+const video = { 
+  file: '/home/user/video.mp4'
+};
+
+const streamId = 'my-stream-id';
+const detectorId = 'my-detector-id';
+
+/* 
+ * Required configuration:
+ * - startTime: timestamp for the start of the period to summarize
+ * - endTime: timestamp for the end of the period to summarize
+ */
+
+ const startTime = '2022-06-21T00:00:00Z'
+ const endTime = '2022-06-22T00:00:00'
+
+/*
+ * Optional configuration:
+ * - detectorId: the detector to use for the summary. Summarizes people if not specified
+ * - labels: array of labels to summarize
+ * - fps: the number of frames per seceond to process when generating the summary [default = 4]
+ * - featureWeight: weight to be given to features when tracking
+ * - motionWieght: weight to be given to motion when tracking
+ * - matchingDistance [range 0 - 1]: distance threshold when matching
+ */
+
+const labelsToSummarize = ['people', 'car'];
+const summaryFPS = 4;
+
+const configs = { 
+  startTime,
+  endTime,
+  fps: summaryFPS,
+  labels: labelsToSummarize,
+};
+
+api.retrieveToken()
+   .then(token => api.createVideoSummary(detectorId, video, configs))
+   .catch(error => console.error('Something happened:', error))
 ```
 
 ## API Response samples
@@ -383,8 +488,73 @@ api.retrieveToken()
 ```
 
 #### Sample delete feedback response
-```
+```json
 {
   "feedbackId": "unique-feedback-id"
+}
+```
+
+#### Sample get video summary response
+```json
+{
+  "progress": 0.5,
+  "state": "ready",
+  "message": "running"
+}
+```
+
+#### Sample create video summary response
+```json
+{
+  "summary": {
+    "_id": "6614d4d545d3b83467cbabca",
+    "createdBy": "5f7fc9e142ff025006199af7",
+    "state": "requested",
+    "video": "6164d4d545d3b43867bacbab"
+  }
+}
+```
+
+#### Sample delete video summary response
+```json
+{
+  "summaryId": "6614d4d545d3b83467cbabca"
+}
+```
+
+#### Sample get stream summaries response
+```json
+{
+  "summaries": [
+    {
+      "_id": "1232eac3be247b0d915ee82f",
+      "feed": "4092eac3be247b0d915ee23c",
+      "startTime": "2021-04-12T22:53:17.902Z",
+      "endTime": "2021-04-13T22:53:17.902Z",
+      "progress": 0.5
+    },
+    {
+      "_id": "2232eac3be247b0d915ee82f",
+      "feed": "5092eac3be247b0d915ee23c",
+      "startTime": "2021-04-11T22:53:17.902Z",
+      "endTime": "2021-04-14T22:53:17.902Z",
+      "progress": 0.75
+    }
+  ]
+}
+```
+
+#### Sample create stream summary response
+```json
+{
+  "summary": {
+    "_id": "6164a3d891e6a932927bd6d6",
+    "createdBy": "5f7fc9e142ff025006199af7",
+    "feed": "16325a725af20d025c865421",
+    "startTime": "2021-10-09T22:53:17.902Z",
+    "endTime": "2021-10-10T22:53:17.902Z",
+    "state": "requested",
+    "progress": 0
+  }
 }
 ```

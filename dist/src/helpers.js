@@ -107,7 +107,7 @@ const addHelpers = matroid => {
   matroid._makeEndpoint = function (method, resource) {
     return {
       method: method,
-      uri: `${matroid.baseUrl}/${resource}`
+      uri: "".concat(matroid.baseUrl, "/").concat(resource)
     };
   };
 
@@ -190,7 +190,7 @@ const addHelpers = matroid => {
 
   matroid._checkImageSize = function (image) {
     if (image && !this._checkFilePayloadSize(image, this._fileSizeLimits.imageBatch, this._fileSizeLimits.image)) {
-      throw new Error(`Individual file size must be under ${this._fileSizeLimits.image / 1024 / 1024}MB; Batch size under ${this._fileSizeLimits.imageBatch / 1024 / 1024}MB`);
+      throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.image / 1024 / 1024, "MB; Batch size under ").concat(this._fileSizeLimits.imageBatch / 1024 / 1024, "MB"));
     }
   };
 
@@ -204,10 +204,10 @@ const addHelpers = matroid => {
 
   matroid._setAuthToken = function (resolve, reject, token) {
     if (!token || !token.token_type || !token.access_token) {
-      reject(Error(`Unable to extract token from ${util.inspect(token, false, null)}`));
+      reject(Error("Unable to extract token from ".concat(util.inspect(token, false, null))));
     }
 
-    this.authorizationHeader = `${token.token_type} ${token.access_token}`;
+    this.authorizationHeader = "".concat(token.token_type, " ").concat(token.access_token);
     return resolve(token);
   };
 
@@ -222,7 +222,7 @@ const addHelpers = matroid => {
     });
 
     if (missingParams.length) {
-      const errorMsg = `Please provide data: ${missingParams.join(', ')}`;
+      const errorMsg = "Please provide data: ".concat(missingParams.join(', '));
       throw new Error(errorMsg);
     }
   };
@@ -244,7 +244,7 @@ const addHelpers = matroid => {
 
 function validateMediaObj(media, mediaType) {
   if (!media || typeof media.url === 'undefined' && typeof media.file === 'undefined') {
-    throw new Error(`No ${mediaType} provided`);
+    throw new Error("No ".concat(mediaType, " provided"));
   }
 
   if (media.url && media.file) {
@@ -266,7 +266,7 @@ function safeParse(response) {
       code: 'server_err',
       message: 'Unable to parse server response'
     };
-    console.error(`Server response ${response}`);
+    console.error("Server response ".concat(response));
   }
 
   return result;

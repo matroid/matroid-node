@@ -2,7 +2,9 @@
 
 const addLabelsApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabels
-  matroid.createLabelWithImages = function (detectorId, name, imageFiles, configs = {}) {
+  matroid.createLabelWithImages = function (detectorId, name, imageFiles) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Create a label and upload images to it
     Requires processing=false. Creates label asynchronously (turn processing to true)
@@ -65,7 +67,9 @@ const addLabelsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Labels-GetImagesAnnotationsQuery
 
 
-  matroid.getAnnotations = function (configs = {}) {
+  matroid.getAnnotations = function () {
+    let configs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     /*
     Requires processing=false. Note: you need to provide at least one of the three ids to query
     */
@@ -114,7 +118,9 @@ const addLabelsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Labels-UpdateAnnotations
 
 
-  matroid.updateAnnotations = function (detectorId, labelId, images, configs = {}) {
+  matroid.updateAnnotations = function (detectorId, labelId, images) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Update bounding boxes of label images
     */
@@ -143,7 +149,9 @@ const addLabelsApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabelsLabel_idImages
 
 
-  matroid.updateLabelWithImages = function (detectorId, labelId, imageFiles, configs = {}) {
+  matroid.updateLabelWithImages = function (detectorId, labelId, imageFiles) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     Requires processing=false. Updates label asynchronously (turn processing to true)
     */

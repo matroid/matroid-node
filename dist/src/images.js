@@ -2,7 +2,9 @@
 
 const addImagesApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Images-Classify
-  matroid.classifyImage = function (detectorId, image, configs = {}) {
+  matroid.classifyImage = function (detectorId, image) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     Classify one or more images using a detector. Expected image format: { url: 'https://www.matroid.com/logo.png'} OR { file: ['/home/user/image.jpg', '/home/user/other_image.png'] }.
     */
@@ -37,7 +39,9 @@ const addImagesApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Images-PostLocalize
 
 
-  matroid.localizeImage = function (localizer, localizerLabel, configs = {}) {
+  matroid.localizeImage = function (localizer, localizerLabel) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     This API is very similar to [Images/Classify](#api-Images-Classify). However, it can be used to update bounding boxes of existing training images by supplying `update=true`, `labelId`, and one of `imageId` or `imageIds`. It also has access to the internal face localizer (`localizer="DEFAULT_FACE"` and `localizerLabel="face"`). After receiving the results, perform the actual update using [Labels/Update Annotations](#api-Labels-UpdateAnnotations).
     */

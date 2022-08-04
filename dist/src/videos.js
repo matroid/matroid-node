@@ -2,7 +2,9 @@
 
 const addVideosApi = matroid => {
   // https://www.matroid.com/docs/api/index.html#api-Videos-PostDetectorsDetector_idClassify_video
-  matroid.classifyVideo = function (detectorId, video, configs = {}) {
+  matroid.classifyVideo = function (detectorId, video) {
+    let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     /*
     - Expected video format: { url: 'https://online-video-url'} OR { file: '/home/user/video.mp4'}
     - videoId, fps, and annotationThresholds are the three parameters passed in the configs object
@@ -22,7 +24,7 @@ const addVideosApi = matroid => {
       }
 
       if (!video.url && !this._checkFilePayloadSize(video.file, 0, this._fileSizeLimits.video)) {
-        throw new Error(`Individual file size must be under ${this._fileSizeLimits.video / 1024 / 1024}MB`);
+        throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.video / 1024 / 1024, "MB"));
       }
 
       let options = {
@@ -42,7 +44,9 @@ const addVideosApi = matroid => {
   }; // https://www.matroid.com/docs/api/index.html#api-Videos-GetVideosVideo_idQuery
 
 
-  matroid.getVideoResults = function (videoId, threshold, format, configs = {}) {
+  matroid.getVideoResults = function (videoId, threshold, format) {
+    let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
     /*
     - Get video classification results
     - annotations is the parameter passed in the configs object
