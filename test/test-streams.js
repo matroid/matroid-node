@@ -99,7 +99,6 @@ describe('Streams', function () {
   describe('searchMonitorings', function () {
     it('should get monitoring search result', async function () {
       const res = await this.api.searchMonitorings({ monitoringId });
-
       expect(res).to.be.an('Array', JSON.stringify(res));
       expect(res).to.have.lengthOf(1, JSON.stringify(res));
       expect(res[0].monitoringId).to.equal(monitoringId, JSON.stringify(res));
@@ -112,7 +111,14 @@ describe('Streams', function () {
 
       expect(res).to.be.an('Array', JSON.stringify(res));
     });
-
+    it('should get monitoring result between two dates', async function () {
+      const config = {
+        startTime: '2022-05-01 00:00:00',
+        endTime: '2022-06-01 00:00:00',
+      };
+      const res = await this.api.getMonitoringResult(monitoringId, config);
+      expect(res).to.be.an('Array', JSON.stringify(res));
+    });
     it('should throw an error if missing monitoringId', async function () {
       try {
         await this.api.getMonitoringResult();

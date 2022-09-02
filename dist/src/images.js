@@ -1,12 +1,12 @@
 "use strict";
 
 const addImagesApi = matroid => {
-  // https://www.matroid.com/docs/api/index.html#api-Images-Classify
+  // https://app.matroid.com/docs/api/index.html#api-Images-Classify
   matroid.classifyImage = function (detectorId, image) {
     let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     /*
-    Classify one or more images using a detector. Expected image format: { url: 'https://www.matroid.com/logo.png'} OR { file: ['/home/user/image.jpg', '/home/user/other_image.png'] }.
+    Classify one or more images using a detector. Expected image format: { url: 'https://app.matroid.com/logo.png'} OR { file: ['/home/user/image.jpg', '/home/user/other_image.png'] }.
     */
     return new Promise((resolve, reject) => {
       this._checkRequiredParams({
@@ -36,7 +36,7 @@ const addImagesApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Images-PostLocalize
+  }; // https://app.matroid.com/docs/api/index.html#api-Images-PostLocalize
 
 
   matroid.localizeImage = function (localizer, localizerLabel) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const addVideoSummaryApi = matroid => {
-  // https://www.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryid
+  // https://app.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryid
   matroid.getVideoSummary = function (summaryId) {
     return new Promise((resolve, reject) => {
       this._checkRequiredParams({
@@ -17,7 +17,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryidTracksCsv
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryidTracksCsv
 
 
   matroid.getVideoSummaryTracks = function (summaryId) {
@@ -37,7 +37,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryidVideoMp4
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-GetSummariesSummaryidVideoMp4
 
 
   matroid.getVideoSummaryFile = function (summaryId) {
@@ -58,7 +58,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-PostSummarize
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-PostSummarize
 
 
   matroid.createVideoSummary = function (video, configs) {
@@ -98,7 +98,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-DeleteSummariesSummaryid
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-DeleteSummariesSummaryid
 
 
   matroid.deleteVideoSummary = function (summaryId) {
@@ -117,7 +117,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-GetStreamsStreamidSummaries
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-GetStreamsStreamidSummaries
 
 
   matroid.getStreamSummaries = function (streamId) {
@@ -135,7 +135,7 @@ const addVideoSummaryApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://www.matroid.com/docs/api/index.html#api-Video_Summary-PostStreamsStreamidSummarize
+  }; // https://app.matroid.com/docs/api/index.html#api-Video_Summary-PostStreamsStreamidSummarize
 
 
   matroid.createStreamSummary = function (streamId) {
