@@ -1,7 +1,7 @@
 "use strict";
 
 const addStreamsApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Streams-PostStreams
+  // https://app.matroid.com/docs/api/documentation#api-Streams-PostStreams
   matroid.createStream = matroid.registerStream = function (url, name) {
     let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -26,7 +26,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-DeleteMonitoringsMonitoring_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-DeleteMonitoringsMonitoring_id
 
 
   matroid.deleteMonitoring = function (monitoringId) {
@@ -48,7 +48,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-DeleteStreamsStream_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-DeleteStreamsStream_id
 
 
   matroid.deleteStream = function (streamId) {
@@ -69,7 +69,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsMonitoring_idQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-GetMonitoringsMonitoring_idQuery
 
 
   matroid.getMonitoringResult = function (monitoringId) {
@@ -99,7 +99,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-PostMonitoringsMonitoring_idKill
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-PostMonitoringsMonitoring_idKill
 
 
   matroid.killMonitoring = function (monitoringId) {
@@ -120,7 +120,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-GetMonitoringsQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-GetMonitoringsQuery
 
 
   matroid.monitorStream = function (streamId, detectorId) {
@@ -153,7 +153,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-PostStreamsStream_idMonitorDetector_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-PostStreamsStream_idMonitorDetector_id
 
 
   matroid.searchMonitorings = function () {
@@ -172,7 +172,7 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Streams-GetStreamsQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Streams-GetStreamsQuery
 
 
   matroid.searchStreams = function () {

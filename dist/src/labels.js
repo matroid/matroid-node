@@ -1,7 +1,7 @@
 "use strict";
 
 const addLabelsApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabels
+  // https://app.matroid.com/docs/api/documentation#api-Labels-PostDetectorsDetector_idLabels
   matroid.createLabelWithImages = function (detectorId, name, imageFiles) {
     let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
@@ -41,7 +41,7 @@ const addLabelsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Labels-DeleteDetectorsDetector_idLabelsLabel_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Labels-DeleteDetectorsDetector_idLabelsLabel_id
 
 
   matroid.deleteLabel = function (detectorId, labelId) {
@@ -64,7 +64,7 @@ const addLabelsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Labels-GetImagesAnnotationsQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Labels-GetImagesAnnotationsQuery
 
 
   matroid.getAnnotations = function () {
@@ -95,7 +95,7 @@ const addLabelsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Labels-GetDetectorsDetector_idLabelsLabel_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Labels-GetDetectorsDetector_idLabelsLabel_id
 
 
   matroid.getLabelImages = function (detectorId, labelId) {
@@ -115,7 +115,7 @@ const addLabelsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Labels-UpdateAnnotations
+  }; // https://app.matroid.com/docs/api/documentation#api-Labels-UpdateAnnotations
 
 
   matroid.updateAnnotations = function (detectorId, labelId, images) {
@@ -146,7 +146,7 @@ const addLabelsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Labels-PostDetectorsDetector_idLabelsLabel_idImages
+  }; // https://app.matroid.com/docs/api/documentation#api-Labels-PostDetectorsDetector_idLabelsLabel_idImages
 
 
   matroid.updateLabelWithImages = function (detectorId, labelId, imageFiles) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const addVideosApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Videos-PostDetectorsDetector_idClassify_video
+  // https://app.matroid.com/docs/api/documentation#api-Videos-PostDetectorsDetector_idClassify_video
   matroid.classifyVideo = function (detectorId, video) {
     let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -41,7 +41,7 @@ const addVideosApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Videos-GetVideosVideo_idQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Videos-GetVideosVideo_idQuery
 
 
   matroid.getVideoResults = function (videoId, threshold, format) {

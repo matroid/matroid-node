@@ -1,7 +1,7 @@
 "use strict";
 
 const addDetectorApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Detectors-PostDetectors
+  // https://app.matroid.com/docs/api/documentation#api-Detectors-PostDetectors
   matroid.createDetector = function (zipFile, name, detectorType) {
     let configs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
@@ -32,7 +32,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-DeleteDetectorsDetector_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-DeleteDetectorsDetector_id
 
 
   matroid.deleteDetector = function (detectorId) {
@@ -53,7 +53,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idFinalize
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-PostDetectorsDetector_idFinalize
 
 
   matroid.trainDetector = function (detectorId) {
@@ -74,7 +74,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-GetDetectorsDetector_id
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-GetDetectorsDetector_id
   // Formerly called detectorInfo (now deprecated), use getDetectorInfo
 
 
@@ -93,7 +93,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsUpload
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-PostDetectorsUpload
 
 
   matroid.importDetector = function (name) {
@@ -185,7 +185,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-PostDetectorsDetector_idRedo
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-PostDetectorsDetector_idRedo
 
 
   matroid.redoDetector = function (detectorId, feedbackOnly) {
@@ -209,7 +209,7 @@ const addDetectorApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Detectors-Search
+  }; // https://app.matroid.com/docs/api/documentation#api-Detectors-Search
 
 
   matroid.searchDetectors = function () {

@@ -1,7 +1,7 @@
 "use strict";
 
 const addCollectionsApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Collections-PostApiVersionCollectionsCollectionidCollectionTasks
+  // https://app.matroid.com/docs/api/documentation#api-Collections-PostApiVersionCollectionsCollectionidCollectionTasks
   matroid.createCollectionIndex = function (collectionId, detectorId, fileTypes) {
     /*
     Creates an index on a collection with a detector.
@@ -26,7 +26,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-PostCollections
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-PostCollections
 
 
   matroid.createCollection = function (name, url, sourceType) {
@@ -60,7 +60,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-DeleteCollectionTasksTaskid
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-DeleteCollectionTasksTaskid
 
 
   matroid.deleteCollectionIndex = function (collectionTaskId) {
@@ -81,7 +81,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-DeleteCollectionsCollectionid
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-DeleteCollectionsCollectionid
 
 
   matroid.deleteCollection = function (collectionId) {
@@ -102,7 +102,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-GetCollectionTasksTaskid
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-GetCollectionTasksTaskid
 
 
   matroid.getCollectionTask = function (collectionTaskId) {
@@ -123,7 +123,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-GetCollectionsCollectionid
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-GetCollectionsCollectionid
 
 
   matroid.getCollection = function (collectionId) {
@@ -144,7 +144,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-PostCollectionTasksTaskidKill
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-PostCollectionTasksTaskidKill
 
 
   matroid.killCollectionIndex = function (collectionTaskId, includeCollectionInfo) {
@@ -168,7 +168,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-PostApiVersionCollectionTasksTaskidScoresQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-PostApiVersionCollectionTasksTaskidScoresQuery
 
 
   matroid.queryCollectionByScores = function (taskId, thresholds, configs) {
@@ -194,7 +194,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-PostApiCollectionTasksTaskidImageQuery
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-PostApiCollectionTasksTaskidImageQuery
 
 
   matroid.queryCollectionByImage = function (taskId, image) {
@@ -251,7 +251,7 @@ const addCollectionsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Collections-PutApiVersionCollectionTasksTaskid
+  }; // https://app.matroid.com/docs/api/documentation#api-Collections-PutApiVersionCollectionTasksTaskid
 
 
   matroid.updateCollectionIndex = function (collectionTaskId, updateIndex) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const addImagesApi = matroid => {
-  // https://app.matroid.com/docs/api/index.html#api-Images-Classify
+  // https://app.matroid.com/docs/api/documentation#api-Images-Classify
   matroid.classifyImage = function (detectorId, image) {
     let configs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -36,7 +36,7 @@ const addImagesApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
-  }; // https://app.matroid.com/docs/api/index.html#api-Images-PostLocalize
+  }; // https://app.matroid.com/docs/api/documentation#api-Images-PostLocalize
 
 
   matroid.localizeImage = function (localizer, localizerLabel) {

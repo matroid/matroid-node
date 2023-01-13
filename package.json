@@ -1,6 +1,6 @@
 {
   "name": "matroid",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "homepage": "https://github.com/matroid/matroid-node",
   "description": "Matroid API Node Library",
   "main": "dist/matroid.js",

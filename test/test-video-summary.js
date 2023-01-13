@@ -131,7 +131,7 @@ describe('Video Summary', function () {
       expect(res).to.be.an('object', JSON.stringify(res));
       expect(res.progress).to.equal(0, JSON.stringify(res));
       expect(res.state).to.be.oneOf(
-        ['requested', 'preparing', 'ready'],
+        ['requested', 'toprepare', 'preparing', 'ready'],
         JSON.stringify(res)
       );
     });
