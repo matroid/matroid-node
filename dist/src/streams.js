@@ -149,6 +149,12 @@ const addStreamsApi = matroid => {
         processedConfigs.thresholds = JSON.stringify(processedConfigs.thresholds);
       }
 
+      if (Number.isInteger(parseInt(processedConfigs.minDetectionInterval))) {
+        processedConfigs.minDetectionInterval = parseInt(processedConfigs.minDetectionInterval);
+      } else {
+        delete processedConfigs.minDetectionInterval;
+      }
+
       Object.assign(options.data, processedConfigs);
 
       this._genericRequest(options, resolve, reject);

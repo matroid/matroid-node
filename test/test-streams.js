@@ -83,15 +83,20 @@ describe('Streams', function () {
 
   describe('monitorStream', function () {
     it('should create a monitoring', async function () {
+      let minDetectionInterval = 90;
       const res = await this.api.monitorStream(streamId, EVERYDAY_OBJECT_ID, {
         thresholds: { cat: 0.5 },
         taskName: 'node-test-task',
         endTime: '5 minutes',
+        minDetectionInterval: minDetectionInterval,
       });
 
       expect(res.streamId).to.equal(streamId, JSON.stringify(res));
       expect(res.monitoringId).to.be.a('string', JSON.stringify(res));
-
+      expect(res.minDetectionInterval).to.equal(
+        minDetectionInterval,
+        JSON.stringify(res)
+      );
       monitoringId = res.monitoringId;
     });
   });
