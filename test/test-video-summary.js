@@ -47,6 +47,7 @@ describe('Video Summary', function () {
     const defaultConfigs = {
       labels,
       detectorId: EVERYDAY_OBJECT_ID,
+      name: 'My Summary',
     };
 
     const urlVideo = {
@@ -189,6 +190,7 @@ describe('Video Summary', function () {
       ...overrides,
       startTime: new Date(Date.now() - 60 * 2),
       endTime: new Date(Date.now() - 30),
+      name: 'My Summary',
     });
 
     it('should throw an error if missing a stream ID', async function () {

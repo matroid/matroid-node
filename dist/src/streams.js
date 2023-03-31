@@ -1,5 +1,15 @@
 "use strict";
 
+const {
+  json
+} = require('body-parser');
+
+const {
+  option
+} = require('grunt');
+
+const _ = require('lodash');
+
 const addStreamsApi = matroid => {
   // https://app.matroid.com/docs/api/documentation#api-Streams-PostStreams
   matroid.createStream = matroid.registerStream = function (url, name) {
@@ -194,6 +204,32 @@ const addStreamsApi = matroid => {
       };
       const processedConfigs = this.convertConfigsSnakeCase(configs);
       Object.assign(options.data, processedConfigs);
+
+      this._genericRequest(options, resolve, reject);
+    });
+  };
+
+  matroid.updateMonitoring = function (monitoringId) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        monitoringId
+      });
+
+      let options = {
+        action: 'updateMonitoring',
+        data: {
+          monitoringId,
+          detection: configs.detection || {},
+          schedule: configs.schedule || {},
+          registeredEndpoint: configs.registeredEndpoint || {},
+          region: configs.region || {}
+        },
+        uriParams: {
+          ':monitoringId': monitoringId
+        }
+      };
+      Object.assign(options.data, configs);
 
       this._genericRequest(options, resolve, reject);
     });

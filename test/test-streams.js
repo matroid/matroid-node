@@ -137,6 +137,56 @@ describe('Streams', function () {
     });
   });
 
+  describe('updateMonitoring', function () {
+    it('should update a monitoring', async function () {
+      let name = 'oh wow new name!!!!!!';
+      let colors = { color: '#dce775', darkColor: '#9e9d24' };
+      let regionEnabled = true;
+      let regionCoords = [
+        '0.2500,0.2500',
+        '0.7500,0.2500',
+        '0.7500,0.7500',
+        '0.2500,0.7500',
+      ];
+      let minDetectionInterval = 50;
+      let thresholds = { cat: 0.7 };
+      const configs = {
+        thresholds,
+        name,
+        regionCoords: regionCoords,
+        colors,
+        minDetectionInterval,
+      };
+      const res = await this.api.updateMonitoring(monitoringId, configs);
+      expect(res.name).to.equal(name);
+      expect(res.detection.minDetectionInterval).to.equal(minDetectionInterval);
+      expect(res.detection.thresholds).to.eql([
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '0.7',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+        '1',
+      ]);
+      expect(res.region.enabled).to.equal(regionEnabled);
+      expect(res.region.focusAreas[0].coords).to.eql([regionCoords]);
+    });
+  });
+
   describe('killMonitoring', function () {
     this.timeout(50000);
 

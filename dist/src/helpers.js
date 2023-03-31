@@ -59,6 +59,7 @@ const addEndPoints = matroid => {
     killMonitoring: matroid._makeEndpoint('POST', 'monitorings/:key/kill'),
     searchMonitorings: matroid._makeEndpoint('GET', 'monitorings'),
     monitorStream: matroid._makeEndpoint('POST', 'streams/:streamId/monitor/:detectorId'),
+    updateMonitoring: matroid._makeEndpoint('PUT', 'monitorings/:monitoringId'),
     searchStreams: matroid._makeEndpoint('GET', 'streams'),
     // video summary
     getVideoSummary: matroid._makeEndpoint('GET', 'summaries/:summaryId'),
