@@ -56,6 +56,7 @@ const addEndPoints = matroid => {
     deleteMonitoring: matroid._makeEndpoint('DELETE', 'monitorings/:key'),
     deleteStream: matroid._makeEndpoint('DELETE', 'streams/:key'),
     getMonitoringResult: matroid._makeEndpoint('GET', 'monitorings/:key'),
+    watchMonitoringResult: matroid._makeEndpoint('GET', 'monitorings/:key/watch'),
     killMonitoring: matroid._makeEndpoint('POST', 'monitorings/:key/kill'),
     searchMonitorings: matroid._makeEndpoint('GET', 'monitorings'),
     monitorStream: matroid._makeEndpoint('POST', 'streams/:streamId/monitor/:detectorId'),

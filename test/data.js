@@ -5,9 +5,10 @@ module.exports = {
   DETECTOR_ZIP: `${__dirname}/test-files/detector.zip`,
   DOG_FILE: `${__dirname}/test-files/dog.jpg`,
   CAT_FILE: `${__dirname}/test-files/cat.jpg`,
-  DOG_URL: 'https://matroid-web.s3.amazonaws.com/test/python-client/dog.jpg',
+  DOG_URL:
+    'https://m-test-public.s3.amazonaws.com/test/python-client/dog.jpg',
   CAT_URL:
-    'https://matroid-web.s3.amazonaws.com/test/python-client/tesla-cat.jpg',
+    'https://m-test-public.s3.amazonaws.com/test/python-client/tesla-cat.jpg',
   UPLOAD_PB_FILE: `${__dirname}/test-files/upload-detector.pb`,
   UPLOAD_LABEL_FILE: `${__dirname}/test-files/upload-detector-label.txt`,
   S3_VID_URL:

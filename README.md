@@ -148,7 +148,7 @@ api.retrieveToken()
 // Add feedback to a detector using a URL
 const detectorId = 'your-detector-id';
 
-const imageURL = 'https://matroid-web.s3.amazonaws.com/test/python-client/tesla-cat.jpg';
+const imageURL = 'https://m-test-public.s3.amazonaws.com/test/python-client/tesla-cat.jpg';
 const image = { url: imageURL };
 
 const feedback = [

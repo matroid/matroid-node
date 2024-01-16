@@ -4,7 +4,7 @@ const { setUpClient, sleep } = require('./utils');
 const { S3_VID_URL, S3_VID_URL_2, EVERYDAY_OBJECT_ID } = require('./data');
 
 describe('Streams', function () {
-  this.timeout(10000);
+  this.timeout(60000);
 
   let streamId, streamId2, monitoringId;
 
@@ -85,7 +85,7 @@ describe('Streams', function () {
     it('should create a monitoring', async function () {
       let minDetectionInterval = 90;
       const res = await this.api.monitorStream(streamId, EVERYDAY_OBJECT_ID, {
-        thresholds: { cat: 0.5 },
+        thresholds: { cat: 0.5, car: 0.1 },
         taskName: 'node-test-task',
         endTime: '5 minutes',
         minDetectionInterval: minDetectionInterval,
@@ -134,6 +134,25 @@ describe('Streams', function () {
           JSON.stringify(e)
         );
       }
+    });
+  });
+
+  describe('watchMonitoringResult', function () {
+    after(function () {
+      if (this.watch) {
+        this.watch.close();
+      }
+    });
+    it('should watch monitoring result', async function () {
+      await new Promise((resolve, reject) => {
+        this.watch = this.api.watchMonitoringResult(monitoringId);
+        this.watch.addListener((msg) => {
+          expect(msg.monitoringId).to.equal(monitoringId);
+          expect(msg.detections).to.have.lengthOf.at.least(1);
+          resolve(msg);
+          this.watch.close();
+        });
+      });
     });
   });
 

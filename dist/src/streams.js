@@ -109,6 +109,47 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
+  };
+
+  matroid.watchMonitoringResult = function (monitoringId) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    /*
+    Returns an object that you can subscribe to for detection events.
+     */
+    const EventSource = require('eventsource');
+
+    let {
+      method,
+      uri
+    } = matroid.endpoints.watchMonitoringResult;
+    uri = this._replaceParamsInUri(uri, {
+      ':key': monitoringId
+    });
+    let headers = {
+      Authorization: this.authorizationHeader
+    };
+    const evtSource = new EventSource(uri, {
+      headers
+    });
+    const listeners = [];
+    evtSource.addEventListener('message', e => {
+      const data = JSON.parse(e.data);
+
+      for (const listener of listeners) {
+        listener(data);
+      }
+    });
+
+    evtSource.onerror = e => {
+      console.error("Event source error: ".concat(JSON.stringify(e)));
+    };
+
+    return {
+      addListener: fn => listeners.push(fn),
+      removeListener: fn => listeners.pop(fn),
+      close: () => evtSource.close()
+    };
   }; // https://app.matroid.com/docs/api/documentation#api-Streams-PostMonitoringsMonitoring_idKill
 
 

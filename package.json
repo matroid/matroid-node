@@ -1,6 +1,6 @@
 {
   "name": "matroid",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "homepage": "https://github.com/matroid/matroid-node",
   "description": "Matroid API Node Library",
   "main": "dist/matroid.js",
@@ -12,6 +12,7 @@
   "author": "Matroid",
   "license": "MIT",
   "dependencies": {
+    "eventsource": "^2.0.2",
     "mime-types": "^2.1.31",
     "request": "^2.88.2"
   },
