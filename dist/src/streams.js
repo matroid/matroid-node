@@ -36,6 +36,25 @@ const addStreamsApi = matroid => {
 
       this._genericRequest(options, resolve, reject);
     });
+  };
+
+  matroid.updateStream = function (streamId) {
+    let configs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    return new Promise((resolve, reject) => {
+      this._checkRequiredParams({
+        streamId
+      });
+
+      let options = {
+        action: 'updateStream',
+        uriParams: {
+          ':streamId': streamId
+        },
+        data: configs
+      };
+
+      this._genericRequest(options, resolve, reject);
+    });
   }; // https://app.matroid.com/docs/api/documentation#api-Streams-DeleteMonitoringsMonitoring_id
 
 

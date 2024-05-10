@@ -71,6 +71,27 @@ describe('Streams', function () {
     });
   });
 
+  describe('updateStream', function () {
+    it('should update stream', async function () {
+      const name = 'new name';
+      const customFields = [
+        { key: 'i am a key', template: 'and i am a template' },
+      ];
+      const retentionDays = '5';
+
+      const res = await this.api.updateStream(streamId, {
+        name,
+        customFields,
+        retentionDays,
+      });
+
+      expect(res.feed.toString()).to.equal(streamId);
+      expect(res.name).to.equal(name);
+      expect(res.retentionDays.toString()).to.equal(retentionDays);
+      expect(res.customFields).to.eql(customFields);
+    });
+  });
+
   describe('searchStreams', function () {
     it('should get stream search result', async function () {
       const res = await this.api.searchStreams({ streamId });

@@ -53,6 +53,7 @@ const addEndPoints = matroid => {
     getVideoResults: matroid._makeEndpoint('GET', 'videos/:key'),
     // streams
     createStream: matroid._makeEndpoint('POST', 'streams'),
+    updateStream: matroid._makeEndpoint('PUT', 'streams/:streamId'),
     deleteMonitoring: matroid._makeEndpoint('DELETE', 'monitorings/:key'),
     deleteStream: matroid._makeEndpoint('DELETE', 'streams/:key'),
     getMonitoringResult: matroid._makeEndpoint('GET', 'monitorings/:key'),
