@@ -17,7 +17,7 @@ const addDetectorApi = matroid => {
       });
 
       if (!this._checkFilePayloadSize(zipFile, 0, this._fileSizeLimits.zip)) {
-        throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.zip / 1024 / 1024, "MB"));
+        throw new Error("Individual file size must be under ".concat(this._fileSizeLimits.zip / 1000 / 1000 / 1000, "GB"));
       }
 
       let options = {

@@ -37,7 +37,7 @@ class Matroid {
       image: 50 * 1024 * 1024,
       video: 300 * 1024 * 1024,
       imageBatch: 50 * 1024 * 1024,
-      zip: 300 * 1024 * 1024
+      zip: 2 * 1000 * 1000 * 1000
     };
     /* eslint-enable no-magic-numbers */
 

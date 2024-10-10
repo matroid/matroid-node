@@ -41,7 +41,7 @@ const waitDetectorReadyForEdit = async (api, detectorId) => {
 
     await sleep(2000);
     res = await api.detectorInfo(detectorId);
-    console.log(res.state);
+    console.info(`waitDetectorReadyForEdit: ${res.state}, ${res.processing}`);
   }
 };
 
