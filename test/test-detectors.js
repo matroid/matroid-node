@@ -12,16 +12,17 @@ const {
   RANDOM_MONGO_ID,
   INVALID_QUERY_ERR,
   EVERYDAY_OBJECT_ID,
-  UPLOAD_PB_FILE,
-  UPLOAD_LABEL_FILE,
   DOG_FILE,
   CAT_URL,
+  COCO_ZIP,
 } = require('./data');
+
+const TIME_CREATE_MS = 300000;
 
 describe('Detectors', function () {
   this.timeout(10000);
 
-  let detectorId, redoDetectorId, importedDetectorId;
+  let detectorId, redoDetectorId;
   const detectorName = `node-detector-${Date.now()}`;
 
   before(async function () {
@@ -34,11 +35,10 @@ describe('Detectors', function () {
     // clean up - make sure all new detectors created by tests are deleted
     await cleanUpDetector(this.api, detectorId);
     await cleanUpDetector(this.api, redoDetectorId);
-    await cleanUpDetector(this.api, importedDetectorId);
   });
 
   describe('createDetector', function () {
-    this.timeout(30000);
+    this.timeout(TIME_CREATE_MS);
 
     it('should create detector', async function () {
       const res = await this.api.createDetector(
@@ -48,6 +48,17 @@ describe('Detectors', function () {
       );
       expect(res.detectorId).to.be.a('string', JSON.stringify(res));
       detectorId = res.detectorId;
+      // wait until detector can be edited
+      await waitDetectorReadyForEdit(this.api, detectorId);
+    });
+    it('should create a new studio detector', async function () {
+      const res = await this.api.createDetector(
+        COCO_ZIP,
+        detectorName,
+        'general',
+        { useNewStudio: 'true' }
+      );
+      expect(res.detectorId).to.be.a('string', JSON.stringify(res));
       // wait until detector can be edited
       await waitDetectorReadyForEdit(this.api, detectorId);
     });
@@ -263,7 +274,9 @@ describe('Detectors', function () {
     it('should get an error with an invalid detectorId', async function () {
       const res = await this.api.redoDetector(RANDOM_MONGO_ID);
 
-      expect(res.message).to.equal('The proto network does not exist.');
+      expect(res.message).to.equal(
+        `Could not find subject with id ${RANDOM_MONGO_ID}`
+      );
     });
   });
 
@@ -288,47 +301,6 @@ describe('Detectors', function () {
     });
   });
 
-  describe('importDetector', function () {
-    this.timeout(200000);
-
-    it('should import detector when provided with valid params', async function () {
-      const detectorName = `upload-node-client-${Date.now()}`;
-      const inputTensor = 'input_5[128,128,3]';
-      const outputTensor = 'prob3[2]';
-      const detectorType = 'facial_recognition';
-
-      const res = await this.api.importDetector(detectorName, {
-        fileProto: UPLOAD_PB_FILE,
-        fileLabel: UPLOAD_LABEL_FILE,
-        inputTensor,
-        outputTensor,
-        detectorType,
-      });
-
-      expect(res.detectorId).to.be.a('string', JSON.stringify(res));
-      expect(res.message).to.include(
-        'Your model is being uploaded',
-        JSON.stringify(res)
-      );
-
-      importedDetectorId = res.detectorId;
-    });
-
-    it('should throw an error with invalid params', async function () {
-      try {
-        await this.api.importDetector(detectorName, {
-          label: ['cat', 'dog'],
-        });
-      } catch (e) {
-        expect(e).to.be.an('Error', JSON.stringify(e));
-        expect(e.message).to.equal(
-          'Please provide info: inputTensor, outputTensor, detectorType',
-          JSON.stringify(e)
-        );
-      }
-    });
-  });
-
   describe('listDetectors (deprecated for searchDetectors)', function () {
     it('should list all detectors', async function () {
       const res = await this.api.listDetectors();
@@ -345,13 +317,12 @@ describe('Detectors', function () {
       expect(res.message).to.equal('Deleted detector.', JSON.stringify(res));
 
       await cleanUpDetector(redoDetectorId);
-      await cleanUpDetector(importedDetectorId);
     });
 
     it('should get an error with an invalid detector ID', async function () {
       const res = await this.api.deleteDetector(RANDOM_MONGO_ID);
 
-      expect(res.code).to.equal('not_found', JSON.stringify(res));
+      expect(res.code).to.equal('invalid_query_err', JSON.stringify(res));
     });
   });
 });
@@ -360,11 +331,11 @@ describe('Detectors', function () {
 
 async function waitDetectorTraining(api, detectorId) {
   // wait until detector is trained
-  printInfo('waiting for detector training');
+  printInfo(`waiting for detector training ${detectorId}`);
 
   let res = await api.getDetectorInfo(detectorId);
   let indicator = '\x1b[2m      .';
-  const maxTries = 40;
+  const maxTries = 60;
 
   while (res.state !== 'trained') {
     console.log(indicator);

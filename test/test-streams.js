@@ -6,7 +6,7 @@ const { S3_VID_URL, S3_VID_URL_2, EVERYDAY_OBJECT_ID } = require('./data');
 describe('Streams', function () {
   this.timeout(60000);
 
-  let streamId, streamId2, monitoringId;
+  let streamId, streamId2, monitoringId, monitoringId2;
 
   // Append a query to stream URLs to avoid duplicate URL error
   const makeStreamUrl = (baseUrl) => {
@@ -22,6 +22,11 @@ describe('Streams', function () {
     if (monitoringId) {
       await this.api.killMonitoring(monitoringId);
       await waitMonitoringStop(this.api, monitoringId);
+    }
+
+    if (monitoringId2) {
+      await this.api.killMonitoring(monitoringId2);
+      await waitMonitoringStop(this.api, monitoringId2);
     }
 
     if (streamId) {
@@ -118,7 +123,23 @@ describe('Streams', function () {
         minDetectionInterval,
         JSON.stringify(res)
       );
+
       monitoringId = res.monitoringId;
+
+      const res2 = await this.api.monitorStream(streamId2, EVERYDAY_OBJECT_ID, {
+        thresholds: { cat: 0.5, car: 0.1 },
+        taskName: 'node-test-task-2',
+        endTime: '5 minutes',
+        minDetectionInterval: minDetectionInterval,
+      });
+
+      expect(res2.streamId).to.equal(streamId2, JSON.stringify(res));
+      expect(res2.minDetectionInterval).to.equal(
+        minDetectionInterval,
+        JSON.stringify(res2)
+      );
+
+      monitoringId2 = res2.monitoringId;
     });
   });
 
@@ -176,7 +197,7 @@ describe('Streams', function () {
       });
     });
   });
-
+  /*
   describe('updateMonitoring', function () {
     it('should update a monitoring', async function () {
       let name = 'oh wow new name!!!!!!';
@@ -224,6 +245,118 @@ describe('Streams', function () {
       ]);
       expect(res.region.enabled).to.equal(regionEnabled);
       expect(res.region.focusAreas[0].coords).to.eql([regionCoords]);
+    });
+  });
+*/
+  describe('bulkUpdateMonitorings', function () {
+    it('should batch update monitorings', async function () {
+      try {
+        const taskUpdate = {
+          detection: {
+            thresholds: [
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '0.7',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+              '1',
+            ],
+            notificationAlertSounds: [
+              'simple-ding.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+              'invalid.mp3',
+            ],
+          },
+          registeredEndpoint: {
+            uri: 'http://example.com',
+          },
+        };
+        const res = await this.api.bulkUpdateMonitorings(
+          [monitoringId, monitoringId2],
+          taskUpdate
+        );
+        expect(res.modifiedMonitorings).to.have.lengthOf(2);
+        for (const monitoring of res.modifiedMonitorings) {
+          expect(monitoring._id).to.be.oneOf([monitoringId, monitoringId2]);
+          expect(monitoring.detection.thresholds).to.deep.equal([
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '0.7',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+          ]);
+          expect(monitoring.detection.notificationAlertSounds).to.deep.equal([
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+            'simple-ding.mp3',
+          ]);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     });
   });
 

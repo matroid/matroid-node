@@ -30,7 +30,7 @@ const waitDetectorReadyForEdit = async (api, detectorId) => {
   let res = await api.detectorInfo(detectorId);
 
   let tries = 0;
-  const maxTries = 15;
+  const maxTries = 150;
   while (res.processing) {
     tries++;
     if (tries > maxTries) {
